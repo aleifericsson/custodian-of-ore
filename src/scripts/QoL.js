@@ -51,4 +51,12 @@ const attribs = (element, attribList, values) => {
     })
 }
 
-export {render, remove, create, addClass, hasClass, remClass, find, findAll, write, detect, undetect, style, attribs}
+const isElement = function($obj){
+    try {
+        return ($obj.constructor.__proto__.prototype.constructor.name)?true:false;
+    }catch(e){
+        return false;
+    }
+}
+
+export {render, remove, create, addClass, hasClass, remClass, find, findAll, write, detect, undetect, style, attribs, isElement}

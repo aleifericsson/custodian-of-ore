@@ -16,10 +16,12 @@ let currentCode = 0;
 const togglePrompt = (e) => {
     let code = 0;
     let prompt = "";
+    let title = "Alert";
     if (typeof e === 'string' || e instanceof String){
         if (e === "win"){
             code = 2;
             prompt = "you won!";
+            title = "gg";
         }
         if (e === "tutorial"){
             code = 3;
@@ -49,11 +51,11 @@ const togglePrompt = (e) => {
         setTimeout(()=> remove(find(".wrapper"), exists), 200);
     } 
     else{
-        createPrompt(prompt,code);
+        createPrompt(prompt,code, title);
     }
 }
 
-const createPrompt = (mytext, code) => {
+const createPrompt = (mytext, code, title) => {
     const butOv = find(".button-overlay");
     const prompt = create("div");
         addClass(prompt, ["prompt", "start-state"]);
@@ -72,7 +74,7 @@ const createPrompt = (mytext, code) => {
             top: 250px;
         `);
         
-        const drag = dragBar(code);
+        const drag = dragBar(code, title);
         render(prompt, drag);
 
         render(prompt, createText(mytext));
@@ -89,6 +91,7 @@ const createText = (mytext) =>{
             text-align:center;
             margin:15px 5px;
             font-family: 'munro';
+            font-size: 15px;
         `);
     write(text, mytext);
 
@@ -96,29 +99,38 @@ const createText = (mytext) =>{
 }
 
 
-const dragBar = (code) => {
+const dragBar = (code,title) => {
     const bar = create("div");
     addClass(bar, ["bar"]);
     attribs(bar, ["id", "draggable"], [`bar-${code}`, "false"])
     style(bar, `
         display:flex;
-        justify-content: flex-end;
+        justify-content: space-between;
         padding: 5px;
         background-color: darkslategray;
         height: 20px;
+        align-items: centre;
     `)
     
+    const tit = create("div")
+    tit.textContent = title;
+    style(tit, `
+        color:white;
+        font-family: 'munro';
+        font-size: 20px;
+        pointer-events: none;
+    `)
 
     const closePrompt = create("div");
     addClass(closePrompt, ["button", "closeprompt"]);
     closePrompt.id =   `closeprompt-${code}`;
     style(closePrompt, `
-        position: absolute;
         width: 16px;
         height: 16px;
         background: url(${close});
     `);
 
+    render (bar, tit);
     render(bar, closePrompt);
     detect(bar, "mousedown", mouseDown);
     detect(bar, "mouseup", mouseUp);

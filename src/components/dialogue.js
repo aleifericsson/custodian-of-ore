@@ -10,7 +10,6 @@ const nextDialogue = (code) => {
     if (Number.isInteger(code)){
         currentDialogue = code;
     }
-    console.log(currentDialogue)
     const dialogue = createDialogue(dialogues[currentDialogue]);
     currentDialogue += 1;
     detect(dialogue, "click", deleteDialogue);

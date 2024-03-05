@@ -1,4 +1,6 @@
-import {render, remove, create, addClass, hasClass, remClass, find, write, detect, undetect, style, attribs} from "../scripts/QoL"
+import {render, remove, create, addClass, hasClass, remClass, find, write, detect, undetect, style, attribs, isElement} from "../scripts/QoL"
+
+let hp = 20;
 
 const initInfoScreen = () =>{
     const info = create("div");
@@ -17,7 +19,7 @@ const initInfoScreen = () =>{
 
     render(info, infoTop());
     render(info, infoBottom());
-    render(find(".wrapper"), leftScreen());
+    render(find(".wrapper"), healthBar());
     render(find(".wrapper"), info);
 }
 
@@ -38,11 +40,11 @@ const infoBottom = () =>{
     return(info);
 }
 
-const leftScreen = () => {
-    const left = create("div");
+const healthBar = () => {
+    const health = create("div");
     const width = 32;
-    addClass(left, ["infoLeft"]);
-    style(left, `
+    addClass(health, ["healthbar"]);
+    style(health, `
         width: ${width}px;
         height: 640px;
         background-color: #242424;
@@ -52,10 +54,42 @@ const leftScreen = () => {
         top:-5px;
         color:white;
         font-family:munro;
+        display:flex;
+        flex-direction: column;
+        justify-content: flex-end;
     `)
-    write(left, "😊")
 
-    return left;
+    setHealth(health);
+
+    return health;
+}
+
+const setHealth = (health) =>{
+    let myhp;
+    let healthbar;
+    if(find(".healthbar") === null) {myhp = hp; healthbar = health}
+    else if (typeof health === 'number') {
+        myhp = health; 
+        hp = myhp;
+        healthbar = find(".healthbar"); 
+        healthbar.textContent = '';
+    }
+    
+    for(let i =0; i<myhp; i++){
+        const num = 20-i;
+        const starthue = 350;
+        const endhue = 110 + 360
+        const hue = Math.floor((endhue - starthue)*(num/20)+starthue)
+        const heart = create("div");
+        heart.id = `heart-${num}`;
+        style(heart, `
+            height:28px;
+            width: 28px;
+            margin: 2px;
+            background-color: hsl(${hue}, 70%, 62%);
+        `)
+        render(healthbar, heart)
+    }
 }
 
 const displayInfo = (code, rawicon) => {
@@ -102,4 +136,4 @@ const displayInfo = (code, rawicon) => {
     render(info, text);
 }
 
-export {initInfoScreen, displayInfo};
+export {initInfoScreen, displayInfo, setHealth};
