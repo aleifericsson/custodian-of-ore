@@ -62,13 +62,14 @@ function miniCanvas(name, img, imgsrc){
     this.initMouse = (canv, imgele) => {
         const ctx = canv.getContext("2d");
         let mousePos;
-        const backcanv = find(".layer-1");
+        const backcanv = find(".wrapper");
         let interval_list = [];
         let mousePos2;
         let size = this.size;
         let curFra = this.currentFrame;
 
         const hoverFunc = (evt) => {
+            console.log("JSLKJD")
             if (interval_list.length === 0){
                 interval_list.push(setInterval(() => {
                     curFra += 1;

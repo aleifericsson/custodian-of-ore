@@ -1,5 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
+
 
 module.exports = {
   entry: './src/index.js',
@@ -8,7 +10,13 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'webpack-test3',
       mode: 'Development',
-    }),
+    }),/*
+    new CopyPlugin({
+      patterns: [
+        { from: "public", to: "" }, //to the dist root directory
+        { from: 'src/assets', to: 'assets' }
+    ],
+    })*/
   ],
   mode: 'production',
   output: {

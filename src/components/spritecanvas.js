@@ -4,6 +4,7 @@ import { detectTile, getTiles } from "../scripts/canvasFuncs"
 import hlsrc from "../images/decor.png"
 import { collision_tiles } from "../scripts/canvasFuncs"
 import coinsrc from "../images/coin.png"
+import pdsrc from "../images/package_drone.png";
 
 let sc_list = [];
 let coin_list = [];
@@ -12,7 +13,7 @@ const spriteCanvas = (wrapper, name, size, imgsrc, x, y, speed, show, frames) =>
 
     const canv = create("canvas");
     addClass(canv, ["spritecanvas"]);
-    attribs(canv, ["id", "width", "height"], [name, `${size}px`, `${size}px`]);
+    attribs(canv, ["id", "width", "height"], [name, `${64}px`, `${64}px`]);
 
     const img = new Image();
     img.src = imgsrc;
@@ -54,9 +55,10 @@ const spriteCanvas = (wrapper, name, size, imgsrc, x, y, speed, show, frames) =>
 
     if (show){
         const ctx = canv.getContext("2d");
+        ctx.imageSmoothingEnabled = false;
         img.onload = function() {
-            ctx.clearRect(0,0,size,size);
-            ctx.drawImage(img, 0, 64*0, size, size, 0, 0, size,size);
+            ctx.clearRect(0,0,64,64);
+            ctx.drawImage(img, 0, size*0, size, size, 0, 0, 64,64);
         }
         render(wrapper, canv);
     }
@@ -74,7 +76,7 @@ const moveTowards = (index, x, y) => {
     const nx = obj.x+ux;
     const ny = obj.y+uy;
     const size = sc_list[index].size
-    const incoming_tile = detectTile(nx,ny)
+    const incoming_tile = detectTile(nx,ny);
     if (mag>obj.speed && !collision_tiles.includes(incoming_tile)){
         sc_list[index].x = nx;
         sc_list[index].y = ny;
@@ -171,6 +173,7 @@ const initSC = (wrapper) =>{
     const car = spriteCanvas(wrapper, "car", 64, carsrc, 300, 200, 5, true,3);
     const highlight = spriteCanvas(wrapper, "highlight", 64, hlsrc, 0,0, 0, false,8)
     const coin = spriteCanvas(wrapper, "coin", 64, coinsrc, 400, 500, 0, true, 12)
+    const package_drone = spriteCanvas(wrapper, "package_drone", 32, pdsrc, 100, 300, 5, true, 1)
 }
 
 export{initSC, moveTowards ,setShow, drawSC, teleport, coin_list, destroySC, spriteCanvas}
