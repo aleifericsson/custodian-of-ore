@@ -1,13 +1,10 @@
 import {render, remove, create, addClass, hasClass, remClass, find, write, detect, undetect, style, attribs} from "../scripts/QoL"
-import carsrc from "../images/Car_updated.png"
 import { detectTile, getTiles } from "../scripts/canvasFuncs"
-import hlsrc from "../images/decor.png"
 import { collision_tiles } from "../scripts/canvasFuncs"
-import coinsrc from "../images/coin.png"
 import pdsrc from "../images/package_drone.png";
+import { package_drone } from "../scripts/elements";
 
 let sc_list = [];
-let coin_list = [];
 
 const spriteCanvas = (wrapper, name, size, imgsrc, x, y, speed, show, frames) =>{
 
@@ -15,9 +12,15 @@ const spriteCanvas = (wrapper, name, size, imgsrc, x, y, speed, show, frames) =>
     addClass(canv, ["spritecanvas"]);
     attribs(canv, ["id", "width", "height"], [name, `${64}px`, `${64}px`]);
 
-    const img = new Image();
-    img.src = imgsrc;
-
+    let img;
+    if (imgsrc === "none"){
+        img = "none";
+    }
+    else{
+        img = new Image();
+        img.src = imgsrc;
+    }
+    
     style(canv, `
         position:absolute;
         pointer-events:none;
@@ -43,16 +46,7 @@ const spriteCanvas = (wrapper, name, size, imgsrc, x, y, speed, show, frames) =>
         timer: 1,
     };
 
-    if (name === "car"){
-        obj.direction_data = {"left":0,"downleft":1,"down":2,"upright":3,"downright":4,"upleft":5,"up":6,"right":7}
-    }
-
     sc_list.push(obj);
-
-    if (name === "coin"){
-        coin_list.push(obj);
-    }
-
     if (show){
         const ctx = canv.getContext("2d");
         ctx.imageSmoothingEnabled = false;
@@ -62,14 +56,19 @@ const spriteCanvas = (wrapper, name, size, imgsrc, x, y, speed, show, frames) =>
         }
         render(wrapper, canv);
     }
+    if(name === "package_drone"){
+        package_drone = canv;
+    }
 
     return canv;
 }
 
 const moveTowards = (index, x, y) => {
     const obj = sc_list[index]
-    const dx = x-obj.x;
-    const dy = y-obj.y;
+    const myx = x-obj.size/2;
+    const myy = y-obj.size/2;
+    const dx = myx-obj.x;
+    const dy = myy-obj.y;
     const mag = Math.sqrt(dx*dx + dy*dy);
     const ux = (dx/mag)*obj.speed;
     const uy = (dy/mag)*obj.speed;
@@ -101,7 +100,7 @@ const moveTowards = (index, x, y) => {
         else if (angle <= -112.5 && angle >= -157.5) direction = "downleft"
         else if (angle >= 157.5 && angle <= -157.5) direction = "left"
 
-        drawSC(0, "increment", direction);
+        //drawSC(0, "increment", direction);
     }
 }
 
@@ -170,10 +169,7 @@ const destroySC = (obj) => {
 }
 
 const initSC = (wrapper) =>{
-    const car = spriteCanvas(wrapper, "car", 64, carsrc, 300, 200, 5, true,3);
-    const highlight = spriteCanvas(wrapper, "highlight", 64, hlsrc, 0,0, 0, false,8)
-    const coin = spriteCanvas(wrapper, "coin", 64, coinsrc, 400, 500, 0, true, 12)
-    const package_drone = spriteCanvas(wrapper, "package_drone", 32, pdsrc, 100, 300, 5, true, 1)
+    spriteCanvas(wrapper, "package_drone", 32, pdsrc, 100, 300, 5, true, 1)
 }
 
-export{initSC, moveTowards ,setShow, drawSC, teleport, coin_list, destroySC, spriteCanvas}
+export{initSC, moveTowards ,setShow, drawSC, teleport,destroySC, spriteCanvas}

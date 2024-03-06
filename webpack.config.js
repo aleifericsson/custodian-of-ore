@@ -8,7 +8,7 @@ module.exports = {
   devtool: 'inline-source-map',
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'webpack-test3',
+      title: 'Custodian of Ore',
       mode: 'Development',
     }),/*
     new CopyPlugin({

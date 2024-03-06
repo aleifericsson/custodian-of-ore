@@ -1,7 +1,7 @@
 {
-  "name": "webpack-test3",
+  "name": "custodian-of-ore",
   "version": "1.0.0",
-  "description": "test of webs",
+  "description": "my game",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

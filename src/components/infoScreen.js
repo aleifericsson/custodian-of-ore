@@ -1,5 +1,6 @@
 import {render, remove, create, addClass, hasClass, remClass, find, write, detect, undetect, style, attribs, isElement} from "../scripts/QoL"
 import { descriptions } from "../scripts/data";
+import { wrapper } from "../scripts/elements";
 
 let hp = 20;
 
@@ -20,8 +21,8 @@ const initInfoScreen = () =>{
 
     render(info, infoTop());
     render(info, infoBottom());
-    render(find(".wrapper"), healthBar());
-    render(find(".wrapper"), info);
+    render(wrapper, healthBar());
+    render(wrapper, info);
 }
 
 const infoTop = () =>{

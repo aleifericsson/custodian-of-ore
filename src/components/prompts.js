@@ -2,6 +2,7 @@ import {render, remove, create, addClass, remClass, hasClass, attribs, find, wri
 import close from "../images/close.png"
 import closesound from "../sounds/close.mp3"
 import { playAudio } from "../scripts/sounds";
+import { wrapper } from "../scripts/elements";
 
 let butOv;
 let currentCode = 0;
@@ -48,7 +49,7 @@ const togglePrompt = (e) => {
     const exists = find(`#prompt-${code}`);
     if (exists != null) { 
         addClass(exists, ["end-state"]);
-        setTimeout(()=> remove(find(".wrapper"), exists), 200);
+        setTimeout(()=> remove(wrapper, exists), 200);
     } 
     else{
         createPrompt(prompt,code, title);
@@ -78,7 +79,7 @@ const createPrompt = (mytext, code, title) => {
         render(prompt, drag);
 
         render(prompt, createText(mytext));
-        render(find(".wrapper"), prompt);
+        render(wrapper, prompt);
 
         setTimeout(()=> prompt.classList.remove("start-state"), 100);
 }
@@ -152,7 +153,7 @@ const mouseDown = (e) =>{
 const mouseMove = (evt) => {
     evt.preventDefault();
     const prompt = find(`#prompt-${currentCode}`);
-    const rect = find(".wrapper").getBoundingClientRect();
+    const rect = wrapper.getBoundingClientRect();
     const mousePos = {
         x: evt.clientX - rect.left,
         y: evt.clientY - rect.top

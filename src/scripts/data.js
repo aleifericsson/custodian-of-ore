@@ -1,5 +1,5 @@
 
-const tools = ["Magnet_Drone", "Gunner_Drone", "Lightning_Rod_Drone", "Mirror_Drone", "Air_Strike", "Machine_Gun",
+const tool_list = ["Magnet_Drone", "Gunner_Drone", "Lightning_Rod_Drone", "Mirror_Drone", "Air_Strike", "Machine_Gun",
  "Drone_Control_Hack", "Drone_GPS_Hack", "Recall_Drones", "Repair_Package_Drone"]
 
 const descriptions = [`
@@ -72,4 +72,4 @@ When near package drone, restores
 - Cooldown: 30 seconds
 `]
 
-export {tools, descriptions}
+export {tool_list, descriptions}

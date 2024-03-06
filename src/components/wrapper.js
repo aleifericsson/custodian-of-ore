@@ -1,6 +1,7 @@
 import {render, create, addClass, remClass, find, write, detect,style} from "../scripts/QoL"
+import { wrapper } from "../scripts/elements";
 
-const wrapper = () =>{   
+const wrappe = () =>{   
     const rapper = create("div");
     addClass(rapper, ["wrapper"]);
     style(rapper,`
@@ -10,6 +11,7 @@ const wrapper = () =>{
         height:640px;
     `)
     render(document.body, rapper);
+    wrapper = rapper;
     return rapper;
 }
 
@@ -31,4 +33,4 @@ const miniWrapper = () =>{
     return rapper;
 }
 
-export {wrapper, miniWrapper};
+export {wrappe, miniWrapper};

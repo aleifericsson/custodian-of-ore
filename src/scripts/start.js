@@ -3,7 +3,7 @@ import '../css/fonts.css';
 import pattern from "../images/pattern_102.gif"
 import {render, create, addClass, remClass, find, write, style, detect} from "../scripts/QoL"
 import { canvas, runEverything } from '../components/canvas';
-import { wrapper, miniWrapper } from '../components/wrapper';
+import { wrappe, miniWrapper } from '../components/wrapper';
 import { debugTools } from '../components/debugTools';
 import { initMinis } from '../components/miniCanvas';
 import { buttonOverlay } from '../components/buttonOverlay';
@@ -23,7 +23,7 @@ const initCanvases = () => {
         background-size: 70px;
         background-repeat: repeat;
     `)
-    const rapper = wrapper();
+    const rapper = wrappe();
     const backgroundCanvas = canvas(width,height,0);
     const solidBGs = canvas(width,height,1);
     render(rapper, backgroundCanvas);

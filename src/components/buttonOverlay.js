@@ -1,7 +1,7 @@
 import {render, remove, create, addClass, remClass, find, write, detect, undetect, style, hasClass} from "../scripts/QoL"
 import buttons from "../images/Buttons_updated.png"
 import { togglePrompt } from "./prompts";
-import { coin_list, destroySC, drawSC, moveTowards, setShow, teleport } from "./spritecanvas";
+import {destroySC, drawSC, moveTowards, setShow, teleport } from "./spritecanvas";
 import { renderShader, removeShaders, renderLevel } from "./shaders";
 
 const butSize = 32;
@@ -25,10 +25,7 @@ const buttonOverlay = (width, height) =>{
 }
 
 const generateButtons = (butOv) => {
-    render(butOv, Button("promptbut-1", 2, togglePrompt, 16, 16))
-    render(butOv, Button("shaker", 3, toggleShake, 16, 80))
-    render(butOv, Button("pointer", 7, togglePointer, 16, 144))
-    render(butOv, Button("changebg", 8, changeBackground, 16, 208))
+    render(butOv, Button("changebg", 8, changeBackground, 16, 16))
 }
 
 const Button = (name, spritenum, func, x, y) =>{
@@ -49,49 +46,7 @@ const Button = (name, spritenum, func, x, y) =>{
     return button;
 }
 
-const toggleShake = (e) => {
-    const promptbut = find("#promptbut-1");
-    if (hasClass(promptbut, "vibrate")){
-        remClass(promptbut, ["vibrate"]);
-    }
-    setTimeout(() => addClass(promptbut, ["vibrate"]), 100);
-
-    let i;
-    for (i = coin_list.length - 1; i >= 0; i -= 1) {
-        destroySC(coin_list[i]);
-    }
-}
-
-const changeBackground = (e) => {
-    bg += 1;
-    if (bg === 2) {
-        bg = -1;
-        removeShaders();
-    }
-    /*
-    const canv = find(".layer-1");
-    const ctx = canv.getContext("2d");
-    const size = 160;
-    if (bg !== -1){
-        const img = new Image();
-        img.src = background;
-        img.onload = function() {
-            ctx.drawImage(img, 160*bg, 0, size, size, 0, 0, 640,640);
-        }
-    }
-    else ctx.clearRect(0,0,640,640);
-    */
-    if (bg === 0) {
-        renderShader("light-shader");
-        renderLevel("level-1");
-    }
-    else if (bg === 1) {
-        removeShaders();
-        renderLevel("level-2");
-        renderShader("dark-shader");
-    }
-}
-
+/*
 const togglePointer = (evt) => {
     const but = find("#pointer")
     const canv = find(".layer-0")
@@ -129,5 +84,36 @@ const togglePointer = (evt) => {
         setShow(1, true);
     }
 }
+*/
 
-export {buttonOverlay ,togglePointer}
+const changeBackground = (e) => {
+    bg += 1;
+    if (bg === 2) {
+        bg = -1;
+        removeShaders();
+    }
+    /*
+    const canv = find(".layer-1");
+    const ctx = canv.getContext("2d");
+    const size = 160;
+    if (bg !== -1){
+        const img = new Image();
+        img.src = background;
+        img.onload = function() {
+            ctx.drawImage(img, 160*bg, 0, size, size, 0, 0, 640,640);
+        }
+    }
+    else ctx.clearRect(0,0,640,640);
+    */
+    if (bg === 0) {
+        renderShader("light-shader");
+        renderLevel("level-1");
+    }
+    else if (bg === 1) {
+        removeShaders();
+        renderLevel("level-2");
+        renderShader("dark-shader");
+    }
+}
+
+export {buttonOverlay}

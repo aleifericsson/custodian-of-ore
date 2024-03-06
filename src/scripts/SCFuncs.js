@@ -1,11 +1,14 @@
 import { incrementScore, score } from "../components/debugTools";
-import { togglePrompt } from "../components/prompts";
-import { coin_list, destroySC } from "../components/spritecanvas"
-import { find } from "./QoL";
+import { destroySC } from "../components/spritecanvas"
+import { checkCollision, find, findAll } from "./QoL";
+import { magnet_hitbox, package_drone } from "./elements";
 import { playAudio } from "./sounds";
+import { handleMagnet } from "./toolFuncs";
 import { trigger } from "./triggers";
 
 const animateSCs = () => {
+    checkCollisions();
+    /*
     coin_list.forEach(coin => {
         drawObj(coin, "increment", "none");
         const overlap = checkCollision(coin, find("#car"));
@@ -18,6 +21,7 @@ const animateSCs = () => {
             }
         }
     })
+    */
 }
 
 const drawObj = (obj, frame, direction) => {
@@ -49,20 +53,17 @@ const drawObj = (obj, frame, direction) => {
     }
 }
 
-const checkCollision = (sc, thing) => {
-    // Get the bounding box of the first element 
-    const rect1 = sc.ele.getBoundingClientRect(); 
-    
-    // Get the bounding box of the second element 
-    const rect2 = thing.getBoundingClientRect(); 
-    
-    // Check if the two elements overlap 
-    const overlap = !(rect1.right < rect2.left ||  
-                    rect1.left > rect2.right ||  
-                    rect1.bottom < rect2.top ||  
-                    rect1.top > rect2.bottom); 
+const checkCollisions = () =>{
+    let overlap = checkCollision(magnet_hitbox, package_drone);
+    if (overlap) handleMagnet(package_drone);
 
-    return overlap;
+    const paths = findAll(".pathblock");
+    paths.forEach(path => {
+        if (checkCollision(path, package_drone)){
+            overlap = true;
+        }
+    })
+    //console.log(overlap);
 }
 
 export {animateSCs}

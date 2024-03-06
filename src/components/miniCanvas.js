@@ -1,12 +1,11 @@
-import {render, remove, create, addClass, remClass, find, write, detect, undetect, style, attribs} from "../scripts/QoL"
-import Can from "../images/can.png"
-import Coin from "../images/coin.png"
-import decor from "../images/decor.png"
+import {render, remove, create, addClass, hasclass, remClass, find, write, detect, undetect, style, attribs, moveTo, getPos} from "../scripts/QoL"
 import { backgroundChange } from "../scripts/canvMouseFuncs";
 import { spriteCanvas } from "./spritecanvas";
 import { displayInfo } from "./infoScreen";
-import icons from "../images/icons.png"
-import { tools } from "../scripts/data";
+import tools from "../images/tools.png"
+import { tool_list } from "../scripts/data";
+import { handleMagnet, magnethitbox } from "../scripts/toolFuncs";
+import { magnet_hitbox, wrapper } from "../scripts/elements";
 
 let miniList = [];
 
@@ -74,7 +73,7 @@ function miniCanvas(name, img, imgsrc, index){
     this.initMouse = (canv, imgele) => {
         const ctx = canv.getContext("2d");
         let mousePos;
-        const backcanv = find(".wrapper");
+        const backcanv = wrapper;
         let interval_list = [];
         let mousePos2;
         let size = this.size;
@@ -84,25 +83,19 @@ function miniCanvas(name, img, imgsrc, index){
         const hoverFunc = (evt) => {
             if (interval_list.length === 0){
                 interval_list.push(setInterval(() => {
-                }, 250))
+                    if (name === "Magnet_Drone"){
+                        moveTo(magnet_hitbox, mousePos2.x, mousePos2.y, 200);
+                    }
+                }, 200))
             }
         }
         const updateDrag = (evt) =>{
             evt.preventDefault();
 
-            const rect = document.body.getBoundingClientRect();
-            const rect2 = backcanv.getBoundingClientRect();
-            mousePos2 = {
-                x: evt.clientX - rect2.left,
-                y: evt.clientY - rect2.top
-            };
-            mousePos = {
-                x: evt.clientX - rect.left,
-                y: evt.clientY - rect.top
-            };
-                    
-            canv.style.top = mousePos.y -32 +"px";
-            canv.style.left = mousePos.x -32 + "px";
+            mousePos2 = getPos(evt, backcanv)
+            mousePos = getPos(evt, document.body);
+            
+            moveTo(canv, mousePos.x, mousePos.y, 64)
 
         }
 
@@ -115,23 +108,30 @@ function miniCanvas(name, img, imgsrc, index){
             detect(backcanv, "mouseenter", hoverFunc)
             ctx.clearRect(0,0,64,64);
             ctx.drawImage(img, index*16, 0, 16, 16, 0, 0, 64,64);
+            if (name === "Magnet_Drone"){
+                magnethitbox()
+            }
         }
 
         const mouseUpFunc = (evt) => {
-            undetect(document.body, "mousemove", updateDrag)
-            undetect(backcanv, "mouseenter", hoverFunc)
-            if (interval_list.length!==0){
-                if(name === "coin"){
-                    const coin = spriteCanvas(find(".wrapper"), "coin", 64, Coin, mousePos2.x-32, mousePos2.y-32, 0, true, 12)
+                undetect(document.body, "mousemove", updateDrag)
+                undetect(backcanv, "mouseenter", hoverFunc)
+                if (interval_list.length!==0){
+                    if(name === "coin"){
+                        //const coin = spriteCanvas(find(".wrapper"), "coin", 64, Coin, mousePos2.x-32, mousePos2.y-32, 0, true, 12) spawns sc of coin
+                    }
                 }
-            }
-            clearInterval(interval_list[0]);
-            interval_list = [];
-            const hasChild = find(`.mini-canvas.${this.name}`) != null;
-            if (hasChild) {
-                remove(document.body, canv);
-            }
-            ctx.clearRect(0,0,size,size);
+                clearInterval(interval_list[0]);
+                interval_list = [];
+                const hasChild = find(`.mini-canvas.${this.name}`) != null;
+                if (hasChild) {
+                    remove(document.body, canv);
+                }
+                ctx.clearRect(0,0,size,size);
+                if (name === "Magnet_Drone" && magnet_hitbox !== null){
+                    remove(wrapper, magnet_hitbox);
+                }
+            
         }
 
         const updateInfo = (evt) =>{
@@ -146,8 +146,8 @@ function miniCanvas(name, img, imgsrc, index){
 
 const initMini = (name) => {
     const img = new Image()
-    img.src = icons;
-    const mini = new miniCanvas(name, img, icons, miniList.length)
+    img.src = tools;
+    const mini = new miniCanvas(name, img, tools, miniList.length)
     const miniele = mini.init();
     miniList.push(mini);
     return miniele;
@@ -155,7 +155,7 @@ const initMini = (name) => {
 
 const initMinis = (miniWrapper) => {
     
-    tools.map(tool => render(miniWrapper, initMini(tool)))
+    tool_list.map(tool => render(miniWrapper, initMini(tool)))
     
 }
 
