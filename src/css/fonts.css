@@ -1,0 +1,20 @@
+html {
+  overflow-y: scroll;
+}
+
+@font-face {
+    font-family: 'munro';
+    src: url(../fonts/munro.ttf) format('truetype');
+  }
+
+  /*
+  @font-face {
+    font-family: 'munro-narrow';
+    src: url(../fonts/munro-narrow.ttf) format('truetype');
+  }
+  
+  @font-face {
+    font-family: 'munro-small';
+    src: url(../fonts/munro-small.ttf) format('truetype');
+  }
+  */
