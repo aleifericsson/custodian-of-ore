@@ -1,5 +1,4 @@
 import {render, remove, create, addClass, remClass, hasClass, attribs, find, write, detect, undetect, style} from "../scripts/QoL"
-import shadow from "../images/shad.png"
 import { playAudio } from "../scripts/sounds";
 
 let currentDialogue = 0;
@@ -115,9 +114,7 @@ const createText = (mytext,charname) =>{
 }
 
 const initDialogues = () => {
-    dialogueObj("man", "shadow",0, shadow, true);
-    dialogueObj("life can be tough", "shadow",1, shadow, false);
-    dialogueObj("you aint half bad bro", "shadow", 2, shadow, false);
+    //dialogueObj("man", "shadow",0, shadow, true);
 }
 
 export {initDialogues, nextDialogue};

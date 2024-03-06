@@ -5,27 +5,29 @@ import decor from "../images/decor.png"
 import { backgroundChange } from "../scripts/canvMouseFuncs";
 import { spriteCanvas } from "./spritecanvas";
 import { displayInfo } from "./infoScreen";
+import icons from "../images/icons.png"
+import { tools } from "../scripts/data";
 
 let miniList = [];
 
-function miniCanvas(name, img, imgsrc){
+function miniCanvas(name, img, imgsrc, index){
     this.name = name;
-    this.size = 64;
+    this.index = index;
     this.img = img;
     this.imgsrc = imgsrc;
     this.currentFrame = 0;
     this.canvele;
     this.imgele;
 
-    this.init = (index) =>{
+    this.init = () =>{
+        const index = this.index;
         this.addedleft = miniList.length*64;
 
         const size = this.size;
         const name = this.name;
         const canv = create("canvas");
         addClass(canv, ["mini-canvas", `${name}`]);
-        attribs(canv, ["width", "height"], [`${size}px`,`${size}px`]);
-
+        attribs(canv, ["width", "height"], [`${64}px`,`${64}px`]);
 
         style(canv, `
             position:absolute;
@@ -34,23 +36,33 @@ function miniCanvas(name, img, imgsrc){
         `);
         const ctx = canv.getContext("2d");
         const img = this.img;
+
+        ctx.imageSmoothingEnabled = false;
         img.onload = function() {
-            ctx.clearRect(0,0,size,size);
-            ctx.drawImage(img, 0, 0, size, size, 0, 0, size,size);
+            ctx.clearRect(0,0,64,64);
+            ctx.drawImage(img, 16*index, 0, 16, 16, 0, 0, 64,64);
         }
 
         this.canvele = canv;
         this.ctx = ctx;
 
-        const imgele = create("div");
+        const imgele = create("canvas");
         addClass(imgele, ["canvas-icon"])
-        imgele.id = name;
+        attribs(imgele, ["width", "height", "id"], [`${64}px`,`${64}px`, name]);
         style(imgele, `
-            width: 64px;
-            height: 64px;
-            background: url(${this.imgsrc}) -64px 0, url(${decor});
+
         `)
+
+        const ctx2 = imgele.getContext("2d");
+        ctx2.imageSmoothingEnabled = false;
+
+        img.onload = function() {
+            ctx2.clearRect(0,0,64,64);
+            ctx2.drawImage(img, 16*index, 0, 16, 16, 0, 0, 64,64);
+        }
+            
         imgele.dataset.imgsrc = this.imgsrc;
+        imgele.dataset.index = index;
 
         this.imgele = imgele;
 
@@ -67,27 +79,11 @@ function miniCanvas(name, img, imgsrc){
         let mousePos2;
         let size = this.size;
         let curFra = this.currentFrame;
+        let index = this.index;
 
         const hoverFunc = (evt) => {
-            console.log("JSLKJD")
             if (interval_list.length === 0){
                 interval_list.push(setInterval(() => {
-                    curFra += 1;
-                    if (this.name === "can"){
-                        backgroundChange(ctx, mousePos2);
-                        if(curFra === 14){
-                            curFra = 10
-                        }
-                    }
-                    if(this.name === "coin"){
-                        if(curFra === 12){
-                            curFra = 0;
-                        }
-                    }
-                    const img = this.img;
-                    ctx.clearRect(0,0,size,size);
-                    ctx.drawImage(img, curFra*size, 0, size, size, 0, 0, size,size);
-                    this.currentFrame = curFra;
                 }, 250))
             }
         }
@@ -111,15 +107,14 @@ function miniCanvas(name, img, imgsrc){
         }
 
         const mouseDownFunc = (evt) => {
-            let curFra = this.currentFrame;
             evt.preventDefault();  
             canv.style.top ="-1000px";
             canv.style.left = "-1000px";
             render(document.body,canv);
             detect(document.body, "mousemove", updateDrag)
             detect(backcanv, "mouseenter", hoverFunc)
-            ctx.clearRect(0,0,size,size);
-            ctx.drawImage(img, curFra*size, 0, size, size, 0, 0, size,size);
+            ctx.clearRect(0,0,64,64);
+            ctx.drawImage(img, index*16, 0, 16, 16, 0, 0, 64,64);
         }
 
         const mouseUpFunc = (evt) => {
@@ -149,18 +144,19 @@ function miniCanvas(name, img, imgsrc){
     }       
 }
 
-const initMini = (name, imgsrc) => {
+const initMini = (name) => {
     const img = new Image()
-    img.src = imgsrc;
-    const mini = new miniCanvas(name, img, imgsrc)
-    const miniele = mini.init(miniList.length);
+    img.src = icons;
+    const mini = new miniCanvas(name, img, icons, miniList.length)
+    const miniele = mini.init();
     miniList.push(mini);
     return miniele;
 }
 
 const initMinis = (miniWrapper) => {
-    render(miniWrapper, initMini("can", Can))
-    render(miniWrapper, initMini("coin", Coin))
+    
+    tools.map(tool => render(miniWrapper, initMini(tool)))
+    
 }
 
 export {initMinis}

@@ -1,4 +1,5 @@
 import {render, remove, create, addClass, hasClass, remClass, find, write, detect, undetect, style, attribs, isElement} from "../scripts/QoL"
+import { descriptions } from "../scripts/data";
 
 let hp = 20;
 
@@ -96,18 +97,30 @@ const displayInfo = (code, rawicon) => {
     const cloned = rawicon.cloneNode(false);
     cloned.id = "infoPic"
     remClass(cloned, ["canvas-icon"])
+    attribs(cloned, ["width", "height"], [`${64}px`,`${64}px`]);
     style(cloned, `
-        height:64px;
-        width:64px;
-        background: url(${cloned.dataset.imgsrc});
+        padding-left: 5px;
+        padding-top: 10px;
     `)
 
+    const ctx2 = cloned.getContext("2d");
+    ctx2.imageSmoothingEnabled = false;
+    const img = new Image();
+    img.src = cloned.dataset.imgsrc;
+    const index = cloned.dataset.index;
+
+    img.onload = function() {
+        ctx2.clearRect(0,0,64,64);
+        ctx2.drawImage(img, 16*index, 0, 16, 16, 0, 0, 64,64);
+    }
     const info = find(".infoTop");
     info.textContent = '';
 
     const title = create("div");
     addClass(title, ["infoTitle"]);
-    write(title, code);
+    let tit = code.replace("_", " ");
+    tit = tit.replace("_", " ")
+    write(title, tit);
     style(title, `
         padding-left: 5px;
         color:white;
@@ -122,14 +135,10 @@ const displayInfo = (code, rawicon) => {
         color:white;
         font-family: 'munro';
         font-size: 15px;
+        white-space: pre;
     `)
 
-    if (code === "can"){
-        write(text,"the can is for water");
-    }
-    else if (code === "coin"){
-        write(text, "the coin is for car somehow");
-    }
+    write(text, descriptions[index])
 
     render(info, title);
     render(info, cloned);
