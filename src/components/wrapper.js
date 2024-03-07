@@ -24,7 +24,7 @@ const miniWrapper = () =>{
         border: 5px solid darkslategray;
         width: 640px;
         display:flex;
-        justify-content: flex-start; 
+        justify-content: space-around;
         height:64px;
         align-items:center;
         margin-top: 10px;

@@ -8,7 +8,7 @@ const butSize = 32;
 let butOv;
 let pointer = false;
 let pointTime = [];
-let bg = -1;
+let bg = 0;
 
 const buttonOverlay = (width, height) =>{
     butOv = create("div");
@@ -86,12 +86,22 @@ const togglePointer = (evt) => {
 }
 */
 
-const changeBackground = (e) => {
+const changeBackground = () => {
+    const dark_levels = [4,5,8,9,10]
+    removeShaders();
     bg += 1;
-    if (bg === 2) {
-        bg = -1;
-        removeShaders();
-    }
+        write(find("#level"), `Level: ${bg}`)
+        renderLevel(`level-${bg}`)
+        if (dark_levels.includes(bg)){
+            renderShader("dark-shader");
+        }
+        else{   
+            renderShader("light-shader");
+        }
+        if (bg === 10) {
+            bg = 0;
+        }
+    
     /*
     const canv = find(".layer-1");
     const ctx = canv.getContext("2d");
@@ -105,15 +115,6 @@ const changeBackground = (e) => {
     }
     else ctx.clearRect(0,0,640,640);
     */
-    if (bg === 0) {
-        renderShader("light-shader");
-        renderLevel("level-1");
-    }
-    else if (bg === 1) {
-        removeShaders();
-        renderLevel("level-2");
-        renderShader("dark-shader");
-    }
 }
 
-export {buttonOverlay}
+export {buttonOverlay, changeBackground}

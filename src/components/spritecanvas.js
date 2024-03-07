@@ -2,6 +2,7 @@ import {render, remove, create, addClass, hasClass, remClass, find, write, detec
 import { detectTile, getTiles } from "../scripts/canvasFuncs"
 import { collision_tiles } from "../scripts/canvasFuncs"
 import pdsrc from "../images/package_drone.png";
+import mdsrc from "../images/missile_drone.png";
 import { package_drone } from "../scripts/elements";
 
 let sc_list = [];
@@ -72,14 +73,15 @@ const moveTowards = (index, x, y) => {
     const mag = Math.sqrt(dx*dx + dy*dy);
     const ux = (dx/mag)*obj.speed;
     const uy = (dy/mag)*obj.speed;
-    const nx = obj.x+ux;
-    const ny = obj.y+uy;
+    const nx = obj.x+ux-obj.size/2;
+    const ny = obj.y+uy-obj.size/2;
     const size = sc_list[index].size
     const incoming_tile = detectTile(nx,ny);
-    if (mag>obj.speed && !collision_tiles.includes(incoming_tile)){
-        sc_list[index].x = nx;
-        sc_list[index].y = ny;
-        teleport(index, nx-size/2, ny-size/2)
+    const outta_bounds = nx > 640-obj.size/2 || nx < 0-obj.size/2 || ny > 640-obj.size/2 || ny < 0-obj.size/2
+    if (mag>obj.speed && !outta_bounds){
+        sc_list[index].x = nx+obj.size/2;
+        sc_list[index].y = ny+obj.size/2;
+        teleport(index, nx, ny)
         let angle = Math.atan(-uy/ux);
         if(ux < 0){
             if (-uy < 0){
@@ -170,6 +172,7 @@ const destroySC = (obj) => {
 
 const initSC = (wrapper) =>{
     spriteCanvas(wrapper, "package_drone", 32, pdsrc, 100, 300, 5, true, 1)
+    spriteCanvas(wrapper, "missile_drone", 32, mdsrc, 200, 400, 5, true, 1)
 }
 
-export{initSC, moveTowards ,setShow, drawSC, teleport,destroySC, spriteCanvas}
+export{initSC, moveTowards ,setShow, drawSC, teleport,destroySC, spriteCanvas, sc_list}

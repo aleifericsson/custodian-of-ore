@@ -1,6 +1,7 @@
 import {render, remove, create, addClass, hasClass, remClass, find, write, detect, undetect, style, attribs, isElement} from "../scripts/QoL"
 import { descriptions } from "../scripts/data";
 import { wrapper } from "../scripts/elements";
+import toolsrc from "../images/tools.png"
 
 let hp = 20;
 
@@ -62,6 +63,20 @@ const healthBar = () => {
     `)
 
     setHealth(health);
+
+    const icon = create("div");
+    style(icon, `
+        position:absolute;
+        width: 16px;
+        height: 16px;
+        background: url(${toolsrc}) -${16*9}px 0px;
+        scale: 300%;
+        image-rendering: pixelated;
+        left: 8px;
+        z-index: 5;
+        transform: translate(0, 3px);
+    `)
+    render(health, icon);
 
     return health;
 }

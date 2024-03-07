@@ -1,5 +1,5 @@
 
-const tool_list = ["Magnet_Drone", "Gunner_Drone", "Lightning_Rod_Drone", "Mirror_Drone", "Air_Strike", "Machine_Gun",
+const tool_list = ["Magnet_Drone", "Gunner_Drone", "Lightning_Rod_Drone", "Air_Strike", "Machine_Gun",
  "Drone_Control_Hack", "Drone_GPS_Hack", "Recall_Drones", "Repair_Package_Drone"]
 
 const descriptions = [`
@@ -25,15 +25,6 @@ Absorbs lightning in a small radius
 - Only one on the field at a time
 
 - Shatters after 3 lightning strikes
-- Cooldown: 20 seconds
-`,`
-Deflects lasers that hit it,
-click to change deflection direction
-
-- Placeable & draggable
-- Only one on the field at a time
-
-- Shatters after 3 laser deflections
 - Cooldown: 20 seconds
 `,`
 Call a missile to any point on the field

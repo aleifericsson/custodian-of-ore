@@ -1,7 +1,7 @@
 import floor_tiles from "../images/floor_tiles.png";
 
 let tiles;
-const collision_tiles = [11,14,15,16,19]
+const collision_tiles = [`11,14,15,16,19`]
 
 const updateBackground = (ctx, width, height) => {
     renderTiles(tiles,ctx);
@@ -56,9 +56,15 @@ const clear = (ctx, width, height) =>{
 }
 
 const detectTile = (x, y) => {
-    const i = Math.floor(x/64)
-    const j = Math.floor(y/64)
-    return tiles[i][j]
+    if (x > 0 && y > 0 && x <= 640 && y <= 640)
+    {
+        const i = Math.floor(x/64)
+        const j = Math.floor(y/64)
+        return tiles[i][j]
+    }
+    else{
+        return "outta bounds"
+    }
 }
 
 export {initBackground, updateBackground, clear, modifyTile, getTiles, collision_tiles, detectTile}

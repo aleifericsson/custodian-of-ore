@@ -39,8 +39,18 @@ const debugTools = () =>{
         color:white;
         font-family: munro;
     `)
+
+    const level = create("h1")
+    level.id = "level";
+    style(level,`
+        color:white;
+        font-family:munro;
+    `)
+
+    write(level, `Level: ${0}`)
     incrementScore(scoreele);
     render(debugWrap, scoreele);
+    render(debugWrap,level);
 
     return debugWrap;
 }

@@ -38,12 +38,52 @@ const renderLevel = (name) =>{
     `);
 
     if (name === "level-1"){
-        render(shad, pathBlock(0, 256, 640, 64));
+        render(shad, pathBlock(0, 200, 300, 150));
+        render(shad, pathBlock(200, 350, 440, 150));
     }
     else if(name === "level-2"){
-        render(shad, pathBlock(0, 128, 640, 64));
+        render(shad, pathBlock(400, 200, 240, 100));
+        render(shad, pathBlock(300, 200, 100, 300));
+        render(shad, pathBlock(100,500,300, 50));
+        render(shad, pathBlock(0, 550, 150, 50));
     }
+    else if (name === "level-3"){
+        render(shad, pathBlock(140, 550, 500, 50));
+        render(shad, pathBlock(140, 320, 50, 230));
+        render(shad, pathBlock(140, 270, 320, 50));
+        render(shad, pathBlock(410, 220, 50, 50));
+        render(shad, pathBlock(0, 170, 460, 50));
+    }
+    else if (name === "level-4"){
+        render(shad, pathBlock(360, 170, 280, 100));
+        render(shad, pathBlock(220, 270, 200, 50));
+        render(shad, pathBlock(100, 320, 170, 50));
+        render(shad, pathBlock(0, 370, 160, 50));
+    }
+    else if (name === "level-5"){
+        render(shad, pathBlock(480, 370, 160, 50));
+        render(shad, pathBlock(430, 230, 50, 360));
+        render(shad, pathBlock(317, 180, 233, 50));
+        
+        render(shad, pathBlock(550, 78, 50, 152));
+        render(shad, pathBlock(100, 478, 50, 112));
+        render(shad, pathBlock(267, 275, 50, 203));
+        render(shad, pathBlock(188, 78, 50, 111));
+        render(shad, pathBlock(138, 134, 50, 141));
 
+        render(shad, pathBlock(100, 28, 500, 50));
+        render(shad, pathBlock(100, 590, 380, 50));
+        render(shad, pathBlock(100, 428, 167, 50));
+        render(shad, pathBlock(0, 275, 267, 50));
+    }
+    else if (name === "level-6"){
+        render(shad, pathBlock(373, 275, 267, 50));
+        render(shad, pathBlock(373, 325, 50, 315));
+    }
+    if (name !== "level-10"){
+        render(shad, endBlock());
+    }
+    
     render(find(".shadwrap"), shad);
 }
 
@@ -58,11 +98,26 @@ const pathBlock = (x,y,width,height) => {
     const path = create("div");
     addClass(path, ["pathblock"]);
     style(path, `
-        background-color: rgba(245, 66, 66, 0.5);
+        background-color: rgba(245, 66, 66, 0.3);
         left: ${x}px;
         top: ${y}px;
         height: ${height}px;
         width: ${width}px;
+        position:absolute;
+    `)
+
+    return path;
+}
+
+const endBlock = () => {
+    const path = create("div");
+    addClass(path, ["endblock"]);
+    style(path, `
+        background-color: rgba(34, 117, 59, 0.6);
+        left: ${0}px;
+        top: ${0}px;
+        height: ${640}px;
+        width: ${10}px;
         position:absolute;
     `)
 
@@ -79,6 +134,7 @@ const initShaders = (wrapper) => {
     `);
 
     render(wrapper, shadwrap);
+    render(shadwrap, endBlock());
 }
 
 export {initShaders, renderShader, renderLevel, removeShaders}

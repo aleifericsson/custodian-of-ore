@@ -1,6 +1,7 @@
+import { changeBackground } from "../components/buttonOverlay";
 import { incrementScore, score } from "../components/debugTools";
-import { destroySC } from "../components/spritecanvas"
-import { checkCollision, find, findAll } from "./QoL";
+import { destroySC, sc_list, teleport } from "../components/spritecanvas"
+import { checkCollision, find, findAll, getPosEle, moveTo } from "./QoL";
 import { magnet_hitbox, package_drone } from "./elements";
 import { playAudio } from "./sounds";
 import { handleMagnet } from "./toolFuncs";
@@ -63,6 +64,14 @@ const checkCollisions = () =>{
             overlap = true;
         }
     })
+
+    if (checkCollision(find(".endblock"), package_drone)) {
+        changeBackground();
+        const pdpos = getPosEle(package_drone, 64);
+        moveTo(package_drone, pdpos.x+580, pdpos.y, 64);
+        sc_list[0].x = pdpos.x+580;
+        sc_list[0].y = pdpos.y;
+    }
     //console.log(overlap);
 }
 

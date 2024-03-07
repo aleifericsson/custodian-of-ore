@@ -86,7 +86,7 @@ function miniCanvas(name, img, imgsrc, index){
                     if (name === "Magnet_Drone"){
                         moveTo(magnet_hitbox, mousePos2.x, mousePos2.y, 200);
                     }
-                }, 200))
+                }, 100))
             }
         }
         const updateDrag = (evt) =>{
