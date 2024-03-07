@@ -1,3 +1,8 @@
+let level = 0;
+
+const dark_levels = [4,5,8,9,10]
+
+const wind_directions = ["down", "left", "up", "right", "random"];
 
 const tool_list = ["Magnet_Drone", "Gunner_Drone", "Lightning_Rod_Drone", "Air_Strike", "Machine_Gun",
  "Drone_Control_Hack", "Drone_GPS_Hack", "Recall_Drones", "Repair_Package_Drone"]
@@ -63,4 +68,4 @@ When near package drone, restores
 - Cooldown: 30 seconds
 `]
 
-export {tool_list, descriptions}
+export {tool_list, descriptions, level, dark_levels}

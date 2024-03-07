@@ -2,8 +2,9 @@ import {render, remove, create, addClass, hasClass, remClass, find, write, detec
 import { detectTile, getTiles } from "../scripts/canvasFuncs"
 import { collision_tiles } from "../scripts/canvasFuncs"
 import pdsrc from "../images/package_drone.png";
-import mdsrc from "../images/missile_drone.png";
+import gdsrc from "../images/gunner_drone.png";
 import { package_drone } from "../scripts/elements";
+import { enemy } from "../scripts/enemies";
 
 let sc_list = [];
 
@@ -172,7 +173,6 @@ const destroySC = (obj) => {
 
 const initSC = (wrapper) =>{
     spriteCanvas(wrapper, "package_drone", 32, pdsrc, 100, 300, 5, true, 1)
-    spriteCanvas(wrapper, "missile_drone", 32, mdsrc, 200, 400, 5, true, 1)
 }
 
 export{initSC, moveTowards ,setShow, drawSC, teleport,destroySC, spriteCanvas, sc_list}

@@ -3,12 +3,12 @@ import buttons from "../images/Buttons_updated.png"
 import { togglePrompt } from "./prompts";
 import {destroySC, drawSC, moveTowards, setShow, teleport } from "./spritecanvas";
 import { renderShader, removeShaders, renderLevel } from "./shaders";
+import { dark_levels, level } from "../scripts/data";
 
 const butSize = 32;
 let butOv;
 let pointer = false;
 let pointTime = [];
-let bg = 0;
 
 const buttonOverlay = (width, height) =>{
     butOv = create("div");
@@ -87,19 +87,18 @@ const togglePointer = (evt) => {
 */
 
 const changeBackground = () => {
-    const dark_levels = [4,5,8,9,10]
     removeShaders();
-    bg += 1;
-        write(find("#level"), `Level: ${bg}`)
-        renderLevel(`level-${bg}`)
-        if (dark_levels.includes(bg)){
+    level += 1;
+        write(find("#level"), `Level: ${level}`)
+        renderLevel(`level-${level}`)
+        if (dark_levels.includes(level)){
             renderShader("dark-shader");
         }
         else{   
             renderShader("light-shader");
         }
-        if (bg === 10) {
-            bg = 0;
+        if (level === 10) {
+            level = 0;
         }
     
     /*

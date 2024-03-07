@@ -1,4 +1,8 @@
 import {render, remove, create, addClass, hasClass, remClass, find, findAll, write, detect, undetect, style, attribs} from "../scripts/QoL"
+import { level } from "../scripts/data";
+import { shadwrap } from "../scripts/elements";
+import { enemy, removeEnemies } from "../scripts/enemies";
+import { effect, removeEffects } from "./effects";
 
 const renderShader = (name) => {
     const shad = create("div");
@@ -23,7 +27,7 @@ const renderShader = (name) => {
         ${extra_style}
     `);
 
-    render(find(".shadwrap"), shad);
+    render(shadwrap, shad);
 }
 
 const renderLevel = (name) =>{
@@ -36,10 +40,13 @@ const renderLevel = (name) =>{
         width: 640px;
         position: absolute;
     `);
-
+    removeEnemies();
+    removeEffects();
     if (name === "level-1"){
         render(shad, pathBlock(0, 200, 300, 150));
         render(shad, pathBlock(200, 350, 440, 150));
+        enemy("gunner_drone", 70, 450);
+        enemy("gunner_drone", 100, 50);
     }
     else if(name === "level-2"){
         render(shad, pathBlock(400, 200, 240, 100));
@@ -59,6 +66,7 @@ const renderLevel = (name) =>{
         render(shad, pathBlock(220, 270, 200, 50));
         render(shad, pathBlock(100, 320, 170, 50));
         render(shad, pathBlock(0, 370, 160, 50));
+        effect("wind", 20,100, 0);
     }
     else if (name === "level-5"){
         render(shad, pathBlock(480, 370, 160, 50));
@@ -75,21 +83,23 @@ const renderLevel = (name) =>{
         render(shad, pathBlock(100, 590, 380, 50));
         render(shad, pathBlock(100, 428, 167, 50));
         render(shad, pathBlock(0, 275, 267, 50));
+
+        effect("wind", 20,100, 90);
     }
     else if (name === "level-6"){
         render(shad, pathBlock(373, 275, 267, 50));
         render(shad, pathBlock(373, 325, 50, 315));
     }
     if (name !== "level-10"){
-        render(shad, endBlock());
+        render(shad, endBlock(":)"));
     }
     
-    render(find(".shadwrap"), shad);
+    
+    render(shadwrap, shad);
 }
 
 const removeShaders = () =>{
     const shadlist = findAll(".shader");
-    const shadwrap = find(".shadwrap");
 
     shadlist.forEach(shad => {remove(shadwrap,shad)});    
 }
@@ -109,32 +119,33 @@ const pathBlock = (x,y,width,height) => {
     return path;
 }
 
-const endBlock = () => {
+const endBlock = (thing) => {
     const path = create("div");
     addClass(path, ["endblock"]);
-    style(path, `
-        background-color: rgba(34, 117, 59, 0.6);
-        left: ${0}px;
-        top: ${0}px;
-        height: ${640}px;
-        width: ${10}px;
-        position:absolute;
-    `)
+        style(path, `
+            background-color: rgba(34, 117, 59, 0.6);
+            left: ${0}px;
+            top: ${0}px;
+            height: ${640}px;
+            width: ${10}px;
+            position:absolute;
+        `)
 
     return path;
 }
 
 const initShaders = (wrapper) => {
-    const shadwrap = create("div");
-    addClass(shadwrap, ["shadwrap"]);
-    style(shadwrap, `
+    const shadwra = create("div");
+    addClass(shadwra, ["shadwrap"]);
+    style(shadwra, `
         height:640px;
         width: 640px;
         position: absolute;
     `);
 
-    render(wrapper, shadwrap);
-    render(shadwrap, endBlock());
+    render(wrapper, shadwra);
+    render(shadwra, endBlock("start"));
+    shadwrap = shadwra;
 }
 
 export {initShaders, renderShader, renderLevel, removeShaders}
