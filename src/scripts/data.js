@@ -66,6 +66,23 @@ When near package drone, restores
 2 health per 5 seconds.
 
 - Cooldown: 30 seconds
-`]
+`,`
+Has Dio's special package,
+get it to his house somewhere west.
+`,`
+Shoots low damage burst shots
+in 4 diagonal directions.
+`,`
+Fires heat-seeking missiles
+or torpedoes, both are high damage.
+`,`
+Will try to ram into you and cut you
+with its saws. Longer contact means
+more damage.
+`,`
+The boss. Can spawn all drones
+and even summon lightning somehow.
+`
+]
 
 export {tool_list, descriptions, level, dark_levels}

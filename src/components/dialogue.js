@@ -1,5 +1,7 @@
 import {render, remove, create, addClass, remClass, hasClass, attribs, find, write, detect, undetect, style} from "../scripts/QoL"
+import { loadDialogues } from "../scripts/dialoguedata";
 import { playAudio } from "../scripts/sounds";
+import { toggleStart } from "../scripts/start";
 
 let currentDialogue = 0;
 let dialogues = [];
@@ -15,6 +17,9 @@ const nextDialogue = (code) => {
 }
 
 const deleteDialogue = (e) =>{
+    if(currentDialogue<=3){
+        toggleStart();
+    }
     playAudio("swipe");
     let dialogue = e.target;
     if (!hasClass(dialogue, "dialogue")){
@@ -64,6 +69,7 @@ const createDialogue = (dialogueObj) => {
             align-items: center;
             gap: 10px;
             padding: 10px;
+            z-index: 7;
         `);
 
         render(dialogue, createCharBox(dialogueObj.charactersrc))
@@ -79,8 +85,8 @@ const createCharBox = (charsrc) => {
     addClass(charBox, ["charBox"])
     style(charBox, `
         border: 5px solid darkslategray;
-        width: 64px;
-        height: 64px;
+        min-width: 64px;
+        min-height: 64px;
         background: url(${charsrc}) 0 0;
     `)
     return(charBox);
@@ -114,7 +120,7 @@ const createText = (mytext,charname) =>{
 }
 
 const initDialogues = () => {
-    //dialogueObj("man", "shadow",0, shadow, true);
+    loadDialogues();
 }
 
-export {initDialogues, nextDialogue};
+export {initDialogues, nextDialogue, dialogueObj};

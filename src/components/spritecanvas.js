@@ -5,13 +5,14 @@ import pdsrc from "../images/package_drone.png";
 import gdsrc from "../images/gunner_drone.png";
 import { package_drone } from "../scripts/elements";
 import { enemy } from "../scripts/enemies";
+import { displayInfo } from "./infoScreen";
 
 let sc_list = [];
 
 const spriteCanvas = (wrapper, name, size, imgsrc, x, y, speed, show, frames) =>{
 
     const canv = create("canvas");
-    addClass(canv, ["spritecanvas"]);
+    addClass(canv, ["spritecanvas", name]);
     attribs(canv, ["id", "width", "height"], [name, `${64}px`, `${64}px`]);
 
     let img;
@@ -25,7 +26,6 @@ const spriteCanvas = (wrapper, name, size, imgsrc, x, y, speed, show, frames) =>
     
     style(canv, `
         position:absolute;
-        pointer-events:none;
         top: ${y}px;
         left: ${x}px;
     `);    
@@ -57,12 +57,19 @@ const spriteCanvas = (wrapper, name, size, imgsrc, x, y, speed, show, frames) =>
             ctx.drawImage(img, 0, size*0, size, size, 0, 0, 64,64);
         }
         render(wrapper, canv);
+        detect(canv, "mouseenter", updateInfo);
     }
     if(name === "package_drone"){
         package_drone = canv;
     }
 
+    canv.dataset.imgsrc = imgsrc;
+
     return canv;
+}
+
+const updateInfo = (evt) =>{
+    displayInfo(evt.target.id, evt.target);
 }
 
 const moveTowards = (index, x, y) => {

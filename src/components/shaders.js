@@ -139,6 +139,7 @@ const initShaders = (wrapper) => {
         height:640px;
         width: 640px;
         position: absolute;
+        pointer-events:none;
     `);
 
     render(wrapper, shadwra);
