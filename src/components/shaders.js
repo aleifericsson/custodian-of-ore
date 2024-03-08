@@ -1,7 +1,7 @@
 import {render, remove, create, addClass, hasClass, remClass, find, findAll, write, detect, undetect, style, attribs} from "../scripts/QoL"
 import { level } from "../scripts/data";
 import { shadwrap } from "../scripts/elements";
-import { enemy, removeEnemies } from "../scripts/enemies";
+import { enemy, removeEnemies, spawnEnemies } from "../scripts/enemies";
 import { effect, removeEffects } from "./effects";
 
 const renderShader = (name) => {
@@ -40,13 +40,11 @@ const renderLevel = (name) =>{
         width: 640px;
         position: absolute;
     `);
-    removeEnemies();
     removeEffects();
+    spawnEnemies(name);
     if (name === "level-1"){
         render(shad, pathBlock(0, 200, 300, 150));
         render(shad, pathBlock(200, 350, 440, 150));
-        enemy("gunner_drone", 70, 450);
-        enemy("gunner_drone", 100, 50);
     }
     else if(name === "level-2"){
         render(shad, pathBlock(400, 200, 240, 100));
