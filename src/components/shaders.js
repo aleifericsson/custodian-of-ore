@@ -133,6 +133,56 @@ const endBlock = (thing) => {
     return path;
 }
 
+const initEdges = (wrapper) =>{
+    let path = create("div");
+    addClass(path, ["edge", "left"]);
+        style(path, `
+            background-color: rgba(229, 232, 65, 0.6);
+            left: ${0}px;
+            top: ${0}px;
+            height: ${640}px;
+            width: ${5}px;
+            position:absolute;
+    `)
+    render(wrapper, path)
+
+    path = create("div");
+    addClass(path, ["edge","top"]);
+        style(path, `
+            background-color: rgba(229, 232, 65, 0.6);
+            left: ${0}px;
+            top: ${0}px;
+            height: ${5}px;
+            width: ${640}px;
+            position:absolute;
+    `)
+    render(wrapper, path)
+
+    path = create("div");
+    addClass(path, ["edge", "bottom"]);
+        style(path, `
+            background-color: rgba(229, 232, 65, 0.6);
+            left: ${0}px;
+            top: ${635}px;
+            height: ${5}px;
+            width: ${640}px;
+            position:absolute;
+    `)
+    render(wrapper, path)
+
+    path = create("div");
+    addClass(path, ["edge", "right"]);
+        style(path, `
+            background-color: rgba(229, 232, 65, 0.6);
+            left: ${635}px;
+            top: ${0}px;
+            height: ${640}px;
+            width: ${5}px;
+            position:absolute;
+    `)
+    render(wrapper, path)
+}
+
 const initShaders = (wrapper) => {
     const shadwra = create("div");
     addClass(shadwra, ["shadwrap"]);
@@ -146,6 +196,7 @@ const initShaders = (wrapper) => {
     render(wrapper, shadwra);
     render(shadwra, endBlock("start"));
     shadwrap = shadwra;
+    initEdges(wrapper)
 }
 
 export {initShaders, renderShader, renderLevel, removeShaders}

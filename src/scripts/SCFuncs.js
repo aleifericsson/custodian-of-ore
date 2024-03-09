@@ -1,19 +1,20 @@
 import { changeBackground } from "../components/buttonOverlay";
 import { incrementScore, score } from "../components/debugTools";
-import { handleWind } from "../components/effects";
+import { handleWindSpawn, tickeffects } from "../components/effects";
 import { destroySC, sc_list, teleport } from "../components/spritecanvas"
 import { checkCollision, find, findAll, getPosEle, moveTo, remove } from "./QoL";
 import { dark_levels, level, level_start_y, wind_directions } from "./data";
 import { magnet_hitbox, package_drone, shadwrap } from "./elements";
-import { enemy_list, handleShots } from "./enemies";
+import { enemy_list, firing, handleShotSpawn } from "./enemies";
 import { playAudio } from "./sounds";
 import { handleMagnet } from "./toolFuncs";
 import { trigger } from "./triggers";
 
 const animateSCs = () => {
     checkCollisions();
-    handleShots();
-    if (dark_levels.includes(level)) handleWind(wind_directions[dark_levels.indexOf(level)]);
+    handleShotSpawn();
+    if (dark_levels.includes(level)) handleWindSpawn(wind_directions[dark_levels.indexOf(level)]);
+    tickeffects();
     /*
     coin_list.forEach(coin => {
         drawObj(coin, "increment", "none");
@@ -29,7 +30,7 @@ const animateSCs = () => {
     })
     */
 }
-
+/*
 const drawObj = (obj, frame, direction) => {
     let fram = frame;
     if (frame === "increment"){
@@ -58,6 +59,7 @@ const drawObj = (obj, frame, direction) => {
         ctx.drawImage(img, size*fram, size*draind, size, size, 0, 0, size,size);
     }
 }
+*/
 
 const checkCollisions = () =>{
     let overlap = checkCollision(magnet_hitbox, package_drone);
@@ -73,9 +75,7 @@ const checkCollisions = () =>{
         })
         if (inpath === false){
             paths.forEach(shad => {remove(find(".level.shader"),shad)});
-            enemy_list.map((enemy, index) => {
-                enemy_list[index].firing = true;
-            })
+            firing = true;
         }
     }
     

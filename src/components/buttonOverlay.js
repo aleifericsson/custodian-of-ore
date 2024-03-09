@@ -4,6 +4,7 @@ import { togglePrompt } from "./prompts";
 import {destroySC, drawSC, moveTowards, setShow, teleport } from "./spritecanvas";
 import { renderShader, removeShaders, renderLevel } from "./shaders";
 import { dark_levels, level } from "../scripts/data";
+import { firing } from "../scripts/enemies";
 
 const butSize = 32;
 let butOv;
@@ -100,6 +101,9 @@ const changeBackground = () => {
         if (level === 10) {
             level = 0;
         }
+    if (level <= 6){
+        firing = false;
+    }
     
     /*
     const canv = find(".layer-1");

@@ -1,4 +1,4 @@
-import {render, remove, create, addClass, hasClass, remClass, find, write, detect, undetect, style, attribs} from "../scripts/QoL"
+import {render, remove, create, addClass, hasClass, remClass, find, write, detect, undetect, style, attribs, findAll, checkCollision} from "../scripts/QoL"
 import { detectTile, getTiles } from "../scripts/canvasFuncs"
 import { collision_tiles } from "../scripts/canvasFuncs"
 import pdsrc from "../images/package_drone.png";
@@ -73,7 +73,6 @@ const updateInfo = (evt) =>{
 }
 
 const moveTowards = (index, x, y, wind) => {
-
     const obj = sc_list[index]
     const speed = wind ? 2 : obj.speed;
     const myx = x-obj.size/2;
@@ -85,10 +84,25 @@ const moveTowards = (index, x, y, wind) => {
     const uy = (dy/mag)*speed;
     const nx = obj.x+ux-obj.size/2;
     const ny = obj.y+uy-obj.size/2;
-    const size = sc_list[index].size
     const incoming_tile = detectTile(nx,ny);
-    const outta_bounds = nx > 640-obj.size/2 || nx < 0-obj.size/2 || ny > 640-obj.size/2 || ny < 0-obj.size/2
-    if (mag>obj.speed && !outta_bounds){
+
+
+    let inpath = false
+    findAll(".edge").forEach(path => {
+        if (checkCollision(path, obj.ele)){
+            inpath = true;
+        }
+    })
+
+    if (inpath && obj.name === "package_drone"){
+        inpath = false;
+        if (checkCollision(find(".edge.left"), obj.ele)) teleport( index, 6, obj.y)
+        if (checkCollision(find(".edge.right"), obj.ele)) teleport( index, 634, obj.y)
+        if (checkCollision(find(".edge.top"), obj.ele)) teleport( index, obj.x, 6)
+        if (checkCollision(find(".edge.bottom"), obj.ele)) teleport( index, obj.x, 634)
+    }
+
+    if (mag>obj.speed && !inpath){
         sc_list[index].x = nx+obj.size/2;
         sc_list[index].y = ny+obj.size/2;
         teleport(index, nx, ny)
