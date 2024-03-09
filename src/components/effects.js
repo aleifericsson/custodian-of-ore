@@ -1,8 +1,10 @@
 import { addClass, checkCollision, create, find, findAll, remove, render, style } from "../scripts/QoL";
 import effsrc from "../images/effects.png";
-import { shadwrap } from "../scripts/elements";
+import { package_drone, shadwrap } from "../scripts/elements";
 import { moveTowards, sc_list } from "./spritecanvas";
 import { wind_directions } from "../scripts/data";
+import { firing } from "../scripts/enemies";
+import { hp, setHealth } from "./infoScreen";
 
 let effect_list = [];
 
@@ -107,6 +109,14 @@ const tickeffects = () => {
             moveEffect(effect);
         }
         handleFade(effect);
+        if(firing === true){
+            if (effect.type === "bullet"){
+                if (checkCollision(effect.ele, package_drone)){
+                    setHealth(hp-1);
+                    del(effect);
+                }
+            }
+        }
     })
 }
 

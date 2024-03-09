@@ -42,7 +42,7 @@ function runEverything(canvasList, width, height){
         const excessTime = msPassed % msPerFrame
         msPrev = msNow - excessTime
 
-        // Put your drawing code here
+        /*
         canvasList.map((canvas,index) => {
             const ctx = canvas.getContext("2d");
             //clear(ctx, width, height)
@@ -52,6 +52,7 @@ function runEverything(canvasList, width, height){
                 //implement someway so that it wont update unless there is a change
             }
         });
+        */
 
         animateSCs();
     

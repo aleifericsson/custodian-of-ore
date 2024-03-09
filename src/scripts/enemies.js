@@ -3,11 +3,10 @@ import { wrapper } from "./elements";
 import gdsrc from "../images/gunner_drone.png"
 import mdsrc from "../images/missile_drone.png"
 import adsrc from "../images/attack_drone.png"
-import { addClass, checkCollision, findAll, moveTo, remove } from "./QoL";
+import { addClass, checkCollision, find, findAll, moveTo, remove } from "./QoL";
 import { effect } from "../components/effects";
 
 let enemy_list = [];
-let shot_list = [];
 let firing = false;
 
 const enemy = (type, x, y) => {
@@ -31,7 +30,7 @@ const enemy = (type, x, y) => {
         fireevery = 500; //fires a prompt, but will try to ram into pd if firing is true
     }
 
-    let timer = Math.floor(Math.random()*fireevery);
+    let timer = Math.floor(Math.random()*(fireevery)*0.5);
     let rot = Math.random() *360;
 
     const enemy = spriteCanvas(wrapper, type, 32, imgsrc, x, y, 5, true, 1)
@@ -112,10 +111,10 @@ const moveEneTowards = (enemy, rot) => {
 
     if (inpath){
         inpath = false;
-        if (checkCollision(find(".edge.left"), enemy.ele)) moveTo(enemy.ele, 6, enemy.y, enemy.size)
-        if (checkCollision(find(".edge.right"), enemy.ele)) moveTo(enemy.ele, 634, enemy.y, enemy.size)
-        if (checkCollision(find(".edge.top"), enemy.ele)) moveTo(enemy.ele, enemy.x, 6, enemy.size)
-        if (checkCollision(find(".edge.bottom"), enemy.ele)) moveTo(enemy.ele, enemy.x, 634, enemy.size)
+        if (checkCollision(find(".edge.left"), enemy.ele)) {moveTo(enemy.ele, 6, enemy.y, enemy.size);enemy.x =6}
+        if (checkCollision(find(".edge.right"), enemy.ele)) {moveTo(enemy.ele, 634, enemy.y, enemy.size);enemy.x =634}
+        if (checkCollision(find(".edge.top"), enemy.ele)) {moveTo(enemy.ele, enemy.x, 6, enemy.size);enemy.y=6}
+        if (checkCollision(find(".edge.bottom"), enemy.ele)) {moveTo(enemy.ele, enemy.x, 634, enemy.size);enemy.y =634}
     }
     else{
         enemy.x = nx+enemy.size/2;
@@ -123,6 +122,13 @@ const moveEneTowards = (enemy, rot) => {
         enemy.ele.style.left = `${enemy.x}px`;
         enemy.ele.style.top = `${enemy.y}px`;
     }
+}
+
+const del = (enemy) =>{
+    remove(wrapper,enemy.ele);
+    enemy_list = enemy_list.filter(function (thing) {
+        return thing !== enemy;
+    });
 }
 
 const gunnerShot = (x,y) =>{

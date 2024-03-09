@@ -82,6 +82,10 @@ const healthBar = () => {
 }
 
 const setHealth = (health) =>{
+    if(health === 0){
+        //trigger death thing
+    }
+    else{
     let myhp;
     let healthbar;
     if(find(".healthbar") === null) {myhp = hp; healthbar = health}
@@ -106,6 +110,7 @@ const setHealth = (health) =>{
             background-color: hsl(${hue}, 70%, 62%);
         `)
         render(healthbar, heart)
+    }    
     }
 }
 
@@ -177,4 +182,4 @@ const displayInfo = (code, rawicon) => {
     render(info, text);
 }
 
-export {initInfoScreen, displayInfo, setHealth};
+export {initInfoScreen, displayInfo, setHealth, hp};

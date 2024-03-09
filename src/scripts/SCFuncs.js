@@ -1,6 +1,6 @@
 import { changeBackground } from "../components/buttonOverlay";
 import { incrementScore, score } from "../components/debugTools";
-import { handleWindSpawn, tickeffects } from "../components/effects";
+import { checkHits, handleWindSpawn, tickeffects } from "../components/effects";
 import { destroySC, sc_list, teleport } from "../components/spritecanvas"
 import { checkCollision, find, findAll, getPosEle, moveTo, remove } from "./QoL";
 import { dark_levels, level, level_start_y, wind_directions } from "./data";
@@ -15,6 +15,7 @@ const animateSCs = () => {
     handleShotSpawn();
     if (dark_levels.includes(level)) handleWindSpawn(wind_directions[dark_levels.indexOf(level)]);
     tickeffects();
+    
     /*
     coin_list.forEach(coin => {
         drawObj(coin, "increment", "none");
