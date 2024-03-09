@@ -72,15 +72,17 @@ const updateInfo = (evt) =>{
     displayInfo(evt.target.id, evt.target);
 }
 
-const moveTowards = (index, x, y) => {
+const moveTowards = (index, x, y, wind) => {
+
     const obj = sc_list[index]
+    const speed = wind ? 2 : obj.speed;
     const myx = x-obj.size/2;
     const myy = y-obj.size/2;
     const dx = myx-obj.x;
     const dy = myy-obj.y;
     const mag = Math.sqrt(dx*dx + dy*dy);
-    const ux = (dx/mag)*obj.speed;
-    const uy = (dy/mag)*obj.speed;
+    const ux = (dx/mag)*speed;
+    const uy = (dy/mag)*speed;
     const nx = obj.x+ux-obj.size/2;
     const ny = obj.y+uy-obj.size/2;
     const size = sc_list[index].size
@@ -179,7 +181,7 @@ const destroySC = (obj) => {
 }
 
 const initSC = (wrapper) =>{
-    spriteCanvas(wrapper, "package_drone", 32, pdsrc, 100, 300, 5, true, 1)
+    spriteCanvas(wrapper, "package_drone", 32, pdsrc, 500, 300, 5, true, 1)
 }
 
 export{initSC, moveTowards ,setShow, drawSC, teleport,destroySC, spriteCanvas, sc_list}

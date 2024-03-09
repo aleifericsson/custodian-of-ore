@@ -1,15 +1,19 @@
 import { changeBackground } from "../components/buttonOverlay";
 import { incrementScore, score } from "../components/debugTools";
+import { handleWind } from "../components/effects";
 import { destroySC, sc_list, teleport } from "../components/spritecanvas"
-import { checkCollision, find, findAll, getPosEle, moveTo } from "./QoL";
-import { level } from "./data";
-import { magnet_hitbox, package_drone } from "./elements";
+import { checkCollision, find, findAll, getPosEle, moveTo, remove } from "./QoL";
+import { dark_levels, level, level_start_y, wind_directions } from "./data";
+import { magnet_hitbox, package_drone, shadwrap } from "./elements";
+import { enemy_list, handleShots } from "./enemies";
 import { playAudio } from "./sounds";
 import { handleMagnet } from "./toolFuncs";
 import { trigger } from "./triggers";
 
 const animateSCs = () => {
     checkCollisions();
+    handleShots();
+    if (dark_levels.includes(level)) handleWind(wind_directions[dark_levels.indexOf(level)]);
     /*
     coin_list.forEach(coin => {
         drawObj(coin, "increment", "none");
@@ -59,12 +63,22 @@ const checkCollisions = () =>{
     let overlap = checkCollision(magnet_hitbox, package_drone);
     if (overlap) handleMagnet(package_drone);
 
-    const paths = findAll(".pathblock");
-    paths.forEach(path => {
-        if (checkCollision(path, package_drone)){
-            overlap = true;
+    if(level > 0 && level<=6){
+        const paths = findAll(".pathblock");
+        let inpath = false
+        paths.forEach(path => {
+            if (checkCollision(path, package_drone)){
+                inpath = true;
+            }
+        })
+        if (inpath === false){
+            paths.forEach(shad => {remove(find(".level.shader"),shad)});
+            enemy_list.map((enemy, index) => {
+                enemy_list[index].firing = true;
+            })
         }
-    })
+    }
+    
 
     if (checkCollision(find(".endblock"), package_drone)) {
         if (level === 0){
@@ -74,9 +88,14 @@ const checkCollisions = () =>{
         }
         else{
             const pdpos = getPosEle(package_drone, 64);
-            moveTo(package_drone, pdpos.x+580, pdpos.y, 64);
+            if (level <= 5){
+                sc_list[0].y = level_start_y[level+1];
+            }
+            else sc_list[0].y = pdpos.y; 
             sc_list[0].x = pdpos.x+580;
-            sc_list[0].y = pdpos.y;
+
+            moveTo(package_drone,sc_list[0].x, sc_list[0].y, 64);
+            
         }
         changeBackground();
     }

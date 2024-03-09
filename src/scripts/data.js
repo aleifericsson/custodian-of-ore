@@ -2,6 +2,8 @@ let level = 0;
 
 const dark_levels = [4,5,8,9,10]
 
+let level_start_y = [350, 450, 250, 560, 200, 350, 270]
+
 const wind_directions = ["down", "left", "up", "right", "random"];
 
 const tool_list = ["Magnet_Drone", "Gunner_Drone", "Lightning_Rod_Drone", "Air_Strike", "Machine_Gun",
@@ -74,7 +76,7 @@ Shoots low damage burst shots
 in 4 diagonal directions.
 `,`
 Fires heat-seeking missiles
-or torpedoes, both are high damage.
+or torpedoes,  tboth are high damage.
 `,`
 Will try to ram into you and cut you
 with its saws. Longer contact means
@@ -85,4 +87,4 @@ and even summon lightning somehow.
 `
 ]
 
-export {tool_list, descriptions, level, dark_levels}
+export {tool_list, descriptions, level, dark_levels, wind_directions ,level_start_y}

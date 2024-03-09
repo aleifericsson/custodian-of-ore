@@ -7,7 +7,7 @@ const magnet_di = 200;
 const handleMagnet = (attracted) => {
     const elepos = getPosEle(magnet_hitbox, magnet_di);
     
-    moveTowards(0, elepos.x, elepos.y);
+    moveTowards(0, elepos.x, elepos.y, false);
 }
 
 const magnethitbox = () => {

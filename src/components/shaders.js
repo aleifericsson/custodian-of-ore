@@ -24,6 +24,7 @@ const renderShader = (name) => {
         height:640px;
         width: 640px;
         position: absolute;
+        z-index: 5;
         ${extra_style}
     `);
 

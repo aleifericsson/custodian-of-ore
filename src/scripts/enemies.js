@@ -6,6 +6,7 @@ import adsrc from "../images/attack_drone.png"
 import { addClass, findAll, remove } from "./QoL";
 
 let enemy_list = [];
+let shot_list = [];
 
 const enemy = (type, x, y) => {
     let imgsrc;
@@ -45,13 +46,14 @@ const enemy = (type, x, y) => {
 const handleShots = () =>{
     enemy_list.map(enemy => {
         //settimeout to implement bursts if gunner drone
-
+        
     });
 }
 
 const removeEnemies = () => {
     enemy_list = [];
     const enemies = findAll(".enemy");
+    //remove timeouts for shotlists and stuff
 
     enemies.forEach(enemy => {remove(wrapper,enemy)});    
 }
