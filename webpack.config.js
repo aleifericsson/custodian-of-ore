@@ -11,7 +11,6 @@ module.exports = {
       title: 'Custodian of Ore',
       mode: 'Development',
     }),
-      )
     /*
     new CopyPlugin({
       patterns: [
