@@ -87,6 +87,25 @@ const checkCollision = (thing1, thing2) => {
     const rect2 = thing2.getBoundingClientRect(); 
     
     // Check if the two elements overlap 
+    const overlap = !(rect1.right-15 < rect2.left+15 ||  
+                    rect1.left+15 > rect2.right-15 ||  
+                    rect1.bottom-15 < rect2.top+15 ||  
+                    rect1.top+15 > rect2.bottom-15); 
+
+    return overlap;
+}
+
+const checkCollisionReal = (thing1, thing2) => {
+    if (thing1 === null || thing2 === null){
+        return false;
+    }
+    // Get the bounding box of the first element 
+    const rect1 = thing1.getBoundingClientRect(); 
+    
+    // Get the bounding box of the second element 
+    const rect2 = thing2.getBoundingClientRect(); 
+    
+    // Check if the two elements overlap 
     const overlap = !(rect1.right < rect2.left ||  
                     rect1.left > rect2.right ||  
                     rect1.bottom < rect2.top ||  
@@ -106,4 +125,4 @@ const getPosEle = (element, size) => {
     }
 }
 
-export {render, remove, create, addClass, hasClass, remClass, find, findAll, write, detect, undetect, style, attribs, isElement, moveTo, getPos, checkCollision, getPosEle}
+export {render, remove, create, addClass, hasClass, remClass, find, findAll, write, detect, undetect, style, attribs, isElement, moveTo, getPos, checkCollision, checkCollisionReal, getPosEle}

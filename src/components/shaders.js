@@ -65,7 +65,6 @@ const renderLevel = (name) =>{
         render(shad, pathBlock(220, 270, 200, 50));
         render(shad, pathBlock(100, 320, 170, 50));
         render(shad, pathBlock(0, 370, 160, 50));
-        effect("wind", 20,100, 0);
     }
     else if (name === "level-5"){
         render(shad, pathBlock(480, 370, 160, 50));
@@ -82,8 +81,6 @@ const renderLevel = (name) =>{
         render(shad, pathBlock(100, 590, 380, 50));
         render(shad, pathBlock(100, 428, 167, 50));
         render(shad, pathBlock(0, 275, 267, 50));
-
-        effect("wind", 20,100, 90);
     }
     else if (name === "level-6"){
         render(shad, pathBlock(373, 275, 267, 50));
@@ -137,11 +134,10 @@ const initEdges = (wrapper) =>{
     let path = create("div");
     addClass(path, ["edge", "left"]);
         style(path, `
-            background-color: rgba(229, 232, 65, 0.6);
-            left: ${0}px;
-            top: ${0}px;
-            height: ${640}px;
-            width: ${5}px;
+            left: ${-15}px;
+            top: ${-10}px;
+            height: ${660}px;
+            width: ${10}px;
             position:absolute;
     `)
     render(wrapper, path)
@@ -149,11 +145,10 @@ const initEdges = (wrapper) =>{
     path = create("div");
     addClass(path, ["edge","top"]);
         style(path, `
-            background-color: rgba(229, 232, 65, 0.6);
-            left: ${0}px;
-            top: ${0}px;
-            height: ${5}px;
-            width: ${640}px;
+            left: ${-10}px;
+            top: ${-15}px;
+            height: ${10}px;
+            width: ${660}px;
             position:absolute;
     `)
     render(wrapper, path)
@@ -161,11 +156,10 @@ const initEdges = (wrapper) =>{
     path = create("div");
     addClass(path, ["edge", "bottom"]);
         style(path, `
-            background-color: rgba(229, 232, 65, 0.6);
             left: ${0}px;
             top: ${635}px;
-            height: ${5}px;
-            width: ${640}px;
+            height: ${10}px;
+            width: ${660}px;
             position:absolute;
     `)
     render(wrapper, path)
@@ -173,11 +167,10 @@ const initEdges = (wrapper) =>{
     path = create("div");
     addClass(path, ["edge", "right"]);
         style(path, `
-            background-color: rgba(229, 232, 65, 0.6);
             left: ${635}px;
             top: ${0}px;
-            height: ${640}px;
-            width: ${5}px;
+            height: ${660}px;
+            width: ${10}px;
             position:absolute;
     `)
     render(wrapper, path)

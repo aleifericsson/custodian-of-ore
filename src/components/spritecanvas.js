@@ -1,4 +1,4 @@
-import {render, remove, create, addClass, hasClass, remClass, find, write, detect, undetect, style, attribs, findAll, checkCollision} from "../scripts/QoL"
+import {render, remove, create, addClass, hasClass, remClass, find, write, detect, undetect, style, attribs, findAll, checkCollision, checkCollisionReal} from "../scripts/QoL"
 import { detectTile, getTiles } from "../scripts/canvasFuncs"
 import { collision_tiles } from "../scripts/canvasFuncs"
 import pdsrc from "../images/package_drone.png";
@@ -96,10 +96,10 @@ const moveTowards = (index, x, y, wind) => {
 
     if (inpath && obj.name === "package_drone"){
         inpath = false;
-        if (checkCollision(find(".edge.left"), obj.ele)) teleport( index, 6, obj.y)
-        if (checkCollision(find(".edge.right"), obj.ele)) teleport( index, 634, obj.y)
-        if (checkCollision(find(".edge.top"), obj.ele)) teleport( index, obj.x, 6)
-        if (checkCollision(find(".edge.bottom"), obj.ele)) teleport( index, obj.x, 634)
+        if (checkCollisionReal(find(".edge.left"), obj.ele)) teleport( index, 6, obj.y)
+        if (checkCollisionReal(find(".edge.right"), obj.ele)) teleport( index, 634, obj.y)
+        if (checkCollisionReal(find(".edge.top"), obj.ele)) teleport( index, obj.x, 6)
+        if (checkCollisionReal(find(".edge.bottom"), obj.ele)) teleport( index, obj.x, 634)
     }
 
     if (mag>obj.speed && !inpath){

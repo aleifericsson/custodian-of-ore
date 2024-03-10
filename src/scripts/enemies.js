@@ -3,8 +3,8 @@ import { wrapper } from "./elements";
 import gdsrc from "../images/gunner_drone.png"
 import mdsrc from "../images/missile_drone.png"
 import adsrc from "../images/attack_drone.png"
-import { addClass, checkCollision, find, findAll, moveTo, remove } from "./QoL";
-import { effect } from "../components/effects";
+import { addClass, checkCollision, checkCollisionReal, find, findAll, moveTo, remove } from "./QoL";
+import { createEffect } from "../components/effects";
 
 let enemy_list = [];
 let firing = false;
@@ -111,10 +111,10 @@ const moveEneTowards = (enemy, rot) => {
 
     if (inpath){
         inpath = false;
-        if (checkCollision(find(".edge.left"), enemy.ele)) {moveTo(enemy.ele, 6, enemy.y, enemy.size);enemy.x =6}
-        if (checkCollision(find(".edge.right"), enemy.ele)) {moveTo(enemy.ele, 634, enemy.y, enemy.size);enemy.x =634}
-        if (checkCollision(find(".edge.top"), enemy.ele)) {moveTo(enemy.ele, enemy.x, 6, enemy.size);enemy.y=6}
-        if (checkCollision(find(".edge.bottom"), enemy.ele)) {moveTo(enemy.ele, enemy.x, 634, enemy.size);enemy.y =634}
+        if (checkCollisionReal(find(".edge.left"), enemy.ele)) {moveTo(enemy.ele, 12, enemy.y, enemy.size);enemy.x =12}
+        if (checkCollisionReal(find(".edge.right"), enemy.ele)) {moveTo(enemy.ele, 628, enemy.y, enemy.size);enemy.x =628}
+        if (checkCollisionReal(find(".edge.top"), enemy.ele)) {moveTo(enemy.ele, enemy.x, 12, enemy.size);enemy.y=12}
+        if (checkCollisionReal(find(".edge.bottom"), enemy.ele)) {moveTo(enemy.ele, enemy.x, 628, enemy.size);enemy.y =628}
     }
     else{
         enemy.x = nx+enemy.size/2;
@@ -132,10 +132,10 @@ const del = (enemy) =>{
 }
 
 const gunnerShot = (x,y) =>{
-    effect("bullet", x,y, 45);
-    effect("bullet",x,y, 45+90);
-    effect("bullet", x,y, 45+180);
-    effect("bullet", x,y, 45+270);
+    createEffect("bullet", x,y, 45);
+    createEffect("bullet",x,y, 45+90);
+    createEffect("bullet", x,y, 45+180);
+    createEffect("bullet", x,y, 45+270);
 }
 
 const removeEnemies = () => {

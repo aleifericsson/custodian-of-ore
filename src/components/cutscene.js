@@ -62,7 +62,7 @@ const toggleStart = () =>{
         updateCutscene();
         setTimeout(() => {
             nextDialogue();
-        }, 2000);
+        }, 1000);
     }
     if (start_seq === 0){  
         curscene =1;

@@ -1,4 +1,4 @@
-import { addClass, checkCollision, create, find, findAll, remove, render, style } from "../scripts/QoL";
+import { addClass, checkCollision, checkCollisionReal, create, find, findAll, getPosEle, remove, render, style } from "../scripts/QoL";
 import effsrc from "../images/effects.png";
 import { package_drone, shadwrap } from "../scripts/elements";
 import { moveTowards, sc_list } from "./spritecanvas";
@@ -8,13 +8,14 @@ import { hp, setHealth } from "./infoScreen";
 
 let effect_list = [];
 
-const effect = (type, x, y, rot) => {
+const createEffect = (type, x, y, rot) => {
     const eff = create("div");
     let loc;
     let fadein;
-    let speed;
+    let speed=0;
     let scale;
     const size = 16;
+    let opacity = 1;
     if (type === "wind"){
         loc = 9;
         fadein = 100;
@@ -27,7 +28,28 @@ const effect = (type, x, y, rot) => {
         speed = 7;
         scale = 2;
     }
-
+    else if (type === "hit"){
+        loc = 2;
+        fadein = 10;
+        scale = 2;
+    }
+    else if (type === "lightning_warning"){
+        loc = 10;
+        fadein = 20;
+        scale = 4;
+        opacity = 0.5;
+    }
+    else if (type === "lightning_strike"){
+        loc = 4;
+        fadein = 7;
+        speed = 0;
+        scale = 4;
+    }
+    else if (type === "lightning_bolt"){
+        loc = 3;
+        fadein = 7;
+        scale = 4;
+    }
 
     addClass(eff, ["effect", type]);
     style(eff, `
@@ -40,6 +62,7 @@ const effect = (type, x, y, rot) => {
         position:absolute;
         image-rendering: pixelated;
         transform: rotate(${rot}deg);
+        opacity: ${opacity};
     `)
 
     effect_list.push({
@@ -75,7 +98,7 @@ const moveEffect = (effect) => {
 
     let inpath = false
     findAll(".edge").forEach(path => {
-        if (checkCollision(path, effect.ele)){
+        if (checkCollisionReal(path, effect.ele)){
             inpath = true;
         }
     })
@@ -94,11 +117,26 @@ const moveEffect = (effect) => {
 
 const handleFade = (effect) => {
     if (effect.fadein === 0){
+        if (effect.type === "lightning_warning"){
+            createEffect("lightning_strike", effect.x, effect.y, 90*Math.floor(Math.random()*4));
+            let reps = (effect.y-24)/64;
+            for(let i = 0; i < reps+1; i++){   
+                createEffect("lightning_bolt", effect.x, effect.y-(64*i), 0)
+            }
+        }
         del(effect)
     }
     else{
         if (effect.fadein !== "none"){
             effect.fadein = effect.fadein - 1;
+            if (effect.type === "lightning_warning"){
+                if(effect.fadein % 4 === 0 || effect.fadein % 4 === 1){
+                    effect.ele.style.background= `url(${effsrc}) -${16*11}px 0`;
+                }
+                else{
+                    effect.ele.style.background= `url(${effsrc}) -${16*10}px 0`;
+                }
+            }
         }
     }
 }
@@ -113,6 +151,21 @@ const tickeffects = () => {
             if (effect.type === "bullet"){
                 if (checkCollision(effect.ele, package_drone)){
                     setHealth(hp-1);
+                    let x=0;
+                    let y=0;
+                    if (effect.rot === 45){ x=16;y=-16}
+                    else if (effect.rot === 45+90){ x=16;y=16}
+                    else if (effect.rot === 45+180){ x=-16;y=16}
+                    else if (effect.rot === 45+270){ x=-16;y=-16}
+                    let pdpos = getPosEle(package_drone,64);
+
+                    createEffect("hit", pdpos.x+x, pdpos.y+y, Math.random()*360);
+                    del(effect);
+                }
+            }
+            if (effect.type === "lightning_strike"){
+                if (checkCollision(effect.ele, package_drone)){
+                    setHealth(hp-4);
                     del(effect);
                 }
             }
@@ -144,9 +197,18 @@ const handleWindSpawn = (direction) => {
 
 
     const rand = Math.floor(Math.random()* 22);
-    if (rand === 21) {effect("wind", Math.random()* 640,Math.random()* 640, rot);}
+    if (rand === 21) {createEffect("wind", Math.random()* 640,Math.random()* 640, rot);}
 
+    const rand2 = Math.floor(Math.random()* 150);
+    if (rand === 21) {
+
+        const x = 64*Math.floor(Math.random()*10)+24;
+        const y = 64*Math.floor(Math.random()*10)+24;
+        createEffect("lightning_warning", x,y, 0);
+
+        console.log(x, y)
+    }
 
 }
 
-export {effect, tickeffects, removeEffects, handleWindSpawn}
+export {createEffect, tickeffects, removeEffects, handleWindSpawn}
