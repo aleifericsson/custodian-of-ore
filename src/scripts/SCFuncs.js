@@ -1,5 +1,6 @@
 import { changeBackground } from "../components/buttonOverlay";
 import { incrementScore, score } from "../components/debugTools";
+import { nextDialogue } from "../components/dialogue";
 import { checkHits, handleWindSpawn, tickeffects } from "../components/effects";
 import { destroySC, sc_list, teleport } from "../components/spritecanvas"
 import { checkCollision, find, findAll, getPosEle, moveTo, remove } from "./QoL";

@@ -10,7 +10,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Custodian of Ore',
       mode: 'Development',
-    }),/*
+    }),
+      )
+    /*
     new CopyPlugin({
       patterns: [
         { from: "public", to: "" }, //to the dist root directory
@@ -23,6 +25,7 @@ module.exports = {
     filename: 'main.js',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
+    publicPath: 'auto',
   },
   module: {
     rules: [

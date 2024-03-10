@@ -1,3 +1,5 @@
+import portraits from "../images/portraits.png"
+
 /*
 Format: (C: is 1 letter char name) 
 `c: helo i am a test thing`
@@ -21,8 +23,7 @@ const dia_1 = [//3
     `P: Package drone status: Ready to deliver ref#7355608`,
     `P: Package drone status: Aberration detected - access from unautorised party`,
     `P: Package drone status: Limited remote control mode activated. Freedom of movement restricted at this admin level`,
-    `D: Damn, I'm in but I cant' move. Guess I'll need my magnet drones to move the package.`,
-    `D: At least I haven't triggered security... yet.`,
+    `D: Damn, I'm in but I cant' move. Guess I'll need my magnet drones to move the package. At least I haven't triggered security... yet.`,
 ]
 
 const dia_2 = [//8
@@ -80,37 +81,38 @@ const loadDialogues = () => {
             const cha = line.substring(0, 1)
             const text = line.substring(3, line.length);
             let character;
-            let image;
+            let image = portraits;
+            let index;
             let follow;
             if (ind === group.length-1) follow = false;
             else follow = true;
 
             if (cha === "D"){
-                character = "Dio"
-                //image = dio
+                character = "Dio";
+                index = 0;
             }
             else if (cha === "d"){
-                character = "Dio"
-                //image = dio_mad
+                character = "Dio";
+                index = 3;
             }
             else if (cha === "A"){
-                character = "Security AI"
-                //image = ai
+                character = "Security AI";
+                index = 4;
             }
             else if (cha === "P"){
-                character = "Package Drone"
-                //image = pdsrc
+                character = "Package Drone";
+                index = 1;
             }
             else if (cha === "S"){
-                character = "Security Drone"
-                //image = gdsrc
+                character = "Security Drone";
+                index = 2;
             }
             else if (cha === "C"){
-                character = "Custodian of Ore"
-                //image = ai
+                character = "Custodian of Ore";
+                index = 4;
             }
 
-            dialogueObj(text, character,index, image, follow)
+            dialogueObj(text, character,index, image, follow, index)
             index += 1;
         })
     });
