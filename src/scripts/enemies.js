@@ -3,8 +3,8 @@ import { wrapper } from "./elements";
 import gdsrc from "../images/gunner_drone.png"
 import mdsrc from "../images/missile_drone.png"
 import adsrc from "../images/attack_drone.png"
-import { addClass, checkCollision, checkCollisionReal, find, findAll, moveTo, remove } from "./QoL";
-import { createEffect } from "../components/effects";
+import { addClass, checkCollision, checkCollisionReal, create, find, findAll, getPosEle, moveTo, remove } from "./QoL";
+import { createEffect, explosion } from "../components/effects";
 
 let enemy_list = [];
 let firing = false;
@@ -54,7 +54,11 @@ const enemy = (type, x, y) => {
 const handleShotSpawn = () =>{
     if (firing === true){
         enemy_list.map(enemy => {
-            //settimeout to implement bursts if gunner drone
+            if (explosion !== null){
+                if (checkCollision(explosion, enemy.ele)) del(enemy)
+            }
+
+
             if (enemy.timer ===0){
                 enemy.timer = enemy.fireevery
                 const x = enemy.x+32;
@@ -71,6 +75,12 @@ const handleShotSpawn = () =>{
                         enemy.moving = true;
                     }, 1000)
                 }
+                if (enemy.type === "missile_drone"){
+                    createEffect("missile", x, y, 180);
+                    setTimeout(()=>{
+                        enemy.moving = true;
+                    }, 1000)
+                } 
             }
             else{
                 enemy.timer = enemy.timer-1;
@@ -89,7 +99,6 @@ const handleShotSpawn = () =>{
         });
     }
 }
-
 
 
 const moveEneTowards = (enemy, rot) => {
@@ -111,10 +120,10 @@ const moveEneTowards = (enemy, rot) => {
 
     if (inpath){
         inpath = false;
-        if (checkCollisionReal(find(".edge.left"), enemy.ele)) {moveTo(enemy.ele, 12, enemy.y, enemy.size);enemy.x =12}
-        if (checkCollisionReal(find(".edge.right"), enemy.ele)) {moveTo(enemy.ele, 628, enemy.y, enemy.size);enemy.x =628}
-        if (checkCollisionReal(find(".edge.top"), enemy.ele)) {moveTo(enemy.ele, enemy.x, 12, enemy.size);enemy.y=12}
-        if (checkCollisionReal(find(".edge.bottom"), enemy.ele)) {moveTo(enemy.ele, enemy.x, 628, enemy.size);enemy.y =628}
+        if (checkCollisionReal(find(".edge.left"), enemy.ele)) {moveTo(enemy.ele, 32, enemy.y, enemy.size);enemy.x =32}
+        if (checkCollisionReal(find(".edge.right"), enemy.ele)) {moveTo(enemy.ele, 608, enemy.y, enemy.size);enemy.x =608}
+        if (checkCollisionReal(find(".edge.top"), enemy.ele)) {moveTo(enemy.ele, enemy.x, 32, enemy.size);enemy.y=32}
+        if (checkCollisionReal(find(".edge.bottom"), enemy.ele)) {moveTo(enemy.ele, enemy.x, 608, enemy.size);enemy.y =608}
     }
     else{
         enemy.x = nx+enemy.size/2;
@@ -180,7 +189,7 @@ const spawnEnemies = (level) =>{
         enemy("gunner_drone",50, 300);
         enemy("gunner_drone", 100, Math.random()*500+50);
         enemy("missile_drone", 400, 400);
-        enemy("missile_drone", Math.random()*500+50, Math.random()*500+50);
+        //enemy("missile_drone", Math.random()*500+50, Math.random()*500+50);
     }
     else if(level === "level-7"){
         enemy("gunner_drone", Math.random()*500+50, 300);

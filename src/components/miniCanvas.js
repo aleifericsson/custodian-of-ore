@@ -6,8 +6,10 @@ import tools from "../images/tools.png"
 import { tool_list } from "../scripts/data";
 import { handleMagnet, magnethitbox } from "../scripts/toolFuncs";
 import { magnet_hitbox, wrapper } from "../scripts/elements";
+import { createEffect } from "./effects";
 
 let miniList = [];
+let magazine = 20;
 
 function miniCanvas(name, img, imgsrc, index){
     this.name = name;
@@ -82,11 +84,23 @@ function miniCanvas(name, img, imgsrc, index){
 
         const hoverFunc = (evt) => {
             if (interval_list.length === 0){
-                interval_list.push(setInterval(() => {
-                    if (name === "Magnet_Drone"){
-                        moveTo(magnet_hitbox, mousePos2.x, mousePos2.y, 200);
-                    }
-                }, 100))
+                if (name === "Machine_Gun"){
+                    magazine = 20;
+                    interval_list.push(setInterval(() => {
+                        if(magazine === 0 ){   
+                            clearInterval(interval_list[0]);
+                        }
+                        else{
+                            magazine -= 1;
+                            createEffect("good_hit", mousePos2.x-24, mousePos2.y-24, 90*Math.floor(Math.random()*4))
+                        }
+                    }, 250))
+                }
+                else if (name === "Magnet_Drone"){
+                    interval_list.push(setInterval(() => {
+                    moveTo(magnet_hitbox, mousePos2.x, mousePos2.y, 200);
+                    }, 100))
+                }
             }
         }
         const updateDrag = (evt) =>{
@@ -116,9 +130,14 @@ function miniCanvas(name, img, imgsrc, index){
         const mouseUpFunc = (evt) => {
                 undetect(document.body, "mousemove", updateDrag)
                 undetect(backcanv, "mouseenter", hoverFunc)
+
+                let mP = getPos(evt, backcanv);
                 if (interval_list.length!==0){
                     if(name === "coin"){
                         //const coin = spriteCanvas(find(".wrapper"), "coin", 64, Coin, mousePos2.x-32, mousePos2.y-32, 0, true, 12) spawns sc of coin
+                    }
+                    else if (name === "Air_Strike"){
+                        createEffect("good_missile", mP.x, mP.y, 0);
                     }
                 }
                 clearInterval(interval_list[0]);

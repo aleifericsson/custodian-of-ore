@@ -2,6 +2,9 @@ import {render, remove, create, addClass, hasClass, remClass, find, write, detec
 import { descriptions } from "../scripts/data";
 import { wrapper } from "../scripts/elements";
 import toolsrc from "../images/tools.png"
+import { updateCutscene } from "./cutscene";
+import { removeEffects } from "./effects";
+import { removeEnemies } from "../scripts/enemies";
 
 let hp = 20;
 
@@ -82,8 +85,11 @@ const healthBar = () => {
 }
 
 const setHealth = (health) =>{
-    if(health === 0){
-        //trigger death thing
+    if(health <= 0){
+        updateCutscene(4, true);
+        find(".healthbar").textContent = "";
+        removeEffects();
+        removeEnemies();
     }
     else{
     let myhp;

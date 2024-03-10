@@ -7,15 +7,19 @@ import { firing } from "../scripts/enemies";
 import { hp, setHealth } from "./infoScreen";
 
 let effect_list = [];
+let explosion = null;
+let good_hit = null;
 
 const createEffect = (type, x, y, rot) => {
     const eff = create("div");
+    let my = y;
     let loc;
     let fadein;
     let speed=0;
     let scale;
     const size = 16;
     let opacity = 1;
+    let final_y = "none";
     if (type === "wind"){
         loc = 9;
         fadein = 100;
@@ -25,7 +29,7 @@ const createEffect = (type, x, y, rot) => {
     else if (type === "bullet"){
         loc = 1;
         fadein = "none";
-        speed = 7;
+        speed = 10;
         scale = 2;
     }
     else if (type === "hit"){
@@ -50,6 +54,35 @@ const createEffect = (type, x, y, rot) => {
         fadein = 7;
         scale = 4;
     }
+    else if (type === "missile"){
+        loc = 0;
+        fadein = "none";
+        speed = 15;
+        scale = 2;
+    }
+    else if (type === "explosion"){
+        loc = 7;
+        fadein = 10;
+        scale = 2;
+    }
+    else if (type === "good_missile"){
+        loc = 0;
+        fadein = "none";
+        speed = 15;
+        scale = 2;
+        final_y = y;
+        my = 0;
+    }
+    else if (type === "good_explosion"){
+        loc = 7;
+        fadein = 10;
+        scale = 4;
+    }
+    else if (type === "good_hit"){
+        loc = 2;
+        fadein = 10;
+        scale = 4;
+    }
 
     addClass(eff, ["effect", type]);
     style(eff, `
@@ -65,16 +98,26 @@ const createEffect = (type, x, y, rot) => {
         opacity: ${opacity};
     `)
 
-    effect_list.push({
+    const theEffect = {
         type,
         x,
-        y,
+        y: my,
         speed,
         fadein,
         rot,
         ele: eff,
-        size
-    })
+        size,
+        final_y,
+    }
+    effect_list.push(theEffect);
+    if (type === "good_explosion") explosion = eff;
+    if (type === "good_hit") {
+        if (good_hit != null){
+            del(good_hit);
+            good_hit = null;
+        }
+        good_hit = theEffect;
+    }
 
     render(shadwrap, eff)
 }
@@ -115,6 +158,28 @@ const moveEffect = (effect) => {
     }
 }
 
+const getRotTowards = (x, y, ele) =>{
+    const coords = getPosEle(ele, 64);
+    const dx = coords.x-x;
+    const dy = coords.y-y;
+    let angle = Math.atan(-dy/dx);
+    if(dx < 0){
+        if (-dy < 0){
+            angle = angle - Math.PI;
+        }
+        else{
+            angle = angle+ Math.PI;
+        }
+    }
+    angle = angle*(180/Math.PI)
+    angle = angle - 90;
+    angle = -angle;
+    if (angle <= -180){
+        angle = angle + 360
+    }
+    return angle;
+}
+
 const handleFade = (effect) => {
     if (effect.fadein === 0){
         if (effect.type === "lightning_warning"){
@@ -124,6 +189,7 @@ const handleFade = (effect) => {
                 createEffect("lightning_bolt", effect.x, effect.y-(64*i), 0)
             }
         }
+        if (effect.type === "good_explosion") explosion = null
         del(effect)
     }
     else{
@@ -138,13 +204,48 @@ const handleFade = (effect) => {
                 }
             }
         }
+        else{
+            if (effect.type === "good_missile"){
+                if (effect.y >= effect.final_y){
+                    createEffect("good_explosion", effect.x, effect.y, 90*Math.floor(Math.random()*4))
+                    del(effect);
+                }
+            }
+        }
     }
+}
+const compareAngles = (sourceAngle, otherAngle) =>{
+    // sourceAngle and otherAngle should be in the range -180 to 180
+    let difference = otherAngle - sourceAngle;
+
+    if(difference <= -180.0) difference += 360.0;
+    if(difference > 180.0) difference -= 360.0;
+
+    if(difference > 0.0) return -1;
+    if(difference < 0.0) return 1;
+
+    return 0;
 }
 
 const tickeffects = () => {
     effect_list.map(effect => {
-        if (["bullet", "missile", "wind"].includes(effect.type)){
+        if (["bullet", "wind", "good_missile"].includes(effect.type)){
             moveEffect(effect);
+        }
+        else if (effect.type === "missile"){
+            let pdrot = getRotTowards(effect.x, effect.y, package_drone);
+            let comp = compareAngles(effect.rot, pdrot);
+            if (comp === 1){
+                effect.rot = effect.rot+5;
+            }
+            else if (comp === -1){
+                effect.rot = effect.rot-5;
+            }
+            if (effect.rot > 180){
+                effect.rot = effect.rot-360;
+            }
+            moveEffect(effect);
+            effect.ele.style.transform = `rotate(${effect.rot}deg)`;
         }
         handleFade(effect);
         if(firing === true){
@@ -165,8 +266,24 @@ const tickeffects = () => {
             }
             if (effect.type === "lightning_strike"){
                 if (checkCollision(effect.ele, package_drone)){
-                    setHealth(hp-4);
+                    setHealth(hp-3);
                     del(effect);
+                }
+            }
+            if (effect.type === "missile"){
+                if (checkCollision(effect.ele, package_drone)){
+                    setHealth(hp-4);
+
+                    let pdpos = getPosEle(package_drone,64);
+                    createEffect("explosion", pdpos.x, pdpos.y, Math.random()*360);
+                    del(effect);
+                }
+                else{
+                    if (good_hit !== null){
+                        if(checkCollision(good_hit.ele, effect.ele)){
+                            del(effect);
+                        }
+                    }
                 }
             }
         }
@@ -199,16 +316,14 @@ const handleWindSpawn = (direction) => {
     const rand = Math.floor(Math.random()* 22);
     if (rand === 21) {createEffect("wind", Math.random()* 640,Math.random()* 640, rot);}
 
-    const rand2 = Math.floor(Math.random()* 150);
+    const rand2 = Math.floor(Math.random()* 250);
     if (rand === 21) {
 
         const x = 64*Math.floor(Math.random()*10)+24;
         const y = 64*Math.floor(Math.random()*10)+24;
         createEffect("lightning_warning", x,y, 0);
-
-        console.log(x, y)
     }
 
 }
 
-export {createEffect, tickeffects, removeEffects, handleWindSpawn}
+export {createEffect, tickeffects, removeEffects, handleWindSpawn, explosion}

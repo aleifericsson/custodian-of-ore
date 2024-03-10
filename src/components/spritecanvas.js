@@ -84,6 +84,7 @@ const moveTowards = (index, x, y, wind) => {
     const uy = (dy/mag)*speed;
     const nx = obj.x+ux-obj.size/2;
     const ny = obj.y+uy-obj.size/2;
+    let angle = Math.atan(-uy/ux);
     const incoming_tile = detectTile(nx,ny);
 
 

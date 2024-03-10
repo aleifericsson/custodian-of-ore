@@ -49,7 +49,9 @@ const initCutscenes = (rapper) =>{
     render(rapper, start_but);
 }
 
-const updateCutscene = () =>{
+const updateCutscene = (cursce, show) =>{
+    curscene = cursce;
+    showing = show;
     const cutscene = find(".cutscene");
     cutscene.style.visibility = showing ? "visible" : "hidden";
     cutscene.style.background = `url(${cutscenes}) -${320*curscene}px 0px`
@@ -58,23 +60,20 @@ const updateCutscene = () =>{
 
 const toggleStart = () =>{
     if (start_seq === 3){
-        showing = false;
-        updateCutscene();
+        updateCutscene(curscene, false);
         setTimeout(() => {
             nextDialogue();
         }, 1000);
     }
-    if (start_seq === 0){  
-        curscene =1;
+    if (start_seq === 0){ 
         start_seq += 1;
         undetect(find(".start-but"), "click", toggleStart)
         remove(wrapper, find(".start-but"));
         nextDialogue();
-        updateCutscene();
+        updateCutscene(1, true);
     }
     else if (start_seq === 2){
-        curscene =2;
-        updateCutscene();
+        updateCutscene(2, true);
         start_seq += 1;
     }
     else{
@@ -88,4 +87,4 @@ const nextCutscene = () =>{
 }
 
 
-export {initCutscenes, toggleStart}
+export {initCutscenes, toggleStart, updateCutscene}
