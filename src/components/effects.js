@@ -5,6 +5,7 @@ import { delSC, moveTowards, sc_list } from "./spritecanvas";
 import { wind_directions } from "../scripts/data";
 import { firing } from "../scripts/enemies";
 import { hp, setHealth } from "./infoScreen";
+import { dgpsh } from "./miniCanvas";
 
 let effect_list = [];
 let explosion = null;
@@ -234,6 +235,8 @@ const tickeffects = () => {
         }
         else if (effect.type === "missile"){
             let pdrot;
+
+            if(!dgpsh){
             if(checkCollisionReal(magnet_hitbox, effect.ele)){
                 pdrot = getRotTowards(effect.x, effect.y, package_drone);
             }
@@ -250,8 +253,10 @@ const tickeffects = () => {
             if (effect.rot > 180){
                 effect.rot = effect.rot-360;
             }
-            moveEffect(effect);
             effect.ele.style.transform = `rotate(${effect.rot}deg)`;
+            }
+
+            moveEffect(effect);
             
         }
         handleFade(effect);

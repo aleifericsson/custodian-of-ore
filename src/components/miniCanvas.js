@@ -1,17 +1,18 @@
 import {render, remove, create, addClass, hasclass, remClass, find, write, detect, undetect, style, attribs, moveTo, getPos} from "../scripts/QoL"
 import { backgroundChange } from "../scripts/canvMouseFuncs";
 import { createDrone, delSC, getIndex, sc_list, spriteCanvas } from "./spritecanvas";
-import { displayInfo } from "./infoScreen";
+import { displayInfo, hp, setHealth } from "./infoScreen";
 import tools from "../images/tools.png"
 import { tool_list } from "../scripts/data";
-import { handleMagnet, magnethitbox } from "../scripts/toolFuncs";
-import { magnet_hitbox, wrapper } from "../scripts/elements";
+import { handleMagnet, healHitbox, magnethitbox } from "../scripts/toolFuncs";
+import { heal_hitbox, magnet_hitbox, wrapper } from "../scripts/elements";
 import { createEffect } from "./effects";
 
 let miniList = [];
 //let cooldown_list = [false, false, false, false, false, false, false, false];
 let magazine = 20;
 let dgpsh = false;
+let heal_countdown = 40;
 
 function miniCanvas(name, img, imgsrc, index){
     this.name = name;
@@ -141,6 +142,16 @@ function miniCanvas(name, img, imgsrc, index){
                     moveTo(magnet_hitbox, mousePos2.x, mousePos2.y, 200);
                     }, 100))
                 }
+                else if (name === "Repair_Package_Drone"){
+                    interval_list.push(setInterval(() => {
+                        moveTo(heal_hitbox, mousePos2.x, mousePos2.y, 200);
+                        if (heal_countdown === 0){
+                            heal_countdown = 40;
+                            setHealth(hp+2);
+                        }
+                        else heal_countdown -= 1;
+                    }, 100))
+                }
             }
         }
         const updateDrag = (evt) =>{
@@ -163,7 +174,7 @@ function miniCanvas(name, img, imgsrc, index){
             ctx.clearRect(0,0,64,64);
             ctx.drawImage(img, index*16, 0, 16, 16, 0, 0, 64,64);
             if (name === "Magnet_Drone"){
-                if (magnet_hitbox !== null) remove(wrapper, magnet_hitbox);
+                if (magnet_hitbox !== null) {remove(wrapper, magnet_hitbox);magnet_hitbox=null}
                 magnethitbox()
             }
             else{
@@ -171,8 +182,26 @@ function miniCanvas(name, img, imgsrc, index){
                 if (name === "Lightning_Rod_Drone") this.cooldown(15000)
                 if (name === "Air_Strike") this.cooldown(5000)
                 if (name === "Machine_Gun") this.cooldown(15000)
-                if (name === "Drone_GPS_Hack") this.cooldown(20000)
-                if (name === "Repair_Drone") this.cooldown(20000)
+                if (name === "Drone_GPS_Hack") {
+                    this.cooldown(20000)
+                    dgpsh = true
+                    setTimeout(() => {dgpsh = false},10000)
+                }
+                if (name === "Repair_Package_Drone") {
+                    healHitbox()
+                    this.cooldown(20000)
+                }
+                if(name === "Recall_Drones"){
+                    if (sc_list[1] !== null){
+                        delSC(1)
+                    }
+                    if (sc_list[2] !== null){
+                        delSC(2)
+                    }
+                    if (sc_list[3] !== null){
+                        delSC(3)
+                    }
+                }
             }
             if (["Magnet_Drone", "Lightning_Rod_Drone", "Force-field_Drone"].includes(this.name)){
                 if (sc_list[getIndex(this.name)] !== null){
@@ -195,6 +224,9 @@ function miniCanvas(name, img, imgsrc, index){
                             createDrone(name, mP.x-32, mP.y-32)
                         //}
                     } 
+                    if (name === "Repair_Package_Drone"){
+                        if (heal_hitbox !== null) {remove(wrapper, heal_hitbox);magnet_hitbox=null}
+                    }
                     holding = false;
                 }
                 clearInterval(interval_list[0]);
@@ -232,4 +264,4 @@ const initMinis = (miniWrapper) => {
     
 }
 
-export {initMinis}
+export {initMinis, dgpsh}

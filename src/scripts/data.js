@@ -57,7 +57,7 @@ Remove all placed drones from field.
 - Cooldown: none
 `,`
 When held near package drone, 
-restores 2 health per 5 seconds.
+restores 2 health every 4 seconds.
 
 - Cooldown: 20 seconds
 `,`

@@ -54,7 +54,7 @@ const spriteCanvas = (wrapper, name, size, imgsrc, x, y, speed, show, frames) =>
         timer: 1,
     };
 
-    sc_list[getIndex(name)] = obj;
+    if(sc_names.includes(name)) sc_list[getIndex(name)] = obj;
     if (show){
         const ctx = canv.getContext("2d");
         ctx.imageSmoothingEnabled = false;

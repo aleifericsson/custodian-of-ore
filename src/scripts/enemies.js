@@ -6,6 +6,7 @@ import adsrc from "../images/attack_drone.png"
 import { addClass, checkCollision, checkCollisionReal, create, find, findAll, getPosEle, moveTo, remove } from "./QoL";
 import { createEffect, explosion, getRotTowards } from "../components/effects";
 import { hp, setHealth } from "../components/infoScreen";
+import { dgpsh } from "../components/miniCanvas";
 
 let enemy_list = [];
 let firing = false;
@@ -90,6 +91,7 @@ const handleShotSpawn = () =>{
             else{
                 enemy.timer = enemy.timer-1;
             }
+            if(!dgpsh){
             if (enemy.moving === true){
                 if (enemy.moveTimer === 0){
                     enemy.moveTimer = 10;
@@ -103,6 +105,7 @@ const handleShotSpawn = () =>{
             }
             if(enemy.type === "attack_drone"){
                 moveEneTowards(enemy, getRotTowards(enemy.x,enemy.y,package_drone)+180);
+            }
             }
         });
     }

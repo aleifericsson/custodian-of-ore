@@ -96,7 +96,12 @@ const setHealth = (health) =>{
     let healthbar;
     if(find(".healthbar") === null) {myhp = hp; healthbar = health}
     else if (typeof health === 'number') {
-        myhp = health; 
+        if (health > 20){
+            myhp = 20;
+        }
+        else{
+            myhp = health; 
+        }
         hp = myhp;
         healthbar = find(".healthbar"); 
         healthbar.textContent = '';
