@@ -3,7 +3,7 @@ import { incrementScore, score } from "../components/debugTools";
 import { nextDialogue } from "../components/dialogue";
 import { checkHits, handleWindSpawn, tickeffects } from "../components/effects";
 import { destroySC, sc_list, teleport } from "../components/spritecanvas"
-import { checkCollision, find, findAll, getPosEle, moveTo, remove } from "./QoL";
+import { checkCollision, checkCollisionReal, find, findAll, getPosEle, moveTo, remove } from "./QoL";
 import { dark_levels, level, level_start_y, wind_directions } from "./data";
 import { magnet_hitbox, package_drone, shadwrap } from "./elements";
 import { enemy_list, firing, handleShotSpawn } from "./enemies";
@@ -64,7 +64,7 @@ const drawObj = (obj, frame, direction) => {
 */
 
 const checkCollisions = () =>{
-    let overlap = checkCollision(magnet_hitbox, package_drone);
+    let overlap = checkCollisionReal(magnet_hitbox, package_drone);
     if (overlap) handleMagnet(package_drone);
 
     if(level > 0 && level<=6){

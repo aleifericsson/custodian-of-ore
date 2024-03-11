@@ -1,6 +1,6 @@
 import {render, remove, create, addClass, hasclass, remClass, find, write, detect, undetect, style, attribs, moveTo, getPos} from "../scripts/QoL"
 import { backgroundChange } from "../scripts/canvMouseFuncs";
-import { spriteCanvas } from "./spritecanvas";
+import { createDrone, delSC, getIndex, sc_list, spriteCanvas } from "./spritecanvas";
 import { displayInfo } from "./infoScreen";
 import tools from "../images/tools.png"
 import { tool_list } from "../scripts/data";
@@ -9,7 +9,9 @@ import { magnet_hitbox, wrapper } from "../scripts/elements";
 import { createEffect } from "./effects";
 
 let miniList = [];
+//let cooldown_list = [false, false, false, false, false, false, false, false];
 let magazine = 20;
+let dgpsh = false;
 
 function miniCanvas(name, img, imgsrc, index){
     this.name = name;
@@ -19,6 +21,8 @@ function miniCanvas(name, img, imgsrc, index){
     this.currentFrame = 0;
     this.canvele;
     this.imgele;
+    this.backele;
+    this.lock = null;
 
     this.init = () =>{
         const index = this.index;
@@ -51,7 +55,14 @@ function miniCanvas(name, img, imgsrc, index){
         addClass(imgele, ["canvas-icon"])
         attribs(imgele, ["width", "height", "id"], [`${64}px`,`${64}px`, name]);
         style(imgele, `
+        `)
 
+        const backele = create("div");
+        addClass(backele, ["backele", name])
+        style(backele, `
+            width: 64px;
+            height: 64px;
+            position:relative;
         `)
 
         const ctx2 = imgele.getContext("2d");
@@ -69,8 +80,35 @@ function miniCanvas(name, img, imgsrc, index){
 
         this.initMouse(canv, imgele);
 
-        return imgele;
+        render(backele, imgele);
+        this.backele = backele;
+        return backele;
     }
+
+    this.cooldown = (time) => {
+        const backele = this.backele;
+        const lock = create("div");
+        addClass(lock, ["lock", name])
+        style(lock, `
+            width: 16px;
+            height: 16px;
+            scale: 4;
+            top: 24px;
+            left: 24px;
+            image-rendering: pixelated;
+            position:absolute;
+            background: url(${tools}) -${16*9}px 0px;
+        `)
+
+        render(backele, lock);
+
+        this.lock = lock;
+
+        setTimeout(() => {
+            remove(backele, lock);
+            this.lock = null;
+        },time)
+    } 
 
     this.initMouse = (canv, imgele) => {
         const ctx = canv.getContext("2d");
@@ -81,8 +119,10 @@ function miniCanvas(name, img, imgsrc, index){
         let size = this.size;
         let curFra = this.currentFrame;
         let index = this.index;
+        let holding = false;
 
         const hoverFunc = (evt) => {
+            holding = true;
             if (interval_list.length === 0){
                 if (name === "Machine_Gun"){
                     magazine = 20;
@@ -123,7 +163,21 @@ function miniCanvas(name, img, imgsrc, index){
             ctx.clearRect(0,0,64,64);
             ctx.drawImage(img, index*16, 0, 16, 16, 0, 0, 64,64);
             if (name === "Magnet_Drone"){
+                if (magnet_hitbox !== null) remove(wrapper, magnet_hitbox);
                 magnethitbox()
+            }
+            else{
+                if (name === "Force-field_Drone") this.cooldown(15000)
+                if (name === "Lightning_Rod_Drone") this.cooldown(15000)
+                if (name === "Air_Strike") this.cooldown(5000)
+                if (name === "Machine_Gun") this.cooldown(15000)
+                if (name === "Drone_GPS_Hack") this.cooldown(20000)
+                if (name === "Repair_Drone") this.cooldown(20000)
+            }
+            if (["Magnet_Drone", "Lightning_Rod_Drone", "Force-field_Drone"].includes(this.name)){
+                if (sc_list[getIndex(this.name)] !== null){
+                    delSC(getIndex(this.name))
+                }
             }
         }
 
@@ -132,13 +186,16 @@ function miniCanvas(name, img, imgsrc, index){
                 undetect(backcanv, "mouseenter", hoverFunc)
 
                 let mP = getPos(evt, backcanv);
-                if (interval_list.length!==0){
-                    if(name === "coin"){
-                        //const coin = spriteCanvas(find(".wrapper"), "coin", 64, Coin, mousePos2.x-32, mousePos2.y-32, 0, true, 12) spawns sc of coin
-                    }
-                    else if (name === "Air_Strike"){
+                if (holding === true){
+                    if (this.name === "Air_Strike"){
                         createEffect("good_missile", mP.x, mP.y, 0);
                     }
+                    if (["Magnet_Drone", "Lightning_Rod_Drone", "Force-field_Drone"].includes(this.name)){
+                        //if (sc_list[getIndex(this.name)] !== null){
+                            createDrone(name, mP.x-32, mP.y-32)
+                        //}
+                    } 
+                    holding = false;
                 }
                 clearInterval(interval_list[0]);
                 interval_list = [];
@@ -147,9 +204,6 @@ function miniCanvas(name, img, imgsrc, index){
                     remove(document.body, canv);
                 }
                 ctx.clearRect(0,0,size,size);
-                if (name === "Magnet_Drone" && magnet_hitbox !== null){
-                    remove(wrapper, magnet_hitbox);
-                }
             
         }
 

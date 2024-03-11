@@ -20,10 +20,10 @@ const magnethitbox = () => {
         top: -1000px;
         left; -1000px;
         position: absolute;
-        background-color:rgba(255,255,255, 0.5);
         z-index: 5;
+        background-color: rgba(255,255,255, 0.5);
     `)
-
+//in case of debug: background-color: rgba(255,255,255, 0.5);
     magnet_hitbox = hitb;
 
     render(find(".wrapper"), hitb);

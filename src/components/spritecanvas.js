@@ -2,12 +2,18 @@ import {render, remove, create, addClass, hasClass, remClass, find, write, detec
 import { detectTile, getTiles } from "../scripts/canvasFuncs"
 import { collision_tiles } from "../scripts/canvasFuncs"
 import pdsrc from "../images/package_drone.png";
-import gdsrc from "../images/gunner_drone.png";
-import { package_drone } from "../scripts/elements";
-import { enemy } from "../scripts/enemies";
+import lrdsrc from "../images/lightning_rod_drone.png";
+import ffdsrc from "../images/force_field_drone.png";
+import mdsrc from "../images/magnet_drone.png"
+import { package_drone, wrapper } from "../scripts/elements";
 import { displayInfo } from "./infoScreen";
 
-let sc_list = [];
+let sc_list = [null, null, null, null];
+let sc_names = ["package_drone","magnet_drone","lightning_rod_drone","force_field_drone"]
+//order: pd, md, lrd, ffd
+let magnet_drone;
+let lightning_rod_drone;
+let force_field_drone;
 
 const spriteCanvas = (wrapper, name, size, imgsrc, x, y, speed, show, frames) =>{
 
@@ -48,7 +54,7 @@ const spriteCanvas = (wrapper, name, size, imgsrc, x, y, speed, show, frames) =>
         timer: 1,
     };
 
-    sc_list.push(obj);
+    sc_list[getIndex(name)] = obj;
     if (show){
         const ctx = canv.getContext("2d");
         ctx.imageSmoothingEnabled = false;
@@ -70,6 +76,26 @@ const spriteCanvas = (wrapper, name, size, imgsrc, x, y, speed, show, frames) =>
 
 const updateInfo = (evt) =>{
     displayInfo(evt.target.id, evt.target);
+}
+
+const getIndex = (name) => {
+    let index;
+
+    if (name === "package_drone"){
+        index = 0
+    }
+    else if (name === "lightning_rod_drone" || name ==="Lightning_Rod_Drone"){
+        index = 2
+    }
+    else if (name === "magnet_drone" || name === "Magnet_Drone"){
+        index = 1
+    }
+    else if (name === "force_field_drone" || "Force-field_Drone"){
+        index = 3
+    }
+
+    return index;
+
 }
 
 const moveTowards = (index, x, y, wind) => {
@@ -95,15 +121,16 @@ const moveTowards = (index, x, y, wind) => {
         }
     })
 
-    if (inpath && obj.name === "package_drone"){
-        inpath = false;
-        if (checkCollisionReal(find(".edge.left"), obj.ele)) teleport( index, 6, obj.y)
-        if (checkCollisionReal(find(".edge.right"), obj.ele)) teleport( index, 634, obj.y)
-        if (checkCollisionReal(find(".edge.top"), obj.ele)) teleport( index, obj.x, 6)
-        if (checkCollisionReal(find(".edge.bottom"), obj.ele)) teleport( index, obj.x, 634)
+    if (inpath){
+        if(obj.name === "package_drone")
+        {
+            if (checkCollisionReal(find(".edge.left"), obj.ele)) {teleport( index, obj.x+5, obj.y); obj.x=obj.x+5}
+            if (checkCollisionReal(find(".edge.right"), obj.ele)) {teleport( index, obj.x-5, obj.y); obj.x=obj.x-5}
+            if (checkCollisionReal(find(".edge.top"), obj.ele)) {teleport( index, obj.x, obj.y+5); obj.y=obj.y+5}
+            if (checkCollisionReal(find(".edge.bottom"), obj.ele)) {teleport( index, obj.x, obj.y-5); obj.y=obj.y-5}
+        }
     }
-
-    if (mag>obj.speed && !inpath){
+    else if (mag>obj.speed){
         sc_list[index].x = nx+obj.size/2;
         sc_list[index].y = ny+obj.size/2;
         teleport(index, nx, ny)
@@ -142,6 +169,11 @@ const setShow = (index, show) => {
         if (find(`#${sc_list[index].name}`) !== null) remove(wrapper, sc_list[index].ele);
     }
 }
+
+const delSC = (index) => {
+    remove(wrapper, sc_list[index].ele);
+    sc_list[index] = null;
+}  
 
 const drawSC = (index, frame, direction) => {
     let fram = frame;
@@ -199,4 +231,22 @@ const initSC = (wrapper) =>{
     spriteCanvas(wrapper, "package_drone", 32, pdsrc, 500, 300, 5, true, 1)
 }
 
-export{initSC, moveTowards ,setShow, drawSC, teleport,destroySC, spriteCanvas, sc_list}
+const createDrone = (name, x, y) =>{
+    let imgsrc;
+    let modname;
+    if (name === "Lightning_Rod_Drone"){
+        imgsrc = lrdsrc;
+        modname = "lightning_rod_drone";
+    }
+    else if (name === "Magnet_Drone"){
+        imgsrc = mdsrc;
+        modname = "magnet_drone";
+    }
+    else if (name === "Force-field_Drone"){
+        imgsrc = ffdsrc;
+        modname = "force_field_drone";
+    }
+    spriteCanvas(wrapper, modname, 32, imgsrc, x, y, 0, true, 1)
+}
+
+export{initSC, moveTowards ,setShow, drawSC, teleport,destroySC, spriteCanvas, sc_list, createDrone, getIndex, delSC};

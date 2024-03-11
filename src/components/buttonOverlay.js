@@ -104,6 +104,9 @@ const changeBackground = () => {
     if (level <= 6){
         firing = false;
     }
+    else{
+        firing = true;
+    }
     
     /*
     const canv = find(".layer-1");

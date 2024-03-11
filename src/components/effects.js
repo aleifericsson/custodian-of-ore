@@ -1,7 +1,7 @@
 import { addClass, checkCollision, checkCollisionReal, create, find, findAll, getPosEle, remove, render, style } from "../scripts/QoL";
 import effsrc from "../images/effects.png";
-import { package_drone, shadwrap } from "../scripts/elements";
-import { moveTowards, sc_list } from "./spritecanvas";
+import { magnet_hitbox, package_drone, shadwrap, wrapper } from "../scripts/elements";
+import { delSC, moveTowards, sc_list } from "./spritecanvas";
 import { wind_directions } from "../scripts/data";
 import { firing } from "../scripts/enemies";
 import { hp, setHealth } from "./infoScreen";
@@ -57,7 +57,7 @@ const createEffect = (type, x, y, rot) => {
     else if (type === "missile"){
         loc = 0;
         fadein = "none";
-        speed = 15;
+        speed = 12;
         scale = 2;
     }
     else if (type === "explosion"){
@@ -233,7 +233,13 @@ const tickeffects = () => {
             moveEffect(effect);
         }
         else if (effect.type === "missile"){
-            let pdrot = getRotTowards(effect.x, effect.y, package_drone);
+            let pdrot;
+            if(checkCollisionReal(magnet_hitbox, effect.ele)){
+                pdrot = getRotTowards(effect.x, effect.y, package_drone);
+            }
+            else{
+                pdrot = getRotTowards(effect.x, effect.y, package_drone);
+            }
             let comp = compareAngles(effect.rot, pdrot);
             if (comp === 1){
                 effect.rot = effect.rot+5;
@@ -246,6 +252,7 @@ const tickeffects = () => {
             }
             moveEffect(effect);
             effect.ele.style.transform = `rotate(${effect.rot}deg)`;
+            
         }
         handleFade(effect);
         if(firing === true){
@@ -277,6 +284,15 @@ const tickeffects = () => {
                     let pdpos = getPosEle(package_drone,64);
                     createEffect("explosion", pdpos.x, pdpos.y, Math.random()*360);
                     del(effect);
+                }
+                else if (checkCollision(effect.ele, sc_list[1].ele)){
+                    let pdpos = getPosEle(magnet_hitbox,64);
+                    createEffect("explosion", pdpos.x+64, pdpos.y+64, Math.random()*360);
+                    del(effect);
+                    delSC(1);
+                    if(magnet_hitbox !== null){
+                        remove(wrapper, magnet_hitbox);
+                    }
                 }
                 else{
                     if (good_hit !== null){
@@ -326,4 +342,4 @@ const handleWindSpawn = (direction) => {
 
 }
 
-export {createEffect, tickeffects, removeEffects, handleWindSpawn, explosion}
+export {createEffect, tickeffects, removeEffects, handleWindSpawn, explosion, getRotTowards}

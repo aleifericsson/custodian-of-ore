@@ -1,6 +1,5 @@
 import {render, remove, create, addClass, remClass, hasClass, attribs, find, write, detect, undetect, style} from "../scripts/QoL"
 import close from "../images/close.png"
-import closesound from "../sounds/close.mp3"
 import { playAudio } from "../scripts/sounds";
 import { wrapper } from "../scripts/elements";
 

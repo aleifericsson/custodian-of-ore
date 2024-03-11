@@ -72,7 +72,7 @@ const healthBar = () => {
         position:absolute;
         width: 16px;
         height: 16px;
-        background: url(${toolsrc}) -${16*9}px 0px;
+        background: url(${toolsrc}) -${16*8}px 0px;
         scale: 300%;
         image-rendering: pixelated;
         left: 8px;

@@ -1,10 +1,11 @@
 import { moveTowards, spriteCanvas, teleport } from "../components/spritecanvas";
-import { wrapper } from "./elements";
+import { package_drone, wrapper } from "./elements";
 import gdsrc from "../images/gunner_drone.png"
 import mdsrc from "../images/missile_drone.png"
 import adsrc from "../images/attack_drone.png"
 import { addClass, checkCollision, checkCollisionReal, create, find, findAll, getPosEle, moveTo, remove } from "./QoL";
-import { createEffect, explosion } from "../components/effects";
+import { createEffect, explosion, getRotTowards } from "../components/effects";
+import { hp, setHealth } from "../components/infoScreen";
 
 let enemy_list = [];
 let firing = false;
@@ -13,7 +14,7 @@ const enemy = (type, x, y) => {
     let imgsrc;
     let fireevery;
     const size = 64;
-    const speed = 5;
+    let speed = 5;
     if (type === "gunner_drone"){
         imgsrc = gdsrc;
         fireevery = 75;
@@ -27,7 +28,8 @@ const enemy = (type, x, y) => {
     
     if (type === "attack_drone"){
         imgsrc = adsrc;
-        fireevery = 500; //fires a prompt, but will try to ram into pd if firing is true
+        fireevery = 6; //deals damage every 4
+        speed = 2;
     }
 
     let timer = Math.floor(Math.random()*(fireevery)*0.5);
@@ -57,8 +59,6 @@ const handleShotSpawn = () =>{
             if (explosion !== null){
                 if (checkCollision(explosion, enemy.ele)) del(enemy)
             }
-
-
             if (enemy.timer ===0){
                 enemy.timer = enemy.fireevery
                 const x = enemy.x+32;
@@ -81,6 +81,11 @@ const handleShotSpawn = () =>{
                         enemy.moving = true;
                     }, 1000)
                 } 
+                if (enemy.type === "attack_drone"){
+                    if (checkCollisionReal(enemy.ele, package_drone)){
+                        setHealth(hp-1)
+                    }
+                }
             }
             else{
                 enemy.timer = enemy.timer-1;
@@ -95,6 +100,9 @@ const handleShotSpawn = () =>{
                     enemy.moveTimer = enemy.moveTimer - 1;
                     moveEneTowards(enemy, enemy.rot);
                 }
+            }
+            if(enemy.type === "attack_drone"){
+                moveEneTowards(enemy, getRotTowards(enemy.x,enemy.y,package_drone)+180);
             }
         });
     }
@@ -113,17 +121,19 @@ const moveEneTowards = (enemy, rot) => {
 
     let inpath = false
     findAll(".edge").forEach(path => {
-        if (checkCollision(path, enemy.ele)){
+        if (checkCollisionReal(path, enemy.ele)){
             inpath = true;
         }
     })
 
     if (inpath){
+        /*
         inpath = false;
         if (checkCollisionReal(find(".edge.left"), enemy.ele)) {moveTo(enemy.ele, 32, enemy.y, enemy.size);enemy.x =32}
         if (checkCollisionReal(find(".edge.right"), enemy.ele)) {moveTo(enemy.ele, 608, enemy.y, enemy.size);enemy.x =608}
         if (checkCollisionReal(find(".edge.top"), enemy.ele)) {moveTo(enemy.ele, enemy.x, 32, enemy.size);enemy.y=32}
         if (checkCollisionReal(find(".edge.bottom"), enemy.ele)) {moveTo(enemy.ele, enemy.x, 608, enemy.size);enemy.y =608}
+        */
     }
     else{
         enemy.x = nx+enemy.size/2;
