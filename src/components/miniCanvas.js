@@ -180,8 +180,8 @@ function miniCanvas(name, img, imgsrc, index){
             else{
                 if (name === "Force-field_Drone") this.cooldown(15000)
                 if (name === "Lightning_Rod_Drone") this.cooldown(15000)
-                if (name === "Air_Strike") this.cooldown(5000)
-                if (name === "Machine_Gun") this.cooldown(15000)
+                if (name === "Air_Strike") this.cooldown(3000)
+                if (name === "Machine_Gun") this.cooldown(10000)
                 if (name === "Drone_GPS_Hack") {
                     this.cooldown(20000)
                     dgpsh = true
@@ -221,7 +221,9 @@ function miniCanvas(name, img, imgsrc, index){
                     }
                     if (["Magnet_Drone", "Lightning_Rod_Drone", "Force-field_Drone"].includes(this.name)){
                         //if (sc_list[getIndex(this.name)] !== null){
-                            createDrone(name, mP.x-32, mP.y-32)
+                            if (mP.x <640&&mP.x>0&&mP.y <640&&mP.y>0){
+                                createDrone(name, mP.x-32, mP.y-32)
+                            }
                         //}
                     } 
                     if (name === "Repair_Package_Drone"){

@@ -41,7 +41,6 @@ const healHitbox = () => {
         left; -1000px;
         position: absolute;
         z-index: 5;
-        background-color: rgba(255,255,255, 0.5);
         pointer-events: none;
     `)
 //in case of debug: background-color: rgba(255,255,255, 0.5);

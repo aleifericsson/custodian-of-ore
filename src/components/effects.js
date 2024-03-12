@@ -245,10 +245,10 @@ const tickeffects = () => {
             }
             let comp = compareAngles(effect.rot, pdrot);
             if (comp === 1){
-                effect.rot = effect.rot+5;
+                effect.rot = effect.rot+3;
             }
             else if (comp === -1){
-                effect.rot = effect.rot-5;
+                effect.rot = effect.rot-3;
             }
             if (effect.rot > 180){
                 effect.rot = effect.rot-360;
@@ -290,19 +290,21 @@ const tickeffects = () => {
                     createEffect("explosion", pdpos.x, pdpos.y, Math.random()*360);
                     del(effect);
                 }
-                else if (checkCollision(effect.ele, sc_list[1].ele)){
-                    let pdpos = getPosEle(magnet_hitbox,64);
-                    createEffect("explosion", pdpos.x+64, pdpos.y+64, Math.random()*360);
-                    del(effect);
-                    delSC(1);
-                    if(magnet_hitbox !== null){
-                        remove(wrapper, magnet_hitbox);
+                if (sc_list[1] !== null){
+                    if (checkCollision(effect.ele, sc_list[1].ele)){
+                        let pdpos = getPosEle(magnet_hitbox,64);
+                        createEffect("explosion", pdpos.x+64, pdpos.y+64, Math.random()*360);
+                        del(effect);
+                        delSC(1);
+                        if(magnet_hitbox !== null){
+                            remove(wrapper, magnet_hitbox);
+                        }
                     }
-                }
-                else{
-                    if (good_hit !== null){
-                        if(checkCollision(good_hit.ele, effect.ele)){
-                            del(effect);
+                    else{
+                        if (good_hit !== null){
+                            if(checkCollision(good_hit.ele, effect.ele)){
+                                del(effect);
+                            }
                         }
                     }
                 }
@@ -337,14 +339,17 @@ const handleWindSpawn = (direction) => {
     const rand = Math.floor(Math.random()* 22);
     if (rand === 21) {createEffect("wind", Math.random()* 640,Math.random()* 640, rot);}
 
-    const rand2 = Math.floor(Math.random()* 250);
+
+    if(level === 8 || level === 9 ||level === 10){
+
+    const rand2 = Math.floor(Math.random()* 300);
     if (rand === 21) {
 
         const x = 64*Math.floor(Math.random()*10)+24;
         const y = 64*Math.floor(Math.random()*10)+24;
         createEffect("lightning_warning", x,y, 0);
     }
-
+    }
 }
 
 export {createEffect, tickeffects, removeEffects, handleWindSpawn, explosion, getRotTowards}

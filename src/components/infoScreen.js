@@ -15,7 +15,7 @@ const initInfoScreen = () =>{
         width: 250px;
         height: 640px;
         background-color: #242424;
-        border: 5px solid darkslategray;
+        border: 5px solid darkred;
         position: absolute;
         left: 650px;
         top:-5px;
@@ -54,7 +54,7 @@ const healthBar = () => {
         width: ${width}px;
         height: 640px;
         background-color: #242424;
-        border: 5px solid darkslategray;
+        border: 5px solid darkred;
         position: absolute;
         left: -${width+20}px;
         top:-5px;

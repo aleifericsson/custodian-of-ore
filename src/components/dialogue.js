@@ -58,7 +58,7 @@ const createDialogue = (dialogueObj) => {
         style(dialogue, `
             color:white;
             background-color: slategray;
-            border: 5px solid darkslategray;
+            border: 5px solid darkred;
             position:absolute;
             transition: 0.1s;
             width: 600px;
@@ -85,7 +85,7 @@ const createCharBox = (charsrc, index) => {
     const charBox = create("div");
     addClass(charBox, ["charBox"])
     style(charBox, `
-        border: 2px solid darkslategray;
+        border: 2px solid darkred;
         min-width: 32px;
         min-height: 32px;
         margin: 16px;

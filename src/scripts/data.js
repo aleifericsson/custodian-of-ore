@@ -37,14 +37,14 @@ Call a missile to any point on the field
 
 - Ammo: 1 missile
 - Damage: high
-- Cooldown: 5 seconds
+- Cooldown: 3 seconds
 `,`
 Fires shots at any point on the field,
 machine overheats after 20 shots
 
 - Ammo: 20 bullets
 - Firerate: 4 bullets per second
-- Cooldown: 15 seconds
+- Cooldown: 10 seconds
 `,`
 Locks position of all drones temporarily,
 missiles lose heat-seeking function.

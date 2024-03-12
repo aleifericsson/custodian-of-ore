@@ -50,7 +50,7 @@ const spriteCanvas = (wrapper, name, size, imgsrc, x, y, speed, show, frames) =>
         frame:0,
         show,
         frames,
-        updates_per_frames: 2,
+        updates_per_frames: 4,
         timer: 1,
     };
 
@@ -113,7 +113,7 @@ const moveTowards = (index, x, y, wind) => {
     let angle = Math.atan(-uy/ux);
     const incoming_tile = detectTile(nx,ny);
 
-
+/*
     let inpath = false
     findAll(".edge").forEach(path => {
         if (checkCollision(path, obj.ele)){
@@ -129,6 +129,14 @@ const moveTowards = (index, x, y, wind) => {
             if (checkCollisionReal(find(".edge.top"), obj.ele)) {teleport( index, obj.x, obj.y+5); obj.y=obj.y+5}
             if (checkCollisionReal(find(".edge.bottom"), obj.ele)) {teleport( index, obj.x, obj.y-5); obj.y=obj.y-5}
         }
+    }
+    */
+
+    let outta_bounds = true
+
+    if (nx <640-64&&nx>0&&ny <640-64&&ny>0) outta_bounds = false;
+    if (outta_bounds){
+        //uhh
     }
     else if (mag>obj.speed){
         sc_list[index].x = nx+obj.size/2;
@@ -154,7 +162,7 @@ const moveTowards = (index, x, y, wind) => {
         else if (angle <= -112.5 && angle >= -157.5) direction = "downleft"
         else if (angle >= 157.5 && angle <= -157.5) direction = "left"
 
-        //drawSC(0, "increment", direction);
+        //drawSC(sc_list[0], "increment", direction);
     }
 }
 
@@ -175,32 +183,31 @@ const delSC = (index) => {
     sc_list[index] = null;
 }  
 
-const drawSC = (index, frame, direction) => {
+const drawSC = (sc, frame, direction) => {
     let fram = frame;
     if (frame === "increment"){
-        if (sc_list[index].timer === sc_list[index].updates_per_frames){
-            fram = sc_list[index].frame + 1;
-            sc_list[index].frame = fram;
-            sc_list[index].timer = 1;
+        if (sc.timer === sc.updates_per_frames){
+            fram = sc.frame + 1;
+            sc.frame = fram;
+            sc.timer = 1;
         }
         else {
-            sc_list[index].timer += 1;
+            sc.timer += 1;
         }
     }
-    if (fram === sc_list[index].frames){
-        if (sc_list[index].name === "highlight") fram = 1;
+    if (fram === sc.frames){
+        if (sc.name === "highlight") fram = 1;
         else fram = 0
-        sc_list[index].frame = fram;
+        sc.frame = fram;
     }
-    if (sc_list[index].timer === 1){
-    sc_list[index].direction = direction;
-    const draind = sc_list[index].direction_data[direction];
-    sc_list[index].draw_index = draind;
-    const ctx = sc_list[index].ele.getContext("2d");
-    const size = sc_list[index].size;
-    const img = sc_list[index].img;
-    ctx.clearRect(0,0,size,size);
-    ctx.drawImage(img, size*fram, size*draind, size, size, 0, 0, size,size);
+    if (sc.timer === 1){
+    sc.direction = direction;
+    const draind = sc.direction_data[direction];
+    sc.draw_index = draind;
+    const ctx = sc.ele.getContext("2d");
+    const img = sc.img;
+    ctx.clearRect(0,0,64,64);
+    ctx.drawImage(img, 32*fram, 32*draind, 32, 32, 0, 0, 64,64);
     }
 }
 
@@ -228,7 +235,7 @@ const destroySC = (obj) => {
 }
 
 const initSC = (wrapper) =>{
-    spriteCanvas(wrapper, "package_drone", 32, pdsrc, 500, 300, 5, true, 1)
+    spriteCanvas(wrapper, "package_drone", 32, pdsrc, 500, 300, 5, true, 8)
 }
 
 const createDrone = (name, x, y) =>{

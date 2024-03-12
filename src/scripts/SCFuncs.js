@@ -2,20 +2,21 @@ import { changeBackground } from "../components/buttonOverlay";
 import { incrementScore, score } from "../components/debugTools";
 import { nextDialogue } from "../components/dialogue";
 import { checkHits, handleWindSpawn, tickeffects } from "../components/effects";
-import { destroySC, sc_list, teleport } from "../components/spritecanvas"
+import { destroySC, drawSC, sc_list, teleport } from "../components/spritecanvas"
 import { checkCollision, checkCollisionReal, find, findAll, getPosEle, moveTo, remove } from "./QoL";
 import { dark_levels, level, level_start_y, wind_directions } from "./data";
 import { magnet_hitbox, package_drone, shadwrap } from "./elements";
-import { enemy_list, firing, handleShotSpawn } from "./enemies";
+import { enemy_list, firing, tickEnemies } from "./enemies";
 import { playAudio } from "./sounds";
 import { handleMagnet } from "./toolFuncs";
 import { trigger } from "./triggers";
 
 const animateSCs = () => {
     checkCollisions();
-    handleShotSpawn();
+    tickEnemies();
     if (dark_levels.includes(level)) handleWindSpawn(wind_directions[dark_levels.indexOf(level)]);
     tickeffects();
+    drawSC(sc_list[0],"increment","none");
     
     /*
     coin_list.forEach(coin => {
@@ -32,6 +33,7 @@ const animateSCs = () => {
     })
     */
 }
+
 /*
 const drawObj = (obj, frame, direction) => {
     let fram = frame;
@@ -63,6 +65,7 @@ const drawObj = (obj, frame, direction) => {
 }
 */
 
+
 const checkCollisions = () =>{
     let overlap = checkCollisionReal(magnet_hitbox, package_drone);
     if (overlap) handleMagnet(package_drone);
@@ -82,10 +85,10 @@ const checkCollisions = () =>{
     }
     
 
-    if (checkCollision(find(".endblock"), package_drone)) {
+    if (checkCollisionReal(find(".endblock"), package_drone)) {
         if (level === 0){
             moveTo(package_drone, 600, 420, 64);
-            sc_list[0].x = 600;
+            sc_list[0].x = 570;
             sc_list[0].y = 420;
         }
         else{
@@ -94,7 +97,7 @@ const checkCollisions = () =>{
                 sc_list[0].y = level_start_y[level+1];
             }
             else sc_list[0].y = pdpos.y; 
-            sc_list[0].x = pdpos.x+580;
+            sc_list[0].x = 570;
 
             moveTo(package_drone,sc_list[0].x, sc_list[0].y, 64);
             

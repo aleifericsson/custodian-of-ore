@@ -1,7 +1,7 @@
 import {render, remove, create, addClass, remClass, find, write, detect, undetect, style, hasClass} from "../scripts/QoL"
 import buttons from "../images/Buttons_updated.png"
 import { togglePrompt } from "./prompts";
-import {destroySC, drawSC, moveTowards, setShow, teleport } from "./spritecanvas";
+import {delSC, destroySC, drawSC, moveTowards, sc_list, setShow, teleport } from "./spritecanvas";
 import { renderShader, removeShaders, renderLevel } from "./shaders";
 import { dark_levels, level } from "../scripts/data";
 import { firing } from "../scripts/enemies";
@@ -89,6 +89,15 @@ const togglePointer = (evt) => {
 
 const changeBackground = () => {
     removeShaders();
+    if (sc_list[1] !== null){
+        delSC(1)
+    }
+    if (sc_list[2] !== null){
+        delSC(2)
+    }
+    if (sc_list[3] !== null){
+        delSC(3)
+    }
     level += 1;
         write(find("#level"), `Level: ${level}`)
         renderLevel(`level-${level}`)
