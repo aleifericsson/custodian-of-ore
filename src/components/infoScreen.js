@@ -7,6 +7,7 @@ import { removeEffects } from "./effects";
 import { removeEnemies } from "../scripts/enemies";
 
 let hp = 20;
+let bosshp = 100;
 
 const initInfoScreen = () =>{
     const info = create("div");
@@ -125,6 +126,58 @@ const setHealth = (health) =>{
     }
 }
 
+const bossBar = () =>{
+    const bbwrap = create("div");
+    const height = 12;
+    addClass(bbwrap, ["bbwrap"]);
+    style(bbwrap, `
+        width: 550px;
+        max-height: ${height}px;
+        background-color: #242424;
+        position: absolute;
+        left: 40px;
+        color:white;
+        display:flex;
+        justify-content: flex-start;
+        padding: 10px;
+        align-items: center;
+        position:absolute;
+        gap: 20px;
+        z-index: 5;
+    `)
+
+    const bbtext = create("div");
+    style(bbtext, `
+        font-size: 20px;
+        font-family:munro;
+        color:white;
+    `)
+    write(bbtext, "BOSS");
+    render(bbwrap, bbtext);
+
+    const bbbar = create("div");
+    addClass(bbbar, ["bbbar"]);
+    style(bbbar, `
+        height: 5px;
+        width: 500px;
+        background-color: white;
+    `)
+    render(bbwrap, bbbar);
+
+    render(wrapper, bbwrap)
+}
+
+const updateBossBar = (health) =>{
+    bosshp = health;
+    const bbbar = find(".bbbar");
+    if(health <= 0){
+        remove(wrapper, bbbar)
+    }
+    else{
+        bbbar.style.width = `${(health/100)*500}px`
+    }
+}
+
 const displayInfo = (code, rawicon) => {
     const cloned = rawicon.cloneNode(false);
     cloned.id = "infoPic"
@@ -193,4 +246,4 @@ const displayInfo = (code, rawicon) => {
     render(info, text);
 }
 
-export {initInfoScreen, displayInfo, setHealth, hp};
+export {initInfoScreen, displayInfo, setHealth, hp, bosshp, bossBar, updateBossBar};

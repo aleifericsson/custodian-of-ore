@@ -17,7 +17,8 @@ Attracts metal towards it
 
 - Cooldown: none
 `,`
-Dissolves bullets and missiles it touches.
+Dissolves bullets and missiles it touches,
+but can be taken down by attack drones
 
 - Placeable
 - Only one on the field at a time
@@ -30,7 +31,7 @@ Absorbs lightning in a small radius
 - Placeable
 - Only one on the field at a time
 
-- Shatters after 3 lightning strikes
+- Depletes power in 10 seconds
 - Cooldown: 15 seconds
 `,`
 Call a missile to any point on the field

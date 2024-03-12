@@ -1,10 +1,14 @@
 import {render, remove, create, addClass, remClass, find, write, detect, undetect, style, hasClass} from "../scripts/QoL"
 import buttons from "../images/Buttons_updated.png"
 import { togglePrompt } from "./prompts";
-import {delSC, destroySC, drawSC, moveTowards, sc_list, setShow, teleport } from "./spritecanvas";
+import {delSC, destroySC, drawSC, moveTowards, sc_list, setShow, spriteCanvas, teleport } from "./spritecanvas";
 import { renderShader, removeShaders, renderLevel } from "./shaders";
 import { dark_levels, level } from "../scripts/data";
 import { firing } from "../scripts/enemies";
+import { bossBar, bosshp, updateBossBar } from "./infoScreen";
+import bosssrc from "../images/boss.png"
+import { wrapper } from "../scripts/elements";
+import { bossele } from "../scripts/bossFuncs";
 
 const butSize = 32;
 let butOv;
@@ -98,7 +102,17 @@ const changeBackground = () => {
     if (sc_list[3] !== null){
         delSC(3)
     }
+    if (level === 10) {//DOn't PUT BOSS STUFF HERE
+        level = 0;
+    }
+    else{
     level += 1;
+    }
+    if (level === 10){//PUT BOSS STUFF HERE
+        const boss = spriteCanvas(wrapper, "boss", 128, bosssrc, 25, 200, 5, true, 1)
+        bossele = boss;
+        bossBar();
+    }
         write(find("#level"), `Level: ${level}`)
         renderLevel(`level-${level}`)
         if (dark_levels.includes(level)){
@@ -107,15 +121,13 @@ const changeBackground = () => {
         else{   
             renderShader("light-shader");
         }
-        if (level === 10) {
-            level = 0;
-        }
     if (level <= 6){
         firing = false;
     }
     else{
         firing = true;
     }
+
     
     /*
     const canv = find(".layer-1");

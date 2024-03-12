@@ -1,9 +1,10 @@
 import { moveTowards } from "../components/spritecanvas";
 import {render, remove, create, addClass, hasClass, remClass, find, findAll, write, detect, undetect, style, attribs, isElement, getPos, getCSS, getPosEle} from "./QoL"
-import { heal_hitbox, magnet_hitbox } from "./elements";
+import { heal_hitbox, lr_hitbox, magnet_hitbox } from "./elements";
 
 const magnet_di = 200;
 const heal_di = 200;
+const lr_di = 200;
 
 const handleMagnet = (attracted) => {
     const elepos = getPosEle(magnet_hitbox, magnet_di);
@@ -49,4 +50,25 @@ const healHitbox = () => {
     render(find(".wrapper"), hitb);
 }
 
-export {handleMagnet, magnethitbox, healHitbox}
+
+const lrHitbox = () => {
+    const diameter = lr_di;
+    const hitb = create("div");
+    hitb.id = "lr_hitbox";
+    style(hitb, `
+        height: ${diameter}px;
+        width: ${diameter}px;
+        top: -1000px;
+        left; -1000px;
+        position: absolute;
+        z-index: 5;
+        pointer-events: none;
+        background-color: rgba(255,255,255, 0.5);
+    `)
+//in case of debug: background-color: rgba(255,255,255, 0.5);
+    lr_hitbox = hitb;
+
+    render(find(".wrapper"), hitb);
+}
+
+export {handleMagnet, magnethitbox, healHitbox, lrHitbox, lr_di}

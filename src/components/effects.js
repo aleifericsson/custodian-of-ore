@@ -1,15 +1,18 @@
 import { addClass, checkCollision, checkCollisionReal, create, find, findAll, getPosEle, remove, render, style } from "../scripts/QoL";
 import effsrc from "../images/effects.png";
-import { magnet_hitbox, package_drone, shadwrap, wrapper } from "../scripts/elements";
+import { lr_hitbox, magnet_hitbox, package_drone, shadwrap, wrapper } from "../scripts/elements";
 import { delSC, moveTowards, sc_list } from "./spritecanvas";
-import { wind_directions } from "../scripts/data";
+import { level, wind_directions } from "../scripts/data";
 import { firing } from "../scripts/enemies";
 import { hp, setHealth } from "./infoScreen";
 import { dgpsh } from "./miniCanvas";
+import { currentFrame } from "../scripts/SCFuncs";
+import { lr_di } from "../scripts/toolFuncs";
 
 let effect_list = [];
 let explosion = null;
 let good_hit = null;
+let force_field_list = [];
 
 const createEffect = (type, x, y, rot) => {
     const eff = create("div");
@@ -84,6 +87,12 @@ const createEffect = (type, x, y, rot) => {
         fadein = 10;
         scale = 4;
     }
+    else if (type === "force_field"){
+        loc = 12;
+        scale = 4;
+        fadein = "none";
+    }
+
 
     addClass(eff, ["effect", type]);
     style(eff, `
@@ -118,6 +127,9 @@ const createEffect = (type, x, y, rot) => {
             good_hit = null;
         }
         good_hit = theEffect;
+    }
+    if (type === "force_field"){
+        force_field_list.push(eff)
     }
 
     render(shadwrap, eff)
@@ -184,10 +196,28 @@ const getRotTowards = (x, y, ele) =>{
 const handleFade = (effect) => {
     if (effect.fadein === 0){
         if (effect.type === "lightning_warning"){
-            createEffect("lightning_strike", effect.x, effect.y, 90*Math.floor(Math.random()*4));
-            let reps = (effect.y-24)/64;
-            for(let i = 0; i < reps+1; i++){   
-                createEffect("lightning_bolt", effect.x, effect.y-(64*i), 0)
+            if (checkCollisionReal(effect.ele, lr_hitbox)){
+                if(sc_list[2] === null){
+                    const lrpos = getPosEle(lr_hitbox,lr_di);
+                    let reps = Math.floor((lrpos.y-64)/64);
+                    for(let i = 0; i < reps+1; i++){   
+                        createEffect("lightning_bolt", lrpos.x, lrpos.y-64(64*i), 0)
+                    }
+                }
+                else{
+                    const lrpos = getPosEle(sc_list[2].ele,64);
+                    let reps = Math.floor((lrpos.y-64)/64);
+                    for(let i = 0; i < reps+1; i++){   
+                        createEffect("lightning_bolt", lrpos.x, lrpos.y-64-(64*i), 0)
+                    }
+                }
+            }
+            else{
+                createEffect("lightning_strike", effect.x, effect.y, 90*Math.floor(Math.random()*4));
+                let reps = (effect.y-24)/64;
+                for(let i = 0; i < reps+1; i++){   
+                    createEffect("lightning_bolt", effect.x, effect.y-(64*i), 0)
+                }
             }
         }
         if (effect.type === "good_explosion") explosion = null
@@ -210,6 +240,18 @@ const handleFade = (effect) => {
                 if (effect.y >= effect.final_y){
                     createEffect("good_explosion", effect.x, effect.y, 90*Math.floor(Math.random()*4))
                     del(effect);
+                }
+            }
+            else if(effect.type === "force_field"){
+                if (sc_list[3] === null){
+                    del(effect);
+                    force_field_list = [];
+                }
+                if (currentFrame % 8 < 4){
+                    effect.ele.style.background= `url(${effsrc}) -${16*13}px 0`;
+                }
+                else{
+                    effect.ele.style.background= `url(${effsrc}) -${16*12}px 0`;
                 }
             }
         }
@@ -255,6 +297,11 @@ const tickeffects = () => {
             }
             effect.ele.style.transform = `rotate(${effect.rot}deg)`;
             }
+            force_field_list.map(force => {
+                if (checkCollision(effect.ele, force)){
+                    del(effect);
+                }
+            })
 
             moveEffect(effect);
             
@@ -275,7 +322,13 @@ const tickeffects = () => {
                     createEffect("hit", pdpos.x+x, pdpos.y+y, Math.random()*360);
                     del(effect);
                 }
-            }
+                
+                force_field_list.map(force => {
+                    if (checkCollision(effect.ele, force)){
+                        del(effect);
+                    }
+                })
+                }
             if (effect.type === "lightning_strike"){
                 if (checkCollision(effect.ele, package_drone)){
                     setHealth(hp-3);
@@ -341,14 +394,13 @@ const handleWindSpawn = (direction) => {
 
 
     if(level === 8 || level === 9 ||level === 10){
+        const rand2 = Math.floor(Math.random()* 300);
+        if (rand === 21) {
 
-    const rand2 = Math.floor(Math.random()* 300);
-    if (rand === 21) {
-
-        const x = 64*Math.floor(Math.random()*10)+24;
-        const y = 64*Math.floor(Math.random()*10)+24;
-        createEffect("lightning_warning", x,y, 0);
-    }
+            const x = 64*Math.floor(Math.random()*10)+24;
+            const y = 64*Math.floor(Math.random()*10)+24;
+            createEffect("lightning_warning", x,y, 0);
+        }
     }
 }
 

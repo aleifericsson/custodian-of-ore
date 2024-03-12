@@ -14,12 +14,19 @@ let sc_names = ["package_drone","magnet_drone","lightning_rod_drone","force_fiel
 let magnet_drone;
 let lightning_rod_drone;
 let force_field_drone;
+let bossSC;
 
 const spriteCanvas = (wrapper, name, size, imgsrc, x, y, speed, show, frames) =>{
 
+    let canvsize = 64;
+    if (name==="boss") {
+        canvsize = 256;
+        console.log("huh???")
+    }
+
     const canv = create("canvas");
     addClass(canv, ["spritecanvas", name]);
-    attribs(canv, ["id", "width", "height"], [name, `${64}px`, `${64}px`]);
+    attribs(canv, ["id", "width", "height"], [name, `${canvsize}px`, `${canvsize}px`]);
 
     let img;
     if (imgsrc === "none"){
@@ -39,7 +46,8 @@ const spriteCanvas = (wrapper, name, size, imgsrc, x, y, speed, show, frames) =>
     let obj = { 
         name,
         size,
-        ele: canv, 
+        ele: canv,
+        canvsize,
         x,
         y,
         direction: "left",
@@ -59,14 +67,17 @@ const spriteCanvas = (wrapper, name, size, imgsrc, x, y, speed, show, frames) =>
         const ctx = canv.getContext("2d");
         ctx.imageSmoothingEnabled = false;
         img.onload = function() {
-            ctx.clearRect(0,0,64,64);
-            ctx.drawImage(img, 0, size*0, size, size, 0, 0, 64,64);
+            ctx.clearRect(0,0,canvsize,canvsize);
+            ctx.drawImage(img, 0, size*0, size, size, 0, 0, canvsize,canvsize);
         }
         render(wrapper, canv);
         detect(canv, "mouseenter", updateInfo);
     }
     if(name === "package_drone"){
         package_drone = canv;
+    }
+    if (name==="boss"){
+        bossSC = obj;
     }
 
     canv.dataset.imgsrc = imgsrc;

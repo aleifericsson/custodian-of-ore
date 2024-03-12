@@ -2,8 +2,10 @@ import { changeBackground } from "../components/buttonOverlay";
 import { incrementScore, score } from "../components/debugTools";
 import { nextDialogue } from "../components/dialogue";
 import { checkHits, handleWindSpawn, tickeffects } from "../components/effects";
+import { bossBar } from "../components/infoScreen";
 import { destroySC, drawSC, sc_list, teleport } from "../components/spritecanvas"
 import { checkCollision, checkCollisionReal, find, findAll, getPosEle, moveTo, remove } from "./QoL";
+import { tickBoss } from "./bossFuncs";
 import { dark_levels, level, level_start_y, wind_directions } from "./data";
 import { magnet_hitbox, package_drone, shadwrap } from "./elements";
 import { enemy_list, firing, tickEnemies } from "./enemies";
@@ -11,12 +13,18 @@ import { playAudio } from "./sounds";
 import { handleMagnet } from "./toolFuncs";
 import { trigger } from "./triggers";
 
+let currentFrame = 0;
+
 const animateSCs = () => {
+    currentFrame += 1;
     checkCollisions();
     tickEnemies();
     if (dark_levels.includes(level)) handleWindSpawn(wind_directions[dark_levels.indexOf(level)]);
     tickeffects();
     drawSC(sc_list[0],"increment","none");
+    if (level === 10){
+        tickBoss();
+    }
     
     /*
     coin_list.forEach(coin => {
@@ -107,4 +115,4 @@ const checkCollisions = () =>{
     //console.log(overlap);
 }
 
-export {animateSCs}
+export {animateSCs, currentFrame}

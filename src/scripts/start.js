@@ -24,6 +24,7 @@ const initCanvases = () => {
         background-image: url("${pattern}");
         background-size: 70px;
         background-repeat: repeat;
+        padding: 20px;
     `)
     const rapper = wrappe();
     const backgroundCanvas = canvas(width,height,0);

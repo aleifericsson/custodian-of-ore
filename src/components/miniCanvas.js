@@ -4,8 +4,8 @@ import { createDrone, delSC, getIndex, sc_list, spriteCanvas } from "./spritecan
 import { displayInfo, hp, setHealth } from "./infoScreen";
 import tools from "../images/tools.png"
 import { tool_list } from "../scripts/data";
-import { handleMagnet, healHitbox, magnethitbox } from "../scripts/toolFuncs";
-import { heal_hitbox, magnet_hitbox, wrapper } from "../scripts/elements";
+import { handleMagnet, healHitbox, lrHitbox, lr_di, magnethitbox } from "../scripts/toolFuncs";
+import { heal_hitbox, lr_hitbox, magnet_hitbox, wrapper } from "../scripts/elements";
 import { createEffect } from "./effects";
 
 let miniList = [];
@@ -142,6 +142,11 @@ function miniCanvas(name, img, imgsrc, index){
                     moveTo(magnet_hitbox, mousePos2.x, mousePos2.y, 200);
                     }, 100))
                 }
+                else if (name === "Lightning_Rod_Drone"){
+                    interval_list.push(setInterval(() => {
+                    moveTo(lr_hitbox, mousePos2.x, mousePos2.y, lr_di);
+                    }, 100))
+                }
                 else if (name === "Repair_Package_Drone"){
                     interval_list.push(setInterval(() => {
                         moveTo(heal_hitbox, mousePos2.x, mousePos2.y, 200);
@@ -179,7 +184,10 @@ function miniCanvas(name, img, imgsrc, index){
             }
             else{
                 if (name === "Force-field_Drone") this.cooldown(15000)
-                if (name === "Lightning_Rod_Drone") this.cooldown(15000)
+                if (name === "Lightning_Rod_Drone") {
+                    this.cooldown(15000)
+                    lrHitbox()
+                }
                 if (name === "Air_Strike") this.cooldown(3000)
                 if (name === "Machine_Gun") this.cooldown(10000)
                 if (name === "Drone_GPS_Hack") {
@@ -221,8 +229,27 @@ function miniCanvas(name, img, imgsrc, index){
                     }
                     if (["Magnet_Drone", "Lightning_Rod_Drone", "Force-field_Drone"].includes(this.name)){
                         //if (sc_list[getIndex(this.name)] !== null){
-                            if (mP.x <640&&mP.x>0&&mP.y <640&&mP.y>0){
-                                createDrone(name, mP.x-32, mP.y-32)
+                            const x = mP.x-40;
+                            const y = mP.y-40;
+                            const di = 4;
+                            if (x <640-64&&x>0&&y<640-64&&y>0){
+                                createDrone(name, x, y)
+                                if (name === "Force-field_Drone"){
+                                    const nx = x-10;
+                                    const ny = y-10;
+                                    createEffect("force_field", nx+32+di/2, ny-di, 90)
+                                    createEffect("force_field", nx-di, ny+32+di/2, 0)
+                                    createEffect("force_field", nx+32+di/2, ny+64+di, 90)
+                                    createEffect("force_field", nx+64+di, ny+32+di/2, 0)
+                                    setTimeout(()=>{delSC(3)}, 10000)
+                                }
+                                else if (name === "Lightning_Rod_Drone"){
+                                    setTimeout(()=>{
+                                        delSC(2)
+                                        remove(wrapper, lr_hitbox);
+                                        lr_hitbox=null
+                                    }, 10000)
+                                }
                             }
                         //}
                     } 
