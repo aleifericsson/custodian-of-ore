@@ -63,7 +63,6 @@ const lrHitbox = () => {
         position: absolute;
         z-index: 5;
         pointer-events: none;
-        background-color: rgba(255,255,255, 0.5);
     `)
 //in case of debug: background-color: rgba(255,255,255, 0.5);
     lr_hitbox = hitb;

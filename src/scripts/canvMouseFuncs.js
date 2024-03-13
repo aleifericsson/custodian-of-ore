@@ -8,6 +8,7 @@ const initMouse = (canv) => {
         if (hasClass(canv, "layer-1")){
             backgroundChange(ctx, mousePos)
         }
+        console.log(getTiles());
     });
 }
 
@@ -26,7 +27,7 @@ const backgroundChange = (ctx, mouse) => {
     let tiles = getTiles();
     let tile = tiles[tilex][tiley];
     tile++;
-    if (tile==20){
+    if (tile==12){
         tile = 0;
     }
     modifyTile(tilex,tiley,tile);

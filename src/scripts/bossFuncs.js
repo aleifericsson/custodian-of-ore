@@ -1,20 +1,27 @@
-import { createEffect, del, explosion, good_hit } from "../components/effects";
-import { bosshp, updateBossBar } from "../components/infoScreen";
-import { sc_list } from "../components/spritecanvas";
+import { createEffect, del, explosion, good_hit, handleWindSpawn } from "../components/effects";
+import { bosshp, updateBossBar, bossBar } from "../components/infoScreen";
+import { sc_list, spriteCanvas } from "../components/spritecanvas";
 import {render, remove, create, addClass, hasClass, remClass, find, findAll, write, detect, undetect, style, attribs, isElement, moveTo, getPos, checkCollision, checkCollisionReal, getPosEle} from "./QoL"
+import { wrapper } from "./elements";
 import { enemy } from "./enemies";
+import bosssrc from "../images/boss.png"
+import { wind_directions } from "./data";
+import { currentFrame } from "./SCFuncs";
+import { updateCutscene } from "../components/cutscene";
 
 let bossele;
-let phase = 1;
-let att_1 = null;
+let phase = 0;
+let att_1 = "heh";
 let att_2 = null;
 let boss_timer;
 let attacks = ["fire", "missile", "drones", "charge", "evade", "lightning"];
 const gun_pos = [{x: 86, y:35}, {x: 98, y: 46}, {x:106, y:56}];
 const missile_pos = [{x:73,y:73}, {x:90, y:90}];
 const spawn_points = [{x:86, y:60}, {x: 78, y: 50}, {x:93, y:67}]
+let current_wind = "none";
 
 const generateAttacks = () =>{
+    if (phase === 1 || phase === 2){
     if (att_1 === null && att_2 === null){
         att_1 = attacks[Math.floor(Math.random()*attacks.length)];
         if (att_1 === "fire") {fireAttack(1)}
@@ -24,11 +31,14 @@ const generateAttacks = () =>{
         else if (att_1 === "evade") {evasiveManoevers(1)}
         else if (att_1 === "lightning") {lightningAttack(1)}
         console.log(att_1);
+
+        let num = Math.floor(Math.random()*5);
+        current_wind = wind_directions[num]
     }
     if (phase === 2){
         if(att_2 === null){
             att_2 = attacks[Math.floor(Math.random()*attacks.length)];
-            if (att2 == att_1){
+            if (att_2 == att_1){
                 att_2 = null;
             }
                 
@@ -41,11 +51,20 @@ const generateAttacks = () =>{
         }
         console.log(att_2);
     }
+    }
+    if (phase === 3){
+        current_wind = "none";
+        if (currentFrame % 3 === 0){
+            const mP = getPosEle(bossele, "none");
+            createEffect("explosion", mP.x+Math.random()*256, mP.y+Math.random()*256, 90*Math.floor(Math.random()*4))
+        }
+    }
 }
 
 const tickBoss = ()=>{
     handleHit();
     generateAttacks();
+    handleWindSpawn(current_wind);
 }
 
 const handleHit =() =>{
@@ -97,7 +116,7 @@ const fireAttack = (att) =>{
         else{
             att_1 = null;
         }
-    }, 6000)
+    }, 8000)
 }
 
 const missileAttack = (att) =>{
@@ -116,7 +135,7 @@ const missileAttack = (att) =>{
         else{
             att_1 = null;
         }
-    }, 6000)
+    }, 8000)
 }
 
 const spawnDrone = () => {
@@ -140,7 +159,7 @@ const spawnDrones = (att) =>{
         else{
             att_1 = null;
         }
-    }, 6000)
+    }, 8000)
 }
 
 const chargeAttack = (att) =>{
@@ -223,4 +242,11 @@ const moveBossTowards = (index, x, y, wind) => {
     }
 }
 
-export {tickBoss, bossele}
+const spawnBoss = () =>{
+    const boss = spriteCanvas(wrapper, "boss", 128, bosssrc, 25, 200, 5, true, 1)
+    bossele = boss;
+    bossBar();
+    //updateCutscene(3, true);
+}
+
+export {tickBoss, bossele, phase, spawnBoss}

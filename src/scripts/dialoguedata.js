@@ -20,33 +20,33 @@ const dia_start =[//0
 ]
 
 const dia_1 = [//3
-    `P: Package drone status: Ready to deliver ref#7355608`,
+    `P: Package drone status: Ready to deliver ref#7355608 to [ADDRESS]`,
     `P: Package drone status: Aberration detected - access from unautorised party`,
     `P: Package drone status: Limited remote control mode activated. Freedom of movement restricted at this admin level`,
     `D: Damn, I'm in but I cant' move. Guess I'll need my magnet drones to move the package. At least I haven't triggered security... yet.`,
 ]
 
-const dia_2 = [//8
+const dia_2 = [//7
     `P: Package drone status: Warning. Security drones in area. Deviation from designated path may result in aggression.`,
     `D: These will do nothing against what I have in my arsenal.`,
 ]
 
-const dia_4 = [//10
+const dia_4 = [//9
     `P: Package drone status: Warning. Heavy wind detected, recalculation of trajectory detected to remain on path.`,
     `D: Might be wise to control the drone's rotors directly with my control hack, even if it is temporary.`,
 ]
 
-const dia_6 = [//12
+const dia_6 = [//11
     `D: What?! The path doesn't even go to my house! Someone's already in the system and stealing packages. No wonder I never got mine.`,
     `D: No time to get distracted tho, the sooner I get my package, the sooner I can forget about this scummy company.`,
 ]
 
-const dia_7 = [//14
+const dia_7 = [//13
     `S: Security drone status: Aberration detected in rogue package drone. Requesting immediate backup to eliminate the issue`,
     `D: Finally: A reason to go all out`,
 ]
 
-const dia_10 = [//16
+const dia_10 = [//15
     `D: Hey, that's my house! I'm so close!`,
     `d: !!..`,
     `A: You have laid waste to my brethren and humiliated me!`,
@@ -58,7 +58,7 @@ const dia_10 = [//16
     `d: There are thieves in your system and you go after a guy who's protecting his legal property?! I think it's time for YOU to pay.`,
 ]
 
-const dia_end =[//25
+const dia_end =[//24
     `A: Well, you have defeated me. I failed the one job I was programmed to complete. I will no doubt be replaced soon.`,
     `A: Say something nice. It might be the last thing I hear before I'm gone forever`,
     `D: We're not too different, man. We both made sacrifices defending metal.`,
@@ -72,7 +72,12 @@ const dia_end =[//25
     `D: Tungsten cube!!`
 ]
 
-const dia_groups = [dia_start, dia_1, dia_2, dia_4, dia_6, dia_7, dia_10, dia_end]
+const dia_huh = [//35
+    `S: Security drone status: Aberration detected. Package drone carrying ref#7355608 deviating from path.`,
+    `S: Fire at will.`
+]
+
+const dia_groups = [dia_start, dia_1, dia_2, dia_4, dia_6, dia_7, dia_10, dia_end, dia_huh]
 
 const loadDialogues = () => {
     let index = 0;

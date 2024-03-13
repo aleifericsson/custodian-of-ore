@@ -6,7 +6,7 @@ const wrappe = () =>{
     addClass(rapper, ["wrapper"]);
     style(rapper,`
         position:relative;
-        border: 5px solid darkred;
+        border: 5px solid #8b9bb4;
         width:640px;
         height:640px;
     `)
@@ -20,8 +20,8 @@ const miniWrapper = () =>{
     addClass(rapper, ["mini-wrapper"]);
     style(rapper,`
         position:relative;
-        background-color: #000000;
-        border: 5px solid darkred;
+        background-color: #181425;
+        border: 5px solid #8b9bb4;
         width: 640px;
         display:flex;
         justify-content: space-around;

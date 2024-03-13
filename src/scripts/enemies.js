@@ -7,6 +7,7 @@ import { addClass, checkCollision, checkCollisionReal, create, find, findAll, ge
 import { createEffect, explosion, getRotTowards, good_hit, del } from "../components/effects";
 import { hp, setHealth } from "../components/infoScreen";
 import { dgpsh } from "../components/miniCanvas";
+import { currentFrame } from "./SCFuncs";
 
 let enemy_list = [];
 let firing = false;
@@ -18,12 +19,12 @@ const enemy = (type, x, y) => {
     let speed = 5;
     if (type === "gunner_drone"){
         imgsrc = gdsrc;
-        fireevery = 100;
+        fireevery = 150;
     }
 
     if (type === "missile_drone"){
         imgsrc = mdsrc;
-        fireevery = 250;
+        fireevery = 300;
     }
     
     
@@ -85,7 +86,7 @@ const tickEnemies = () =>{
 
 const handleHit = (enemy) => {
     if (good_hit !== null){
-        if (checkCollision(enemy.ele, good_hit.ele)){
+        if (checkCollisionReal(enemy.ele, good_hit.ele)){
             createEffect("hit", good_hit.x, good_hit.y, 90*Math.floor(Math.random()*4))
             del(good_hit);
             good_hit = null;
@@ -127,7 +128,7 @@ const handleDGPSH = (enemy) =>{
 
 const handleFire = (enemy) =>{
     if (explosion !== null){
-        if (checkCollision(explosion, enemy.ele)) delEne(enemy)
+        if (checkCollisionReal(explosion, enemy.ele)) delEne(enemy)
     }
     if (enemy.firetimer ===0){
         enemy.firetimer = enemy.fireevery
@@ -152,8 +153,11 @@ const handleFire = (enemy) =>{
             }, 1000)
         } 
         if (enemy.type === "attack_drone"){
-            if (checkCollisionReal(enemy.ele, package_drone)){
-                setHealth(hp-1)
+            if(currentFrame % 2 === 0)
+            {
+                if (checkCollisionReal(enemy.ele, package_drone)){
+                    setHealth(hp-1)
+                }
             }
         }
     }

@@ -2,6 +2,7 @@ import {render, create, addClass, remClass, find, write, detect, style, attribs}
 import { animateSCs } from "../scripts/SCFuncs";
 import { initMouse } from "../scripts/canvMouseFuncs";
 import {initBackground, updateBackground, clear} from "../scripts/canvasFuncs";
+import { tile_ctx } from "../scripts/elements";
 
 let stop = false;
 let frames = 0;
@@ -19,11 +20,12 @@ const canvas = (width, height, layer) => {
     `);
     const ctx = canv.getContext("2d");
 
-    initMouse(canv);
+    //initMouse(canv);
     
     if (layer===0)
     {
         initBackground(ctx, width, height);
+        tile_ctx = ctx;
     }
 
     return canv;

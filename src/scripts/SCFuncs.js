@@ -1,6 +1,6 @@
 import { changeBackground } from "../components/buttonOverlay";
 import { incrementScore, score } from "../components/debugTools";
-import { nextDialogue } from "../components/dialogue";
+import { nextDialogue, someone_speakin } from "../components/dialogue";
 import { checkHits, handleWindSpawn, tickeffects } from "../components/effects";
 import { bossBar } from "../components/infoScreen";
 import { destroySC, drawSC, sc_list, teleport } from "../components/spritecanvas"
@@ -14,22 +14,28 @@ import { handleMagnet } from "./toolFuncs";
 import { trigger } from "./triggers";
 
 let currentFrame = 0;
+let have_fired = false;
 
 const animateSCs = () => {
     currentFrame += 1;
     checkCollisions();
-    tickEnemies();
-    if (dark_levels.includes(level)) handleWindSpawn(wind_directions[dark_levels.indexOf(level)]);
-    tickeffects();
+    if (level !== 10){
+        if(someone_speakin === false){
+            if (dark_levels.includes(level)) handleWindSpawn(wind_directions[dark_levels.indexOf(level)]);
+            tickEnemies();
+            tickeffects();
+        }
+    }
+    else{
+        tickEnemies();
+        tickeffects();
+        tickBoss();
+    }
 
     for(let i = 0; i<4; i++){
         if (sc_list[i] !== null){
             drawSC(sc_list[i],"increment","none");
         }
-    }
-
-    if (level === 10){
-        tickBoss();
     }
     
     /*
@@ -93,8 +99,14 @@ const checkCollisions = () =>{
             }
         })
         if (inpath === false){
-            paths.forEach(shad => {remove(find(".level.shader"),shad)});
-            firing = true;
+            if (firing === false){
+                paths.forEach(shad => {remove(find(".level.shader"),shad)});
+                firing = true;
+                if (have_fired === false){
+                    have_fired = true;
+                    nextDialogue(35);
+                }
+            }
         }
     }
     

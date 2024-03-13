@@ -2,6 +2,7 @@ import {render, remove, create, addClass, hasClass, remClass, find, findAll, wri
 import { level } from "../scripts/data";
 import { shadwrap } from "../scripts/elements";
 import { enemy, removeEnemies, spawnEnemies } from "../scripts/enemies";
+import { nextDialogue } from "./dialogue";
 import { effect, removeEffects } from "./effects";
 
 const renderShader = (name) => {
@@ -46,6 +47,7 @@ const renderLevel = (name) =>{
     if (name === "level-1"){
         render(shad, pathBlock(0, 200, 300, 150));
         render(shad, pathBlock(200, 350, 440, 150));
+        nextDialogue(7)
     }
     else if(name === "level-2"){
         render(shad, pathBlock(400, 200, 240, 100));
@@ -65,6 +67,7 @@ const renderLevel = (name) =>{
         render(shad, pathBlock(220, 270, 200, 50));
         render(shad, pathBlock(100, 320, 170, 50));
         render(shad, pathBlock(0, 370, 160, 50));
+        nextDialogue(9)
     }
     else if (name === "level-5"){
         render(shad, pathBlock(480, 370, 160, 50));
@@ -85,9 +88,14 @@ const renderLevel = (name) =>{
     else if (name === "level-6"){
         render(shad, pathBlock(373, 275, 267, 50));
         render(shad, pathBlock(373, 325, 50, 315));
+        nextDialogue(11)
     }
-    if (name !== "level-10"){
-        render(shad, endBlock(":)"));
+    else if (name === "level-7")
+        nextDialogue(13)
+    else if (name === "level-10"){
+        const end = find(".endblock");
+        remove(shadwrap, end);
+        nextDialogue(15)
     }
     
     

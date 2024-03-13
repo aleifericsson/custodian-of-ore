@@ -9,6 +9,7 @@ import { heal_hitbox, lr_hitbox, magnet_hitbox, wrapper } from "../scripts/eleme
 import { createEffect } from "./effects";
 import { firing } from "../scripts/enemies";
 import { removePaths } from "./shaders";
+import { someone_speakin } from "./dialogue";
 
 let miniList = [];
 //let cooldown_list = [false, false, false, false, false, false, false, false];
@@ -141,7 +142,9 @@ function miniCanvas(name, img, imgsrc, index){
                 }
                 else if (name === "Magnet_Drone"){
                     interval_list.push(setInterval(() => {
-                    moveTo(magnet_hitbox, mousePos2.x, mousePos2.y, 200);
+                        if (someone_speakin === false){
+                        moveTo(magnet_hitbox, mousePos2.x, mousePos2.y, 200);
+                        }
                     }, 100))
                 }
                 else if (name === "Lightning_Rod_Drone"){
@@ -173,6 +176,8 @@ function miniCanvas(name, img, imgsrc, index){
 
         const mouseDownFunc = (evt) => {
             evt.preventDefault();  
+            if (someone_speakin === false){
+                
             canv.style.top ="-1000px";
             canv.style.left = "-1000px";
             render(document.body,canv);
@@ -207,7 +212,7 @@ function miniCanvas(name, img, imgsrc, index){
                 }
                 if (name === "Repair_Package_Drone") {
                     healHitbox()
-                    this.cooldown(20000)
+                    this.cooldown(10000)
                 }
                 if(name === "Recall_Drones"){
                     if (sc_list[1] !== null){
@@ -225,6 +230,7 @@ function miniCanvas(name, img, imgsrc, index){
                 if (sc_list[getIndex(this.name)] !== null){
                     delSC(getIndex(this.name))
                 }
+            }
             }
         }
 

@@ -1,13 +1,14 @@
 import { addClass, checkCollision, checkCollisionReal, create, find, findAll, getPosEle, remove, render, style } from "../scripts/QoL";
 import effsrc from "../images/effects.png";
 import { lr_hitbox, magnet_hitbox, package_drone, shadwrap, wrapper } from "../scripts/elements";
-import { delSC, moveTowards, sc_list } from "./spritecanvas";
+import { delSC, moveTowards, sc_list, spriteCanvas } from "./spritecanvas";
 import { level, wind_directions } from "../scripts/data";
 import { firing } from "../scripts/enemies";
 import { hp, setHealth } from "./infoScreen";
 import { dgpsh } from "./miniCanvas";
 import { currentFrame } from "../scripts/SCFuncs";
 import { lr_di } from "../scripts/toolFuncs";
+import { phase, spawnBoss } from "../scripts/bossFuncs";
 
 let effect_list = [];
 let explosion = null;
@@ -220,7 +221,14 @@ const handleFade = (effect) => {
                 }
             }
         }
-        if (effect.type === "good_explosion") explosion = null
+        else if (effect.type === "good_explosion") {
+            explosion = null
+        }
+        else if (effect.type === "lightning_strike"){
+            if(level === 10 && phase === 0){
+                spawnBoss();
+            }
+        }
         del(effect)
     }
     else{
@@ -337,7 +345,7 @@ const tickeffects = () => {
             }
             if (effect.type === "missile"){
                 if (checkCollision(effect.ele, package_drone)){
-                    setHealth(hp-4);
+                    setHealth(hp-3);
 
                     let pdpos = getPosEle(package_drone,64);
                     createEffect("explosion", pdpos.x, pdpos.y, Math.random()*360);
@@ -379,8 +387,12 @@ const handleWindSpawn = (direction) => {
         let num = Math.floor(Math.random()*4);
         dir = wind_directions[num]
     }
-    else dir = direction
-
+    else if(direction === "none"){
+        return;
+    }
+    else {
+        dir = direction
+    }
     let rot;
 
     if (dir === "down") {moveTowards(0, sc_list[0].x, 640,true); rot =0}

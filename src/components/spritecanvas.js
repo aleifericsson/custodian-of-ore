@@ -21,7 +21,6 @@ const spriteCanvas = (wrapper, name, size, imgsrc, x, y, speed, show, frames) =>
     let canvsize = 64;
     if (name==="boss") {
         canvsize = 256;
-        console.log("huh???")
     }
 
     const canv = create("canvas");

@@ -5,10 +5,9 @@ import {delSC, destroySC, drawSC, moveTowards, sc_list, setShow, spriteCanvas, t
 import { renderShader, removeShaders, renderLevel } from "./shaders";
 import { dark_levels, level } from "../scripts/data";
 import { firing } from "../scripts/enemies";
-import { bossBar, bosshp, updateBossBar } from "./infoScreen";
-import bosssrc from "../images/boss.png"
-import { wrapper } from "../scripts/elements";
-import { bossele } from "../scripts/bossFuncs";
+import { tile_ctx, wrapper } from "../scripts/elements";
+import { renderTiles } from "../scripts/canvasFuncs";
+import { tile_list } from "../scripts/tiledata";
 
 const butSize = 32;
 let butOv;
@@ -92,6 +91,11 @@ const togglePointer = (evt) => {
 */
 
 const changeBackground = () => {
+
+    if (level === 10) {//DOn't PUT BOSS STUFF HERE
+
+    }
+    else{
     removeShaders();
     if (sc_list[1] !== null){
         delSC(1)
@@ -102,19 +106,14 @@ const changeBackground = () => {
     if (sc_list[3] !== null){
         delSC(3)
     }
-    if (level === 10) {//DOn't PUT BOSS STUFF HERE
-        level = 0;
-    }
-    else{
     level += 1;
-    }
+    
     if (level === 10){//PUT BOSS STUFF HERE
-        const boss = spriteCanvas(wrapper, "boss", 128, bosssrc, 25, 200, 5, true, 1)
-        bossele = boss;
-        bossBar();
+
     }
         write(find("#level"), `Level: ${level}`)
         renderLevel(`level-${level}`)
+        renderTiles(tile_list[level], tile_ctx);
         if (dark_levels.includes(level)){
             renderShader("dark-shader");
         }
@@ -127,7 +126,7 @@ const changeBackground = () => {
     else{
         firing = true;
     }
-
+}
     
     /*
     const canv = find(".layer-1");

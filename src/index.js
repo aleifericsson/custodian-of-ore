@@ -17,6 +17,6 @@ style(game, `
 
 render(game, initCanvases());
 render(game, initOther());
-render(game, initDebug());
+//render(game, initDebug());
 
 trigger("start");

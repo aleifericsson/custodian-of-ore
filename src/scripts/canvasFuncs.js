@@ -1,24 +1,21 @@
-import floor_tiles from "../images/floor_tiles.png";
+import floor_tiles from "../images/tiles.png";
+import { tile_list } from "./tiledata";
 
 let tiles;
-const collision_tiles = [`11,14,15,16,19`]
 
 const updateBackground = (ctx, width, height) => {
     renderTiles(tiles,ctx);
 }
 
 const initBackground = (ctx, width, height) =>{
-    tiles = generateTiles();
-    tiles[2][1] = 11;
-    tiles[9][9] = 18;
-    tiles[9][8] = 18;
-    tiles[8][8] = 19;
-    tiles[8][9] = 19;
+    //tiles = generateTiles();
+    tiles = tile_list[0];
     console.log(tiles);
     updateBackground(ctx, width, height);
 }
 
-const renderTiles = (tiles,ctx) =>{
+const renderTiles = (tilesf,ctx) =>{
+    tiles = tilesf;
     tiles.forEach((row,index) => {
         row.forEach((tile,index2) =>{
             drawTile(tile, index, index2, ctx);
@@ -34,7 +31,8 @@ const drawTile=(tile,x,y, ctx) =>{
         //drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
         //where s = sprite, d = draw
         //ctx.rotate((90 * Math.PI) / 180);
-        ctx.drawImage(tileset, tile*size, 0, size, size, x*size, y*size, size,size);
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(tileset, tile*32, 0, 32, 32, x*64, y*64, 64,64);
     }  
 }
 
@@ -47,7 +45,7 @@ const getTiles = () => {
 }
 
 const generateTiles = () => {
-    const arr = new Array(10).fill(0).map(()=>new Array(10).fill(10));
+    const arr = new Array(10).fill(0).map(()=>new Array(10).fill(0));
     return arr;
 }
 
@@ -67,4 +65,4 @@ const detectTile = (x, y) => {
     }
 }
 
-export {initBackground, updateBackground, clear, modifyTile, getTiles, collision_tiles, detectTile}
+export {initBackground, updateBackground, clear, modifyTile, getTiles, detectTile, renderTiles}

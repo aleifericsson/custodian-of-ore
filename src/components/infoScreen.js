@@ -5,6 +5,8 @@ import toolsrc from "../images/tools.png"
 import { updateCutscene } from "./cutscene";
 import { removeEffects } from "./effects";
 import { removeEnemies } from "../scripts/enemies";
+import { phase } from "../scripts/bossFuncs";
+import { nextDialogue } from "./dialogue";
 
 let hp = 20;
 let bosshp = 100;
@@ -15,13 +17,15 @@ const initInfoScreen = () =>{
     style(info, `
         width: 250px;
         height: 640px;
-        background-color: #242424;
-        border: 5px solid darkred;
+        background-color: #181425;
+        border: 5px solid #8b9bb4;
         position: absolute;
         left: 650px;
         top:-5px;
         color:white;
         font-family:munro;
+        display: flex;
+        flex-direction: column;
     `)
 
     render(info, infoTop());
@@ -44,6 +48,28 @@ const infoTop = () =>{
 const infoBottom = () =>{
     const info = create("div");
     addClass(info, ["infoBottom"]);
+    style(info, `
+        display: flex;
+        justify-content: flex-end;
+        flex-direction: column;
+        flex-grow: 1;
+        position:relative;
+    `)
+
+    const level = create("h1")
+    level.id = "level";
+    style(level,`
+        color:#3a4466;
+        align-self: right;
+        font-size: 30px;
+        font-family:munro;
+        position: relative;
+        top: 22px;
+        left: 5px;
+    `)
+
+    write(level, `Level: ${0}`)
+    render(info, level);
 
     return(info);
 }
@@ -55,8 +81,8 @@ const healthBar = () => {
     style(health, `
         width: ${width}px;
         height: 640px;
-        background-color: #242424;
-        border: 5px solid darkred;
+        background-color: #181425;
+        border: 5px solid #8b9bb4;
         position: absolute;
         left: -${width+20}px;
         top:-5px;
@@ -69,6 +95,13 @@ const healthBar = () => {
 
     setHealth(health);
 
+    
+    render(health, makeIcon());
+
+    return health;
+}
+
+const makeIcon = () =>{
     const icon = create("div");
     style(icon, `
         position:absolute;
@@ -81,9 +114,8 @@ const healthBar = () => {
         z-index: 5;
         transform: translate(0, 3px);
     `)
-    render(health, icon);
 
-    return health;
+    return(icon)
 }
 
 const setHealth = (health) =>{
@@ -107,6 +139,11 @@ const setHealth = (health) =>{
         hp = myhp;
         healthbar = find(".healthbar"); 
         healthbar.textContent = '';
+
+
+    
+
+    render(healthbar, makeIcon());
     }
     
     for(let i =0; i<myhp; i++){
@@ -134,7 +171,7 @@ const bossBar = () =>{
     style(bbwrap, `
         width: 550px;
         max-height: ${height}px;
-        background-color: #242424;
+        background-color: #181425;
         position: absolute;
         left: 40px;
         color:white;
@@ -173,6 +210,18 @@ const updateBossBar = (health) =>{
     const bbbar = find(".bbbar");
     if(health <= 0){
         remove(wrapper, bbbar)
+        if (phase === 2){
+        phase = 3;
+        setTimeout(() =>{
+            updateCutscene(5, true);
+            phase = 4;
+            nextDialogue(24);
+        }, 3000)
+        }
+    }
+    else if (health <= 50){
+        phase = 2;
+        bbbar.style.width = `${(health/100)*500}px`
     }
     else{
         bbbar.style.width = `${(health/100)*500}px`

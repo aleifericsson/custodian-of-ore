@@ -1,6 +1,6 @@
 import '../css/animations.css';
 import '../css/fonts.css';
-import pattern from "../images/pattern_102.gif"
+import pattern from "../images/pattern1.png"
 import {render, create, addClass, remClass, find, write, style, detect, undetect, remove} from "../scripts/QoL"
 import { canvas, runEverything } from '../components/canvas';
 import { wrappe, miniWrapper } from '../components/wrapper';
@@ -22,7 +22,7 @@ const initCanvases = () => {
     style(document.body, `
         background-color: #242424;
         background-image: url("${pattern}");
-        background-size: 70px;
+        background-size: 128px;
         background-repeat: repeat;
         padding: 20px;
     `)

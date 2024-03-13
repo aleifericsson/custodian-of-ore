@@ -1,18 +1,30 @@
 import {render, remove, create, addClass, remClass, hasClass, attribs, find, write, detect, undetect, style} from "../scripts/QoL"
+import { phase } from "../scripts/bossFuncs";
+import { level } from "../scripts/data";
 import { loadDialogues } from "../scripts/dialoguedata";
 import { playAudio } from "../scripts/sounds";
-import { toggleStart } from "./cutscene";
+import { toggleStart, updateCutscene } from "./cutscene";
+import { createEffect } from "./effects";
 
 let currentDialogue = 0;
 let dialogues = [];
+let someone_speakin = true;
 
 const nextDialogue = (code) => {
+    someone_speakin = true;
     playAudio("swipe");
     if (Number.isInteger(code)){
         currentDialogue = code;
     }
     const dialogue = createDialogue(dialogues[currentDialogue]);
+
+    if (currentDialogue === 16){
+        createEffect("lightning_warning", 5*64+32,5*64+32, 0);
+    }
+
+
     currentDialogue += 1;
+
     detect(dialogue, "click", deleteDialogue);
 }
 
@@ -30,10 +42,23 @@ const deleteDialogue = (e) =>{
     }
     undetect(dialogue, "click", deleteDialogue);
     addClass(dialogue, ["dialogue-start-end"]);
+    if (currentDialogue === 33){
+        updateCutscene(6, true);
+    }if (currentDialogue === 34){
+        updateCutscene(7, true);
+    }if (currentDialogue === 35){
+        updateCutscene(8, true);
+    }
     setTimeout(()=> {
         remove(find(".game"), dialogue)
         if (dialogues[currentDialogue-1].follow){
             nextDialogue();
+        }
+        else{
+            someone_speakin = false;
+            if (level === 10){
+                phase = 1;
+            }
         }
     }, 200);
 }
@@ -57,8 +82,8 @@ const createDialogue = (dialogueObj) => {
         //make prompt index system plsprompt
         style(dialogue, `
             color:white;
-            background-color: slategray;
-            border: 5px solid darkred;
+            background-color: #262b44;
+            border: 5px solid #5a6988;
             position:absolute;
             transition: 0.1s;
             width: 600px;
@@ -85,7 +110,7 @@ const createCharBox = (charsrc, index) => {
     const charBox = create("div");
     addClass(charBox, ["charBox"])
     style(charBox, `
-        border: 2px solid darkred;
+        border: 2px solid #5a6988;
         min-width: 32px;
         min-height: 32px;
         margin: 16px;
@@ -127,4 +152,4 @@ const initDialogues = () => {
     loadDialogues();
 }
 
-export {initDialogues, nextDialogue, dialogueObj};
+export {initDialogues, nextDialogue, dialogueObj, someone_speakin};

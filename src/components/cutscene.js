@@ -34,10 +34,11 @@ const initCutscenes = (rapper) =>{
         position:absolute;
         left: ${320-50}px;
         top: ${450}px;
-        background-color: darkred;
+        background-color: #a22633;
+        border: 5px solid #FFFFFF;
         color: white;
         font-family: munro;
-        font-size: 30px;
+        font-size: 40px;
         padding:5px;
         padding-bottom: 0px;
         text-align: center;
@@ -80,10 +81,6 @@ const toggleStart = () =>{
         //change background here
         start_seq += 1;
     }
-}
-
-const nextCutscene = () =>{
-
 }
 
 

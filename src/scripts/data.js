@@ -4,7 +4,7 @@ const dark_levels = [4,5,8,9,10]
 
 let level_start_y = [350, 450, 250, 560, 200, 350, 270]
 
-const wind_directions = ["down", "left", "up", "right", "random"];
+const wind_directions = ["down", "left", "up", "right", "none"];
 
 const tool_list = ["Magnet_Drone", "Force-field_Drone", "Lightning_Rod_Drone", "Air_Strike", "Machine_Gun",
 "Drone_GPS_Hack", "Recall_Drones", "Repair_Package_Drone"]
@@ -60,7 +60,7 @@ Remove all placed drones from field.
 When held near package drone, 
 restores 2 health every 4 seconds.
 
-- Cooldown: 20 seconds
+- Cooldown: 10 seconds
 `,`
 Has Dio's special package,
 get it to his house somewhere west.
