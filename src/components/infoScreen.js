@@ -35,6 +35,7 @@ const infoTop = () =>{
     addClass(info, ["infoTop"]);
     style(info, `
         padding: 5px;
+        position:relative;
     `)
 
     return(info);
@@ -182,11 +183,22 @@ const displayInfo = (code, rawicon) => {
     const cloned = rawicon.cloneNode(false);
     cloned.id = "infoPic"
     remClass(cloned, ["canvas-icon"])
+    if (code === "boss"){
+        attribs(cloned, ["width", "height"], [`${256}px`,`${256}px`]);
+        style(cloned, `
+            padding-left: 5px;
+            padding-top: 10px;
+            left: -15px;
+            position:relative;
+        `)
+    }
+    else{
     attribs(cloned, ["width", "height"], [`${64}px`,`${64}px`]);
     style(cloned, `
         padding-left: 5px;
         padding-top: 10px;
     `)
+    }
 
     const ctx2 = cloned.getContext("2d");
     ctx2.imageSmoothingEnabled = false;
@@ -194,11 +206,19 @@ const displayInfo = (code, rawicon) => {
     img.src = cloned.dataset.imgsrc;
     let index = cloned.dataset.index;
 
-    if (["package_drone", "gunner_drone", "missile_drone", "attack_drone", "boss_drone"].includes(code)){
-
+    if (["package_drone", "gunner_drone", "missile_drone", "attack_drone", "boss"].includes(code)){
+        if(code === "boss"){
+        img.onload = function() {
+            ctx2.clearRect(0,0,256,256);
+            ctx2.drawImage(img, 0, 0, 128, 128, 0, 0, 256,256);
+        }
+        }
+        else{
         img.onload = function() {
             ctx2.clearRect(0,0,64,64);
             ctx2.drawImage(img, 0, 0, 32, 32, 0, 0, 64,64);
+        }
+
         }
     }
     else{
@@ -207,11 +227,11 @@ const displayInfo = (code, rawicon) => {
             ctx2.drawImage(img, 16*index, 0, 16, 16, 0, 0, 64,64);
         }
     }
-    if(code === "package_drone") index = 9
-    if(code === "gunner_drone") index = 10
-    if(code === "missile_drone") index = 11
-    if(code === "attack_drone") index = 12
-    if(code === "boss_drone") index = 13
+    if(code === "package_drone") index = 8
+    if(code === "gunner_drone") index = 9
+    if(code === "missile_drone") index = 10
+    if(code === "attack_drone") index = 11
+    if(code === "boss") index = 12
 
     const info = find(".infoTop");
     info.textContent = '';

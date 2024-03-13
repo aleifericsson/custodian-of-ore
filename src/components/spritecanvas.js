@@ -192,6 +192,7 @@ const setShow = (index, show) => {
 const delSC = (index) => {
     remove(wrapper, sc_list[index].ele);
     sc_list[index] = null;
+    undetect(sc_list[index], "mouseenter", updateInfo);
 }  
 
 const drawSC = (sc, frame, direction) => {
@@ -264,7 +265,7 @@ const createDrone = (name, x, y) =>{
         imgsrc = ffdsrc;
         modname = "force_field_drone";
     }
-    spriteCanvas(wrapper, modname, 32, imgsrc, x, y, 0, true, 1)
+    spriteCanvas(wrapper, modname, 32, imgsrc, x, y, 0, true, 6)
 }
 
-export{initSC, moveTowards ,setShow, drawSC, teleport,destroySC, spriteCanvas, sc_list, createDrone, getIndex, delSC};
+export{initSC, moveTowards ,setShow, drawSC, teleport,destroySC, spriteCanvas, sc_list, createDrone, getIndex, delSC, updateInfo};

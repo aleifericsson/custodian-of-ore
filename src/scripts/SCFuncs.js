@@ -21,7 +21,13 @@ const animateSCs = () => {
     tickEnemies();
     if (dark_levels.includes(level)) handleWindSpawn(wind_directions[dark_levels.indexOf(level)]);
     tickeffects();
-    drawSC(sc_list[0],"increment","none");
+
+    for(let i = 0; i<4; i++){
+        if (sc_list[i] !== null){
+            drawSC(sc_list[i],"increment","none");
+        }
+    }
+
     if (level === 10){
         tickBoss();
     }

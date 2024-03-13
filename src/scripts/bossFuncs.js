@@ -1,34 +1,157 @@
+import { createEffect, del, explosion, good_hit } from "../components/effects";
+import { bosshp, updateBossBar } from "../components/infoScreen";
+import { sc_list } from "../components/spritecanvas";
 import {render, remove, create, addClass, hasClass, remClass, find, findAll, write, detect, undetect, style, attribs, isElement, moveTo, getPos, checkCollision, checkCollisionReal, getPosEle} from "./QoL"
+import { enemy } from "./enemies";
 
 let bossele;
-let boss_att_stack = [];
+let phase = 1;
+let att_1 = null;
+let att_2 = null;
 let boss_timer;
+let attacks = ["fire", "missile", "drones", "charge", "evade", "lightning"];
+const gun_pos = [{x: 86, y:35}, {x: 98, y: 46}, {x:106, y:56}];
+const missile_pos = [{x:73,y:73}, {x:90, y:90}];
+const spawn_points = [{x:86, y:60}, {x: 78, y: 50}, {x:93, y:67}]
+
+const generateAttacks = () =>{
+    if (att_1 === null && att_2 === null){
+        att_1 = attacks[Math.floor(Math.random()*attacks.length)];
+        if (att_1 === "fire") {fireAttack(1)}
+        else if (att_1 === "missile") {missileAttack(1)}
+        else if (att_1 === "drones") {spawnDrones(1)}
+        else if (att_1 === "charge") {chargeAttack(1)}
+        else if (att_1 === "evade") {evasiveManoevers(1)}
+        else if (att_1 === "lightning") {lightningAttack(1)}
+        console.log(att_1);
+    }
+    if (phase === 2){
+        if(att_2 === null){
+            att_2 = attacks[Math.floor(Math.random()*attacks.length)];
+            if (att2 == att_1){
+                att_2 = null;
+            }
+                
+            if (att_2 === "fire") {fireAttack(2)}
+            else if (att_2 === "missile") {missileAttack(2)}
+            else if (att_2 === "drones") {spawnDrones(2)}
+            else if (att_2 === "charge") {chargeAttack(2)}
+            else if (att_2 === "evade") {evasiveManoevers(2)}
+            else if (att_2 === "lightning") {lightningAttack(2)}
+        }
+        console.log(att_2);
+    }
+}
 
 const tickBoss = ()=>{
-
+    handleHit();
+    generateAttacks();
 }
 
-const fireAttack = () =>{
-
+const handleHit =() =>{
+    if (good_hit !== null){
+        if (checkCollision(bossele, good_hit.ele)){
+            createEffect("hit", good_hit.x, good_hit.y, 90*Math.floor(Math.random()*4))
+            del(good_hit);
+            good_hit = null;
+            updateBossBar(bosshp-1)
+        }
+    }
+        if (explosion !== null){
+            if (checkCollision(bossele, explosion)){
+                updateBossBar(bosshp-5)
+                explosion = null;
+            }
+        }
 }
 
-const missileAttack = () =>{
+const fireGuns = () =>{
+    const mP = getPosEle(bossele, "none");
+    gun_pos.map(pos => {
+        createEffect("bullet", mP.x+(pos.x*2)-10, mP.y+((128-pos.y)*2), -90);
+    })
+}
+
+const fireMissile = () =>{
+    const mP = getPosEle(bossele, "none");
+    missile_pos.map(pos => {
+        createEffect("missile", mP.x+(pos.x*2)-10, mP.y+((128-pos.y)*2), -90-45);
+    })
+}
+
+const fireAttack = (att) =>{
+    fireGuns();
+    setTimeout(() =>{    
+        fireGuns();
+    }, 400)
+    setTimeout(() =>{
+        fireGuns();
+    }, 800)
+    setTimeout(() =>{
+        fireGuns();
+    }, 1200)
+    setTimeout(()=>{
+        if (att === 2){
+            att_2 = null;
+        }
+        else{
+            att_1 = null;
+        }
+    }, 6000)
+}
+
+const missileAttack = (att) =>{
+    setTimeout(() =>{    
+        
+    fireMissile();
+    }, 1000)
+    setTimeout(() =>{    
+        
+    fireMissile();
+    }, 3000)
+    setTimeout(()=>{
+        if (att === 2){
+            att_2 = null;
+        }
+        else{
+            att_1 = null;
+        }
+    }, 6000)
+}
+
+const spawnDrone = () => {
+    const mP = getPosEle(bossele, "none");
+    const sP = spawn_points[Math.floor(Math.random()*spawn_points.length)];
+    enemy("attack_drone", mP.x+(Math.random()*5+sP.x)*2, mP.y+(Math.random()*5+sP.y)*2);
+}
+
+const spawnDrones = (att) =>{
+    spawnDrone()
+    setTimeout(() =>{    
+        spawnDrone()
+    }, 2000)
+    setTimeout(() =>{
+        spawnDrone()
+    }, 4000)
+    setTimeout(()=>{
+        if (att === 2){
+            att_2 = null;
+        }
+        else{
+            att_1 = null;
+        }
+    }, 6000)
+}
+
+const chargeAttack = (att) =>{
     
 }
 
-const spawnDrones = () =>{
+const evasiveManoevers = (att) =>{
     
 }
 
-const chargeAttack = () =>{
-    
-}
-
-const evasiveManoevers = () =>{
-    
-}
-
-const lightningAttack = () =>{
+const lightningAttack = (att) =>{
 
 }
 

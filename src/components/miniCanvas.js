@@ -7,6 +7,8 @@ import { tool_list } from "../scripts/data";
 import { handleMagnet, healHitbox, lrHitbox, lr_di, magnethitbox } from "../scripts/toolFuncs";
 import { heal_hitbox, lr_hitbox, magnet_hitbox, wrapper } from "../scripts/elements";
 import { createEffect } from "./effects";
+import { firing } from "../scripts/enemies";
+import { removePaths } from "./shaders";
 
 let miniList = [];
 //let cooldown_list = [false, false, false, false, false, false, false, false];
@@ -188,8 +190,16 @@ function miniCanvas(name, img, imgsrc, index){
                     this.cooldown(15000)
                     lrHitbox()
                 }
-                if (name === "Air_Strike") this.cooldown(3000)
-                if (name === "Machine_Gun") this.cooldown(10000)
+                if (name === "Air_Strike") {
+                    firing = true;
+                    removePaths();
+                    this.cooldown(3000)
+                }
+                if (name === "Machine_Gun") {
+                    this.cooldown(10000)
+                    firing = true;
+                    removePaths();
+                }
                 if (name === "Drone_GPS_Hack") {
                     this.cooldown(20000)
                     dgpsh = true

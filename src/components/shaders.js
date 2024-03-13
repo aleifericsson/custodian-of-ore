@@ -115,6 +115,13 @@ const pathBlock = (x,y,width,height) => {
     return path;
 }
 
+const removePaths = () =>{
+    const shadlist = findAll(".pathblock");
+
+
+    shadlist.forEach(shad => {remove(shadwrap,shad)});    
+}
+
 const endBlock = (thing) => {
     const path = create("div");
     addClass(path, ["endblock"]);
@@ -184,6 +191,7 @@ const initShaders = (wrapper) => {
         width: 640px;
         position: absolute;
         pointer-events:none;
+        z-index:4;
     `);
 
     render(wrapper, shadwra);
@@ -192,4 +200,4 @@ const initShaders = (wrapper) => {
     initEdges(wrapper)
 }
 
-export {initShaders, renderShader, renderLevel, removeShaders}
+export {initShaders, renderShader, renderLevel, removeShaders, removePaths}

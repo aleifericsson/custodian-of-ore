@@ -75,7 +75,7 @@ Will try to ram into you and cut you
 with its saws. Longer contact means
 more damage.
 `,`
-The boss. Can spawn all drones
+The boss. Can spawn attack drones
 and even summon lightning somehow.
 `
 ]

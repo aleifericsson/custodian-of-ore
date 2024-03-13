@@ -117,8 +117,16 @@ const checkCollisionReal = (thing1, thing2) => {
 const getPosEle = (element, size) => {
     const left = element.style.left;
     const top = element.style.top;
-    const x = Number(left.substring(0, left.length - 2))+(size/2)
-    const y = Number(top.substring(0, top.length - 2))+(size/2)
+    let x;
+    let y;
+    if (size === "none"){
+        x = Number(left.substring(0, left.length - 2));
+        y = Number(top.substring(0, top.length - 2));
+    }
+    else{
+        x = Number(left.substring(0, left.length - 2))+(size/2)
+        y = Number(top.substring(0, top.length - 2))+(size/2)
+    }
     return {
         x,
         y

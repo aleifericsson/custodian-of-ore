@@ -404,4 +404,4 @@ const handleWindSpawn = (direction) => {
     }
 }
 
-export {createEffect, tickeffects, removeEffects, handleWindSpawn, explosion, getRotTowards}
+export {createEffect, tickeffects, removeEffects, handleWindSpawn, explosion, getRotTowards, del, good_hit}

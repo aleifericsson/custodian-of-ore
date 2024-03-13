@@ -1,10 +1,10 @@
-import { drawSC, moveTowards, spriteCanvas, teleport } from "../components/spritecanvas";
+import { delSC, drawSC, moveTowards, sc_list, spriteCanvas, teleport, updateInfo } from "../components/spritecanvas";
 import { package_drone, wrapper } from "./elements";
 import gdsrc from "../images/gunner_drone.png"
 import mdsrc from "../images/missile_drone.png"
 import adsrc from "../images/attack_drone.png"
-import { addClass, checkCollision, checkCollisionReal, create, find, findAll, getPosEle, moveTo, remove } from "./QoL";
-import { createEffect, explosion, getRotTowards } from "../components/effects";
+import { addClass, checkCollision, checkCollisionReal, create, find, findAll, getPosEle, moveTo, remove, undetect } from "./QoL";
+import { createEffect, explosion, getRotTowards, good_hit, del } from "../components/effects";
 import { hp, setHealth } from "../components/infoScreen";
 import { dgpsh } from "../components/miniCanvas";
 
@@ -68,6 +68,7 @@ const enemy = (type, x, y) => {
         frames:6,
         updates_per_frames: 4,
         timer: 1,
+        hp: 5,
     });
 }
 
@@ -76,9 +77,33 @@ const tickEnemies = () =>{
         if (firing === true){
             handleFire(enemy)
             handleDGPSH(enemy)
+            handleHit(enemy)
         }
     drawSC(enemy,"increment","none");
     });
+}
+
+const handleHit = (enemy) => {
+    if (good_hit !== null){
+        if (checkCollision(enemy.ele, good_hit.ele)){
+            createEffect("hit", good_hit.x, good_hit.y, 90*Math.floor(Math.random()*4))
+            del(good_hit);
+            good_hit = null;
+            enemy.hp = enemy.hp -1;
+            if (enemy.hp === 0){
+                createEffect("explosion", enemy.x+16, enemy.y+16, 90*Math.floor(Math.random()*4))
+                delEne(enemy);
+            }
+        }
+    }
+    if (enemy.type === "attack_drone"){
+        if (sc_list[3] !== null){
+            if (checkCollision(enemy.ele, sc_list[3].ele)){
+                createEffect("explosion", sc_list[3].x+16, sc_list[3].y+16, 90*Math.floor(Math.random()*4))
+                delSC(3);
+            }
+        }
+    }
 }
 
 const handleDGPSH = (enemy) =>{
@@ -102,7 +127,7 @@ const handleDGPSH = (enemy) =>{
 
 const handleFire = (enemy) =>{
     if (explosion !== null){
-        if (checkCollision(explosion, enemy.ele)) del(enemy)
+        if (checkCollision(explosion, enemy.ele)) delEne(enemy)
     }
     if (enemy.firetimer ===0){
         enemy.firetimer = enemy.fireevery
@@ -178,8 +203,9 @@ const moveEneTowards = (enemy, rot) => {
     }
 }
 
-const del = (enemy) =>{
+const delEne = (enemy) =>{
     remove(wrapper,enemy.ele);
+    undetect(enemy.ele, "mouseenter", updateInfo);
     enemy_list = enemy_list.filter(function (thing) {
         return thing !== enemy;
     });
@@ -197,7 +223,10 @@ const removeEnemies = () => {
     const enemies = findAll(".enemy");
     //remove timeouts for shotlists and stuff
 
-    enemies.forEach(enemy => {remove(wrapper,enemy)});    
+    enemies.forEach(enemy => {
+        remove(wrapper,enemy);
+        undetect(enemy, "mouseenter", updateInfo);
+    });    
 }
 
 const spawnEnemies = (level) =>{
