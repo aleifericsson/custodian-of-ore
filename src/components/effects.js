@@ -202,7 +202,7 @@ const handleFade = (effect) => {
                     const lrpos = getPosEle(lr_hitbox,lr_di);
                     let reps = Math.floor((lrpos.y-64)/64);
                     for(let i = 0; i < reps+1; i++){   
-                        createEffect("lightning_bolt", lrpos.x, lrpos.y-64(64*i), 0)
+                        createEffect("lightning_bolt", lrpos.x, lrpos.y-64-(64*i), 0)
                     }
                 }
                 else{
@@ -388,6 +388,13 @@ const handleWindSpawn = (direction) => {
         dir = wind_directions[num]
     }
     else if(direction === "none"){
+        const rand2 = Math.floor(Math.random()* 100);
+        if (rand2 === 21) {
+
+            const x = 64*Math.floor(Math.random()*10)+24;
+            const y = 64*Math.floor(Math.random()*10)+24;
+            createEffect("lightning_warning", x,y, 0);
+        }
         return;
     }
     else {
@@ -406,8 +413,8 @@ const handleWindSpawn = (direction) => {
 
 
     if(level === 8 || level === 9 ||level === 10){
-        const rand2 = Math.floor(Math.random()* 300);
-        if (rand === 21) {
+        const rand2 = Math.floor(Math.random()* 100);
+        if (rand2 === 21) {
 
             const x = 64*Math.floor(Math.random()*10)+24;
             const y = 64*Math.floor(Math.random()*10)+24;

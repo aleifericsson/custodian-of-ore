@@ -10,7 +10,8 @@ const tool_list = ["Magnet_Drone", "Force-field_Drone", "Lightning_Rod_Drone", "
 "Drone_GPS_Hack", "Recall_Drones", "Repair_Package_Drone"]
 
 const descriptions = [`
-Attracts metal towards it
+Attracts th package drone and
+missiles towards it.
 
 - Placeable
 - Only one on the field at a time
@@ -58,7 +59,7 @@ Remove all placed drones from field.
 - Cooldown: none
 `,`
 When held near package drone, 
-restores 2 health every 4 seconds.
+restores 3 health every 3 seconds.
 
 - Cooldown: 10 seconds
 `,`

@@ -15,7 +15,7 @@ let miniList = [];
 //let cooldown_list = [false, false, false, false, false, false, false, false];
 let magazine = 20;
 let dgpsh = false;
-let heal_countdown = 40;
+let heal_countdown = 30;
 
 function miniCanvas(name, img, imgsrc, index){
     this.name = name;
@@ -156,8 +156,8 @@ function miniCanvas(name, img, imgsrc, index){
                     interval_list.push(setInterval(() => {
                         moveTo(heal_hitbox, mousePos2.x, mousePos2.y, 200);
                         if (heal_countdown === 0){
-                            heal_countdown = 40;
-                            setHealth(hp+2);
+                            heal_countdown = 30;
+                            setHealth(hp+3);
                         }
                         else heal_countdown -= 1;
                     }, 100))

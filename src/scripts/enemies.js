@@ -275,23 +275,19 @@ const spawnEnemies = (level) =>{
         enemy("attack_drone", 320, Math.random()*200+220);
     }
     else if(level === "level-8"){
-        enemy("gunner_drone", Math.random()*500+50, 300);
         enemy("gunner_drone", 500, Math.random()*500+50);
         enemy("gunner_drone", Math.random()*500+50, 500);
         enemy("missile_drone", Math.random()*500+50, Math.random()*500+50);
-        enemy("missile_drone", 100, Math.random()*500+50);
         enemy("attack_drone", 250, Math.random()*200+20);
         enemy("attack_drone", 450, Math.random()*200+420);
     }
     else if(level === "level-9"){
         enemy("gunner_drone", 100, 100);
-        enemy("gunner_drone", Math.random()*500+50, 320);
         enemy("gunner_drone", Math.random()*500+50, Math.random()*500+50);
         enemy("missile_drone", Math.random()*200+50, Math.random()*200+50);
         enemy("missile_drone", Math.random()*300+250, Math.random()*300+250);
         enemy("attack_drone", 150, Math.random()*200+220);
         enemy("attack_drone", 350, Math.random()*200+220);
-        enemy("attack_drone", 450, 150);
     }
 }
 

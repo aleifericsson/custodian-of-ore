@@ -8,7 +8,7 @@ import { removeEnemies } from "../scripts/enemies";
 import { phase } from "../scripts/bossFuncs";
 import { nextDialogue } from "./dialogue";
 
-let hp = 20;
+let hp = 25;
 let bosshp = 100;
 
 const initInfoScreen = () =>{
@@ -130,8 +130,8 @@ const setHealth = (health) =>{
     let healthbar;
     if(find(".healthbar") === null) {myhp = hp; healthbar = health}
     else if (typeof health === 'number') {
-        if (health > 20){
-            myhp = 20;
+        if (health > 25){
+            myhp = 25;
         }
         else{
             myhp = health; 
@@ -147,10 +147,10 @@ const setHealth = (health) =>{
     }
     
     for(let i =0; i<myhp; i++){
-        const num = 20-i;
+        const num = 25-i;
         const starthue = 350;
         const endhue = 110 + 360
-        const hue = Math.floor((endhue - starthue)*(num/20)+starthue)
+        const hue = Math.floor((endhue - starthue)*(num/25)+starthue)
         const heart = create("div");
         heart.id = `heart-${num}`;
         style(heart, `

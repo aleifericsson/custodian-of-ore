@@ -189,9 +189,9 @@ const setShow = (index, show) => {
 }
 
 const delSC = (index) => {
+    undetect(sc_list[index].ele, "mouseenter", updateInfo);
     remove(wrapper, sc_list[index].ele);
     sc_list[index] = null;
-    undetect(sc_list[index], "mouseenter", updateInfo);
 }  
 
 const drawSC = (sc, frame, direction) => {
