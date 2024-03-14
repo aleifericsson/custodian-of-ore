@@ -77,6 +77,7 @@ const spriteCanvas = (wrapper, name, size, imgsrc, x, y, speed, show, frames) =>
     }
     if (name==="boss"){
         bossSC = obj;
+        console.log("BOS")
     }
 
     canv.dataset.imgsrc = imgsrc;

@@ -3,7 +3,7 @@ import { phase } from "../scripts/bossFuncs";
 import { level } from "../scripts/data";
 import { loadDialogues } from "../scripts/dialoguedata";
 import { playAudio } from "../scripts/sounds";
-import { toggleStart, updateCutscene } from "./cutscene";
+import { fade, toggleStart, updateCutscene } from "./cutscene";
 import { createEffect } from "./effects";
 
 let currentDialogue = 0;
@@ -42,6 +42,9 @@ const deleteDialogue = (e) =>{
     }
     undetect(dialogue, "click", deleteDialogue);
     addClass(dialogue, ["dialogue-start-end"]);
+    if (currentDialogue === 3){
+        fade(0.1);
+    }
     if (currentDialogue === 33){
         updateCutscene(6, true);
     }if (currentDialogue === 34){

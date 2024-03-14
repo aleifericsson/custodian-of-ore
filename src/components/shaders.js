@@ -70,7 +70,7 @@ const renderLevel = (name) =>{
         nextDialogue(9)
     }
     else if (name === "level-5"){
-        render(shad, pathBlock(480, 370, 160, 50));
+        render(shad, pathBlock(400, 370, 160, 50));
         render(shad, pathBlock(430, 230, 50, 360));
         render(shad, pathBlock(317, 180, 233, 50));
         

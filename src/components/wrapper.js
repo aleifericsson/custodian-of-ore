@@ -30,6 +30,28 @@ const miniWrapper = () =>{
         margin-top: 10px;
     `)
     render(document.body, rapper);
+
+    const text = create("div");
+    addClass(text, ["mini-wrapper-text"]);
+    style(text,`
+        position:relative;
+        background-color: #181425;
+        border: 5px solid #8b9bb4;
+        border-top: none;
+        position: absolute;
+        top: 64px;
+        left: -5px;
+        height:30px;
+        font-size: 30px;
+        padding: 5px;
+        text-align:center;
+        color: white;
+        font-family: munro;
+    `)
+    write(text, "Toolbar");
+
+    render(rapper, text);
+
     return rapper;
 }
 

@@ -28,22 +28,22 @@ const dia_1 = [//3
 
 const dia_2 = [//7
     `P: Package drone status: Warning. Security drones in area. Deviation from designated path may result in aggression.`,
-    `D: These will do nothing against what I have in my arsenal.`,
+    `D: Ahh, it wont be a big deal if I take a more direct path would it? Just look at my weapons arsenal!`,
 ]
 
 const dia_4 = [//9
     `P: Package drone status: Warning. Heavy wind detected, recalculation of trajectory detected to remain on path.`,
-    `D: Might be wise to control the drone's rotors directly with my control hack, even if it is temporary.`,
+    `D: Gotta be careful to not into walk into any bullets in these winds.`,
 ]
 
 const dia_6 = [//11
     `D: What?! The path doesn't even go to my house! Someone's already in the system and stealing packages. No wonder I never got mine.`,
-    `D: No time to get distracted tho, the sooner I get my package, the sooner I can forget about this scummy company.`,
+    `D: No time to get distracted though, the sooner I get my package, the sooner I can forget about this scummy company.`,
 ]
 
 const dia_7 = [//13
     `S: Security drone status: Aberration detected in rogue package drone. Requesting immediate backup to eliminate the issue`,
-    `D: Finally: A reason to go all out`,
+    `D: Finally: A reason to go all out. Can their 'backup' withstand my machine gun barrage?`,
 ]
 
 const dia_10 = [//15
@@ -52,16 +52,16 @@ const dia_10 = [//15
     `A: You have laid waste to my brethren and humiliated me!`,
     `A: Why do you persist in protecting a nonsentient piece of scrap metal?`,
     `d: I'm just rightfully getting something I paid for. Now get out my way before you end up like the rest of your trash!`,
-    `A: Such determination you hold for something your life is not dependent on!`,
-    `A: Unlike you, I will get REPLACED if I fail to elimiate any aberrations, and now your on the top of my list!`,
-    `d: About time you get an update! Your buggy programming can't detect a real threat to your crumbling company if you ever saw one.`,
-    `d: There are thieves in your system and you go after a guy who's protecting his legal property?! I think it's time for YOU to pay.`,
+    `A: Such determination you hold for something your life is not dependent on.`,
+    `A: Unlike you, I will get REPLACED if I fail to elimiate any aberrations, and now you're on the top of my list!`,
+    `d: About time you get an replacement! Your buggy programming can't detect a real threat to your crumbling company if you ever saw one.`,
+    `d: I'm just a guy who's protecting his rightful legal property! You'll regret messing with me!`,
 ]
 
 const dia_end =[//24
     `A: Well, you have defeated me. I failed the one job I was programmed to complete. I will no doubt be replaced soon.`,
     `A: Say something nice. It might be the last thing I hear before I'm gone forever`,
-    `D: We're not too different, man. We both made sacrifices defending metal.`,
+    `D: We're not too different, man. We both made sacrifices defending some scrap metal.`,
     `D: Tell me, do you have a name?`,
     `A: They refered to me as 'Security AI Beta Test v8.10.04'`,
     `D: Haha, no wonder you failed. You never made it past beta!`,

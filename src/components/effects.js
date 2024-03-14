@@ -8,7 +8,7 @@ import { hp, setHealth } from "./infoScreen";
 import { dgpsh } from "./miniCanvas";
 import { currentFrame } from "../scripts/SCFuncs";
 import { lr_di } from "../scripts/toolFuncs";
-import { phase, spawnBoss } from "../scripts/bossFuncs";
+import { bossele, phase, spawnBoss } from "../scripts/bossFuncs";
 
 let effect_list = [];
 let explosion = null;
@@ -225,7 +225,7 @@ const handleFade = (effect) => {
             explosion = null
         }
         else if (effect.type === "lightning_strike"){
-            if(level === 10 && phase === 0){
+            if(level === 10 && phase === 0 && bossele === null){
                 spawnBoss();
             }
         }

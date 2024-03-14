@@ -53,3 +53,11 @@
     -ms-transition: none !important;
     transition: none !important;
 }
+
+.opaque{
+    color: rgba(255,255,255,1);
+}
+
+.not-opaque{
+    opacity: 0;
+}

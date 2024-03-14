@@ -2,7 +2,7 @@ import {render, remove, create, addClass, hasClass, remClass, find, write, detec
 import { descriptions } from "../scripts/data";
 import { wrapper } from "../scripts/elements";
 import toolsrc from "../images/tools.png"
-import { updateCutscene } from "./cutscene";
+import { renderRefreshBut, updateCutscene } from "./cutscene";
 import { removeEffects } from "./effects";
 import { removeEnemies } from "../scripts/enemies";
 import { phase } from "../scripts/bossFuncs";
@@ -30,8 +30,31 @@ const initInfoScreen = () =>{
 
     render(info, infoTop());
     render(info, infoBottom());
+    render(info, infoBoxText());
     render(wrapper, healthBar());
     render(wrapper, info);
+}
+
+const infoBoxText = () =>{
+    const text = create("div");
+    style(text,`
+        position:relative;
+        background-color: #181425;
+        border: 5px solid #8b9bb4;
+        border-top: none;
+        position: absolute;
+        top: 640px;
+        left: -5px;
+        height:30px;
+        font-size: 30px;
+        padding: 5px;
+        text-align:center;
+        color: white;
+        font-family: munro;
+    `)
+    write(text, "Info Box");
+
+    return text;
 }
 
 const infoTop = () =>{
@@ -40,7 +63,11 @@ const infoTop = () =>{
     style(info, `
         padding: 5px;
         position:relative;
+        font-family:munro;
+        color:white;
+        color:#5a6988;
     `)
+    write(info, "(Hover over things to display information about them)")
 
     return(info);
 }
@@ -65,7 +92,7 @@ const infoBottom = () =>{
         font-family:munro;
         position: relative;
         top: 22px;
-        left: 5px;
+        left: 147px;
     `)
 
     write(level, `Level: ${0}`)
@@ -97,8 +124,34 @@ const healthBar = () => {
 
     
     render(health, makeIcon());
+    render(health, healthText());
 
     return health;
+}
+
+
+const healthText = () =>{
+    const icon = create("div");
+    style(icon, `
+    position:relative;
+    background-color: #181425;
+    border: 5px solid #8b9bb4;
+    border-bottom: none;
+    position: absolute;
+    top: 575px;
+    left: -70px;
+    height:30px;
+    font-size: 30px;
+    padding: 5px;
+    text-align:center;
+    color: white;
+    font-family: munro;
+    transform: rotate(-90deg);
+    image-rendering: pixelated;
+    `)
+    write(icon, "Health")
+
+    return(icon)
 }
 
 const makeIcon = () =>{
@@ -119,11 +172,16 @@ const makeIcon = () =>{
 }
 
 const setHealth = (health) =>{
+    if (phase === 3 || phase === 4){
+
+    }
+    else{
     if(health <= 0){
         updateCutscene(4, true);
         find(".healthbar").textContent = "";
         removeEffects();
         removeEnemies();
+        renderRefreshBut();
     }
     else{
     let myhp;
@@ -154,7 +212,7 @@ const setHealth = (health) =>{
         const heart = create("div");
         heart.id = `heart-${num}`;
         style(heart, `
-            height:28px;
+            height:21.6px;
             width: 28px;
             margin: 2px;
             background-color: hsl(${hue}, 70%, 62%);
@@ -162,6 +220,8 @@ const setHealth = (health) =>{
         render(healthbar, heart)
     }    
     }
+        
+}
 }
 
 const bossBar = () =>{
@@ -209,6 +269,8 @@ const updateBossBar = (health) =>{
     bosshp = health;
     const bbbar = find(".bbbar");
     if(health <= 0){
+        removeEffects();
+        removeEnemies();
         remove(wrapper, bbbar)
         if (phase === 2){
         phase = 3;

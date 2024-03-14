@@ -19,12 +19,12 @@ const enemy = (type, x, y) => {
     let speed = 5;
     if (type === "gunner_drone"){
         imgsrc = gdsrc;
-        fireevery = 150;
+        fireevery = 125;
     }
 
     if (type === "missile_drone"){
         imgsrc = mdsrc;
-        fireevery = 300;
+        fireevery = 250;
     }
     
     

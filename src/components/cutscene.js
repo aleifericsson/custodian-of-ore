@@ -50,12 +50,64 @@ const initCutscenes = (rapper) =>{
     render(rapper, start_but);
 }
 
+const renderRefreshBut = () =>{
+    const start_but = create("div");
+    addClass(start_but, ["start-but", "button"]);
+    style(start_but, `
+        position:absolute;
+        left: ${220}px;
+        top: ${530}px;
+        background-color: #a22633;
+        color: #ffffff;
+        font-family: munro;
+        font-size: 30px;
+        padding:5px;
+        padding-bottom: 0px;
+        text-align: center;
+        vertical-align: center;
+        z-index: 7;
+    `)
+    write(start_but, "Press Me to Refresh")
+    detect(start_but, "click", toggleRefresh)
+    render(wrapper, start_but);
+}
+
+const toggleRefresh = () =>{
+    window.location.reload();
+}
+
 const updateCutscene = (cursce, show) =>{
     curscene = cursce;
     showing = show;
     const cutscene = find(".cutscene");
     cutscene.style.visibility = showing ? "visible" : "hidden";
     cutscene.style.background = `url(${cutscenes}) -${320*curscene}px 0px`
+}
+
+const fade = (time) =>{
+    const fad = create("div");
+
+    const mili = time*1000;
+
+    addClass(fad, ["fad"]);
+
+    style(fad, `
+        transition-duration: ${time}s
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        color: rgba(255,255,255,0);
+    `)
+
+    render(document.body, fad)
+
+    addClass(fad, ["opaque"]);
+    setTimeout(()=>{
+        remClass(fad, ["opaque"]);
+    }, mili)
+    setTimeout(()=>{
+        remove(document.body, fad);
+    }, mili*2)
 }
 
 
@@ -84,4 +136,4 @@ const toggleStart = () =>{
 }
 
 
-export {initCutscenes, toggleStart, updateCutscene}
+export {initCutscenes, toggleStart, updateCutscene, renderRefreshBut, fade}

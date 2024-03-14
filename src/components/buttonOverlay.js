@@ -29,7 +29,7 @@ const buttonOverlay = (width, height) =>{
 }
 
 const generateButtons = (butOv) => {
-    render(butOv, Button("changebg", 8, changeBackground, 16, 16))
+    //render(butOv, Button("changebg", 8, changeBackground, 16, 16))
 }
 
 const Button = (name, spritenum, func, x, y) =>{
