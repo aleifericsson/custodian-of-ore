@@ -1,4 +1,4 @@
-# Alfa2D
+# Custodian of Ore
 Your legally acquired package is not safe from the security system meant to defend it. The only solution: drone warfare.
 
 Game submission for Acerola Jam. Click [here](https://aleifericsson.itch.io/custodian-of-ore) to view itch.io page,
